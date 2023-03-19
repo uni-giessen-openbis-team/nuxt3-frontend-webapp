@@ -3,12 +3,16 @@ import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
   modules: [
+    // pre-installed
     '@vueuse/nuxt',
     '@unocss/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
     '@nuxt/devtools',
+
+    // own-imports
+    '@formkit/nuxt',
   ],
   experimental: {
     // when using generate, payload js assets included in sw precache manifest
@@ -18,7 +22,12 @@ export default defineNuxtConfig({
   },
   css: [
     '@unocss/reset/tailwind.css',
+    'vuetify/lib/styles/main.sass',
+    '@mdi/font/css/materialdesignicons.min.css',
   ],
+  build: {
+    transpile: ['vuetify'],
+  },
   colorMode: {
     classSuffix: '',
   },
@@ -50,4 +59,5 @@ export default defineNuxtConfig({
     },
   },
   pwa,
+
 })

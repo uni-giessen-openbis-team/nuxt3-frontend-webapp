@@ -1,13 +1,14 @@
 <script setup lang="ts">
+import TheHome from './TheHome.vue'
+
 const online = useOnline()
 </script>
 
 <template>
   <div>
-    <Logos mb-6 />
     <Suspense>
       <ClientOnly>
-        <PageView v-if="online" />
+        <TheHome v-if="online" />
         <div v-else text-gray:80>
           You're offline
         </div>
