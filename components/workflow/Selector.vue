@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import type { Workflow } from './types/workflow-types'
+import type { Workflow } from './workflow-types'
 
 const props = defineProps<{ workflows: Workflow[] }>()
 const searchTerm = ref('')
@@ -32,12 +32,10 @@ const filteredWorkflows = computed(() => {
         :key="index"
         class="col-md-4"
       >
-        <div class="card mb-4 card-gradient">
-          <router-link
-            :to="{
-              name: 'Workflow',
-              params: { id: workflow.UUID },
-            }"
+        <div class="card mb-4 ">
+          <nuxt-link
+            :to="`/workflow/${workflow.UUID}` "
+
             class="text-decoration-none"
           >
             <div class="card-body">
@@ -48,7 +46,7 @@ const filteredWorkflows = computed(() => {
                 {{ workflow.description }}
               </p>
             </div>
-          </router-link>
+          </nuxt-link>
         </div>
       </div>
     </div>

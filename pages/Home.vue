@@ -2,7 +2,10 @@
 
 </script>
 
-<template />
+<template>
+  Home
+  <div />
+</template>
 
 <style scoped>
 

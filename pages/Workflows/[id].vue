@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import type { Version } from '@/components/types/workflow-types'
-import VersionSelector from '@/components/WorkflowVersionSelector.vue'
-import FormGenerator from '@/components/WorkflowFormGenerator.vue'
-import TableGenerator from '@/components/WorkflowTableGenerator.vue'
+import type { Version } from 'test'
 
 const route = useRoute()
 const wf_UUID = route.params.id as string

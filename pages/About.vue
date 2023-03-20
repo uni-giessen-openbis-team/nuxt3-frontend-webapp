@@ -3,7 +3,9 @@
 </script>
 
 <template>
-  <div />
+  <div>
+    This is the about page
+  </div>
 </template>
 
 <style scoped>

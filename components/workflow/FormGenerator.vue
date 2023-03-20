@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, toRefs, watch } from 'vue'
-// import FormKitSchema from '@formkit/nuxt'
+import { FormKitSchema } from '@formkit/vue'
 // import type { FormKitSchemaComponent } from '@formkit/core'
-import type { VersionParameter } from './types/workflow-types'
-import type { Version } from '@/components/types/workflow-types'
+
+import type { Version, VersionParameter } from './workflow-types'
 
 interface FormKitSchemaComponentProps {
   label: string
@@ -43,6 +43,7 @@ const { version } = toRefs(props)
 // computed
 const computedSchema = computed(() => {
   if (version?.value !== undefined) {
+    console.log('wurst')
     const result = computeData(version.value.parameter_definition.parameters)
     return result.schema
   }
@@ -57,6 +58,7 @@ const computedSchema = computed(() => {
 // https://formkit.com/essentials/validation#custom-rules
 function createExtensionValidation(extensions: string[]) {
   return function (node: any) {
+    console.log(node)
     return extensions.some(extension => node.value.endsWith(extension))
   }
 }
@@ -199,7 +201,7 @@ function generateSchemaField(field: VersionParameter): FormKitSchemaComponent {
         :actions="false"
         @update:model-value="updateData"
       >
-        <FormKitSchema default-config :schema="computedSchema" />
+        <FormKitSchema :schema="computedSchema" />
       </FormKit>
     </div>
   </div>

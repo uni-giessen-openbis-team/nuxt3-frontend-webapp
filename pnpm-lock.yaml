@@ -5,13 +5,18 @@ specifiers:
   '@formkit/nuxt': ^0.16.2
   '@iconify-json/carbon': ^1.1.16
   '@iconify-json/twemoji': ^1.1.11
+  '@mdi/font': ^7.1.96
   '@nuxt/devtools': ^0.2.5
   '@nuxtjs/color-mode': ^3.2.0
   '@pinia/nuxt': ^0.4.7
+  '@popperjs/core': ^2.11.6
+  '@types/bootstrap': ^5.2.6
   '@unocss/nuxt': ^0.49.8
   '@vite-pwa/nuxt': ^0.0.7
   '@vueuse/nuxt': ^9.13.0
+  bootstrap: 5.3.0-alpha1
   eslint: ^8.36.0
+  material-design-icons-iconfont: ^6.7.0
   nuxt: ^3.3.1
   pinia: ^2.0.33
   sass: ^1.59.3
@@ -20,6 +25,10 @@ specifiers:
 
 dependencies:
   '@formkit/nuxt': 0.16.2
+  '@mdi/font': 7.2.96
+  '@popperjs/core': 2.11.6
+  bootstrap: 5.3.0-alpha1_@popperjs+core@2.11.6
+  material-design-icons-iconfont: 6.7.0
   sass: 1.59.3
   vuetify: 3.1.10
 
@@ -30,6 +39,7 @@ devDependencies:
   '@nuxt/devtools': 0.2.5_nuxt@3.3.1
   '@nuxtjs/color-mode': 3.2.0
   '@pinia/nuxt': 0.4.7_typescript@4.9.5
+  '@types/bootstrap': 5.2.6
   '@unocss/nuxt': 0.49.8
   '@vite-pwa/nuxt': 0.0.7
   '@vueuse/nuxt': 9.13.0_nuxt@3.3.1
@@ -2561,6 +2571,10 @@ packages:
       - supports-color
     dev: true
 
+  /@mdi/font/7.2.96:
+    resolution: {integrity: sha512-e//lmkmpFUMZKhmCY9zdjRe4zNXfbOIJnn6xveHbaV2kSw5aJ5dLXUxcRt1Gxfi7ZYpFLUWlkG2MGSFAiqAu7w==}
+    dev: false
+
   /@netlify/functions/1.4.0:
     resolution: {integrity: sha512-gy7ULTIRroc2/jyFVGx1djCmmBMVisIwrvkqggq5B6iDcInRSy2Tpkm+V5C63hKJVkNRskKWtLQKm9ecCaQTjA==}
     engines: {node: '>=8.3.0'}
@@ -3029,6 +3043,9 @@ packages:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
     dev: true
 
+  /@popperjs/core/2.11.6:
+    resolution: {integrity: sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==}
+
   /@rollup/plugin-alias/4.0.3_rollup@3.19.1:
     resolution: {integrity: sha512-ZuDWE1q4PQDhvm/zc5Prun8sBpLJy41DMptYrS6MhAy9s9kL/doN1613BWfEchGVfKxzliJ3BjbOPizXX38DbQ==}
     engines: {node: '>=14.0.0'}
@@ -3296,6 +3313,12 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dependencies:
       minimatch: 6.2.0
+    dev: true
+
+  /@types/bootstrap/5.2.6:
+    resolution: {integrity: sha512-BlAc3YATdasbHoxMoBWODrSF6qwQO/E9X8wVxCCSa6rWjnaZfpkr2N6pUMCY6jj2+wf0muUtLySbvU9etX6YqA==}
+    dependencies:
+      '@popperjs/core': 2.11.6
     dev: true
 
   /@types/estree/0.0.39:
@@ -4288,6 +4311,14 @@ packages:
   /boolbase/1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
     dev: true
+
+  /bootstrap/5.3.0-alpha1_@popperjs+core@2.11.6:
+    resolution: {integrity: sha512-ABZpKK4ObS3kKlIqH+ZVDqoy5t/bhFG0oHTAzByUdon7YIom0lpCeTqRniDzJmbtcWkNe800VVPBiJgxSYTYew==}
+    peerDependencies:
+      '@popperjs/core': ^2.11.6
+    dependencies:
+      '@popperjs/core': 2.11.6
+    dev: false
 
   /brace-expansion/1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
@@ -7324,6 +7355,10 @@ packages:
       - bluebird
       - supports-color
     dev: true
+
+  /material-design-icons-iconfont/6.7.0:
+    resolution: {integrity: sha512-lSj71DgVv20kO0kGbs42icDzbRot61gEDBLQACzkUuznRQBUYmbxzEkGU6dNBb5fRWHMaScYlAXX96HQ4/cJWA==}
+    dev: false
 
   /mdast-util-from-markdown/0.8.5:
     resolution: {integrity: sha512-2hkTXtYYnr+NubD/g6KGBS/0mFmBcifAsI0yIWRiRo0PjVs6SSOSOdtzbp6kSGnShDN6G5aWZpKQ2lWRy27mWQ==}

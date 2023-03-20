@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
 import type { Workflow } from '@/components/types/workflow-types'
-import WorkflowSelector from '@/components/WorkflowSelector.vue'
 
 const workflows = ref<Workflow[]>([])
 

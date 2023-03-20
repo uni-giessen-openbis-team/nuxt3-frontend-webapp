@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import TheHome from './TheHome.vue'
-
 const online = useOnline()
 </script>
 

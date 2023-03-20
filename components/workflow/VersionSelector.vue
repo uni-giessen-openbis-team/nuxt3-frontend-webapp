@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { ref, toRefs } from 'vue'
-import type { Version } from '@/components/types/workflow-types'
+import type { Version } from './workflow-types'
 
 const props = defineProps<{ versions: Version[] }>()
 const emit = defineEmits<{
-  (e: 'versionSelected', v: Version | undefined): void
+  (e: 'version-selected', v: Version | undefined): void
 }>()
 const { versions } = toRefs(props)
 
 const selectedVersion = ref<Version>()
 
 async function emitChange() {
-  emit('versionSelected', selectedVersion.value)
+  emit('version-selected', selectedVersion.value)
 }
 </script>
 
