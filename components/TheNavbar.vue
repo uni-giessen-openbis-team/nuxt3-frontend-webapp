@@ -1,66 +1,78 @@
 <script setup>
-const pagerouts = [
-  { name: 'Home', icon: 'bi-house-door', path: '/' },
-  { name: 'Workflows', icon: 'bi-house-door', path: '/workflows' },
-  { name: 'About', icon: 'bi-info-circle', path: '/about' },
-  { name: 'Contact', icon: 'bi-envelope', path: '/contact' },
+import { ref } from 'vue'
+
+const navItems = [
+  { name: 'Home', icon: 'mdi-home', path: '/' },
+  { name: 'Workflows', icon: 'mdi-sitemap', path: '/workflows' },
 ]
 
-const isCollapsed = ref(true)
-
-const settings = [
-  { name: 'Settings', icon: 'mdi-cog', path: '/settings' },
+const menuItems = [
+  { name: 'Settings', icon: 'mdi-account-cog', path: '/settings' },
 ]
+
+const drawer = ref(false)
 </script>
 
 <template>
-  <div class="container">
-    <nav class="navbar navbar-expand-lg mb-4 border-bottom">
-      <nuxt-link
-        :to="pagerouts[0].path"
-        class="navbar-brand d-flex align-items-center text-decoration-none"
-      >
-        <img
-          src="logo.png"
-          class="bg-white rounded"
+  <v-app-bar app>
+    <!-- The Icon on the left to open and close the drawer -->
+    <v-app-bar-nav-icon
+      class="d-flex"
+      @click="drawer = !drawer"
+    />
+    <v-spacer />
+    <nuxt-link to="/" class="d-flex align-items-center">
+      <img src="logo.png" alt="Logo" height="80" width="80">
+    </nuxt-link>
+    <v-spacer />
+    <!-- Icons on the right side -->
+    <!-- Search bar -->
+    <v-btn icon>
+      <v-icon>mdi-magnify</v-icon>
+    </v-btn>
+
+    <!-- Settings Menu -->
+    <v-menu
+      transition="scale-transition"
+    >
+      <template #activator="{ props }">
+        <v-btn
+          color="primary"
+          v-bind="props"
         >
-      </nuxt-link>
-      <button
-        class="navbar-toggler border-0 shadow-none"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNavDropdown"
-        aria-controls="navbarNavDropdown"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon" />
-      </button>
-      <div
-        id="navbarNavDropdown" class="collapse navbar-collapse"
-        :class="[{ show: !isCollapsed }]"
-      >
-        <ul class="navbar-nav ms-auto">
-          <li v-for="routeItem in pagerouts " :key="routeItem.name" class="nav-item text-uppercase">
-            <nuxt-link class="nav-link" :to="routeItem.path">
-              <i :class="`bi ${routeItem.icon}`" />
-              {{ routeItem.name }}
-            </nuxt-link>
-          </li>
-        </ul>
-        <!-- Right Side Buttons -->
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <nuxt-link
-              class="btn btn-primary rounded-circle ms-2 d-flex align-items-center justify-content-center"
-              to="/settings"
-              style="width: 40px; height: 40px;"
-            >
-              <i class="mdi mdi-cog" />
-            </nuxt-link>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </div>
+          <v-icon> mdi-dots-vertical </v-icon>
+        </v-btn>
+      </template>
+
+      <v-list>
+        <v-list-item
+          v-for="(item, i) in menuItems"
+          :key="i"
+        >
+          <v-list-item-title>{{ item.name }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+  </v-app-bar>
+
+  <!-- Add a navigation drawer on the left side -->
+  <v-navigation-drawer
+    v-model="drawer"
+    absolute
+    temporary
+  >
+    <!-- Navigation Links -->
+    <v-list
+      :lines="false"
+      density="compact"
+      nav
+    >
+      <v-list-item v-for="routeItem in navItems" :key="routeItem.name">
+        <nuxt-link :to="routeItem.path" class="text-decoration-none">
+          <v-icon>{{ routeItem.icon }}</v-icon>
+          {{ routeItem.name }}
+        </nuxt-link>
+      </v-list-item>
+    </v-list>
+  </v-navigation-drawer>
 </template>

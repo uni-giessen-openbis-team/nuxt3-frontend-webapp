@@ -21,7 +21,7 @@ export default defineNuxtConfig({
     inlineSSRStyles: false,
   },
   css: [
-    // '@unocss/reset/tailwind.css',
+    '@unocss/reset/tailwind.css',
     'vuetify/lib/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css',
     'bootstrap/dist/css/bootstrap.min.css',

@@ -52,7 +52,7 @@ watch(selectedVersion, () => {
     <h1>Workflow Data</h1>
   </div>
   <div>
-    <VersionSelector
+    <WorkflowVersionSelector
       v-if="versions.length > 1"
       :versions="versions"
       @version-selected="setSelectedVersion"
@@ -63,11 +63,11 @@ watch(selectedVersion, () => {
     <div v-if="selectedVersion" class="mt-3">
       <div class="parameter-section">
         <h2>Parameter</h2>
-        <FormGenerator v-model="formData" :version="selectedVersion" />
+        <WorkflowFormGenerator v-model="formData" :version="selectedVersion" />
       </div>
       <div class="table-section mt-4">
         <h2>Table</h2>
-        <TableGenerator
+        <WorkflowTableGenerator
           v-model="tableData"
           :table-definition="selectedVersion.design_table_definition"
         />

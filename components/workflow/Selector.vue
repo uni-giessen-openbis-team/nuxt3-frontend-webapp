@@ -1,12 +1,23 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import type { Workflow } from './workflow-types'
 
-const props = defineProps<{ workflows: Workflow[] }>()
+const workflows = ref<Workflow[]>([])
+
+onMounted(async () => {
+  try {
+    const response = await fetch('http://localhost:3000/workflows')
+    workflows.value = await response.json()
+  }
+  catch (error) {
+    console.error('Error loading workflows:', error)
+  }
+})
+
 const searchTerm = ref('')
 
 const filteredWorkflows = computed(() => {
-  return props.workflows.filter((workflow) => {
+  return workflows.value.filter((workflow) => {
     const searchValue = searchTerm.value.toLowerCase()
     return (
       workflow.name.toLowerCase().includes(searchValue)
@@ -19,36 +30,32 @@ const filteredWorkflows = computed(() => {
 <template>
   <div>
     <div class="my-3">
-      <input
+      <v-text-field
         v-model="searchTerm"
-        type="text"
-        class="form-control"
-        placeholder="Search for a workflow"
-      >
+        label="Search for a workflow"
+        single-line
+        clearable
+        outlined
+      />
     </div>
-    <div class="row my-3">
-      <div
+    <v-row class="my-3">
+      <v-col
         v-for="(workflow, index) in filteredWorkflows"
         :key="index"
-        class="col-md-4"
+        cols="12"
+        sm="6"
+        md="4"
       >
-        <div class="card mb-4 ">
+        <v-card class="mb-4">
           <nuxt-link
-            :to="`/workflow/${workflow.UUID}` "
-
+            :to="`/workflows/${workflow.UUID}`"
             class="text-decoration-none"
           >
-            <div class="card-body">
-              <h5 class="card-title">
-                {{ workflow.name }}
-              </h5>
-              <p class="card-text">
-                {{ workflow.description }}
-              </p>
-            </div>
+            <v-card-title>{{ workflow.name }}</v-card-title>
+            <v-card-text>{{ workflow.description }}</v-card-text>
           </nuxt-link>
-        </div>
-      </div>
-    </div>
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>

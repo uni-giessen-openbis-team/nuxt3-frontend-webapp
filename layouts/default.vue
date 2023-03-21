@@ -3,15 +3,17 @@ import TheNavbar from '@/components/TheNavbar.vue'
 </script>
 
 <template>
-  <header class="container">
+  <v-app>
     <TheNavbar />
-  </header>
 
-  <main class="container flex-shrink-0 mb-4">
-    <slot />
-  </main>
+    <v-main>
+      <v-container>
+        <slot />
+      </v-container>
+    </v-main>
 
-  <footer class="container footer mb-2 mt-auto">
+    <footer class="container footer mb-2 mt-auto">
     <!-- <TheFooter /> -->
-  </footer>
+    </footer>
+  </v-app>
 </template>
