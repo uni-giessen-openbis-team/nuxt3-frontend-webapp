@@ -4,14 +4,14 @@ import type { Version } from './workflow-types'
 
 const props = defineProps<{ versions: Version[] }>()
 const emit = defineEmits<{
-  (e: 'version-selected', v: Version | undefined): void
+  (e: 'versionSelected', v: Version | undefined): void
 }>()
 const { versions } = toRefs(props)
 
 const selectedVersion = ref<Version>()
 
 async function emitChange() {
-  emit('version-selected', selectedVersion.value)
+  emit('versionSelected', selectedVersion.value)
 }
 </script>
 

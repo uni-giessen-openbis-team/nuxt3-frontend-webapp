@@ -1,5 +1,8 @@
 <script setup>
 import { ref } from 'vue'
+// https://vuetifyjs.com/en/features/display-and-platform/#breakpoint-conditionals
+import { useDisplay } from 'vuetify'
+const { mdAndUp } = useDisplay()
 
 const navItems = [
   { name: 'Home', icon: 'mdi-home', path: '/' },
@@ -10,15 +13,15 @@ const menuItems = [
   { name: 'Settings', icon: 'mdi-account-cog', path: '/settings' },
 ]
 
-const drawer = ref(false)
+const tempDrawer = ref(false)
 </script>
 
 <template>
   <v-app-bar app>
     <!-- The Icon on the left to open and close the drawer -->
     <v-app-bar-nav-icon
-      class="d-flex"
-      @click="drawer = !drawer"
+      class="hidden-md-and-up"
+      @click="tempDrawer = !tempDrawer"
     />
     <v-spacer />
     <nuxt-link to="/" class="d-flex align-items-center">
@@ -26,10 +29,6 @@ const drawer = ref(false)
     </nuxt-link>
     <v-spacer />
     <!-- Icons on the right side -->
-    <!-- Search bar -->
-    <v-btn icon>
-      <v-icon>mdi-magnify</v-icon>
-    </v-btn>
 
     <!-- Settings Menu -->
     <v-menu
@@ -55,13 +54,12 @@ const drawer = ref(false)
     </v-menu>
   </v-app-bar>
 
-  <!-- Add a navigation drawer on the left side -->
+  <!-- Add a navigation drawer on the left side on small screens -->
   <v-navigation-drawer
-    v-model="drawer"
-    absolute
-    temporary
+    v-model="tempDrawer"
+    :permanent="mdAndUp"
   >
-    <!-- Navigation Links -->
+    <!-- Navigation links on medium to small -->
     <v-list
       :lines="false"
       density="compact"

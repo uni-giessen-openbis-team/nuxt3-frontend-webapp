@@ -2,6 +2,7 @@
 // imports
 import { computed, onMounted, ref } from 'vue'
 import type { Workflow } from './workflow-types'
+// eslint-disable-next-line vue/no-export-in-script-setup
 
 // define const
 const workflows = ref<Workflow[]>([])
