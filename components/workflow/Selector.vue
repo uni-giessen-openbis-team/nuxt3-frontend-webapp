@@ -1,10 +1,14 @@
 <script setup lang="ts">
+// imports
 import { computed, onMounted, ref } from 'vue'
 import type { Workflow } from './workflow-types'
 
+// define const
 const workflows = ref<Workflow[]>([])
+const searchTerm = ref('')
 
-onMounted(async () => {
+// functions
+async function loadData(): Promise<void> {
   try {
     const response = await fetch('http://localhost:3000/workflows')
     workflows.value = await response.json()
@@ -12,10 +16,9 @@ onMounted(async () => {
   catch (error) {
     console.error('Error loading workflows:', error)
   }
-})
+}
 
-const searchTerm = ref('')
-
+// computed variables
 const filteredWorkflows = computed(() => {
   return workflows.value.filter((workflow) => {
     const searchValue = searchTerm.value.toLowerCase()
@@ -25,6 +28,9 @@ const filteredWorkflows = computed(() => {
     )
   })
 })
+
+// lifecircle hook
+onMounted(loadData)
 </script>
 
 <template>
