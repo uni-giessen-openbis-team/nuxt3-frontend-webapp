@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, toRefs, watch } from 'vue'
+import { ref, toRefs } from 'vue'
 import type { Version } from './workflow-types'
 
 const props = defineProps({
@@ -26,15 +26,11 @@ const getDefaultValues = (parameters) => {
 
 const { version } = toRefs(props)
 const data = ref({ ...getDefaultValues(version.value.parameter_definition.parameters), ...props.modelValue })
-
-watch(data, () => {
-  emit('update:modelValue', data.value)
-})
 </script>
 
 <template>
   <div>Fill in the form with the needed parameters</div>
-  <v-form @input="() => emit('update:modelValue', data.value)">
+  <v-form @update:model-value="() => emit('update:modelValue', data)">
     <template v-for="field in version.parameter_definition.parameters" :key="field.name">
       <v-select
         v-if="field.type === 'string' && field.constraints?.list"
