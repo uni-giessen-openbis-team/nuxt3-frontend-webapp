@@ -9,15 +9,23 @@ const props = defineProps({
   },
   modelValue: {
     type: Object,
-    required: true,
+    default: () => ({}), // Provide a default empty object
   },
 })
 
 const emit = defineEmits(['update:modelValue'])
 
-// variables
-const data = ref(props.modelValue)
+// Set default values for data
+const getDefaultValues = (parameters) => {
+  const defaultValues = {}
+  parameters.forEach((parameter) => {
+    defaultValues[parameter.name] = parameter.default
+  })
+  return defaultValues
+}
+
 const { version } = toRefs(props)
+const data = ref({ ...getDefaultValues(version.value.parameter_definition.parameters), ...props.modelValue })
 
 watch(data, () => {
   emit('update:modelValue', data.value)
