@@ -3,6 +3,7 @@ import { nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import type { Version } from 'test'
 
+const dynamicFormValid = ref(false)
 const route = useRoute()
 const wf_UUID = route.params.id as string
 const versions = ref<Version[]>([])
@@ -63,7 +64,11 @@ watch(selectedVersion, () => {
     <div v-if="selectedVersion" class="mt-3">
       <div class="parameter-section">
         <h2>Parameter</h2>
-        <WorkflowFormGenerator v-model="formData" :version="selectedVersion" />
+        <WorkflowDynamicForm
+          v-model:model-value="formData"
+          :version="selectedVersion"
+          @update:form-valid="dynamicFormValid = $event"
+        />
       </div>
       <div class="table-section mt-4">
         <h2>Table</h2>
@@ -73,13 +78,7 @@ watch(selectedVersion, () => {
         />
       </div>
     </div>
-    <details>
-      <summary>Form data</summary>
-      <pre>{{ JSON.stringify(formData, null, 2) }}</pre>
-    </details>
-    <details>
-      <summary>table data</summary>
-      <pre>{{ JSON.stringify(tableData, null, 2) }}</pre>
-    </details>
+    <pre>{{ JSON.stringify(formData, null, 2) }}</pre>
+    <pre>{{ JSON.stringify(tableData, null, 2) }}</pre>
   </div>
 </template>
