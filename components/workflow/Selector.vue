@@ -1,8 +1,9 @@
 <script setup lang="ts">
 // imports
 import { computed, onMounted, ref } from 'vue'
+import { useDisplay } from 'vuetify'
 import type { Workflow } from './workflow-types'
-// eslint-disable-next-line vue/no-export-in-script-setup
+const { mdAndUp } = useDisplay()
 
 // define const
 const workflows = ref<Workflow[]>([])
@@ -35,16 +36,22 @@ onMounted(loadData)
 </script>
 
 <template>
-  <div>
-    <div class="my-3">
-      <v-text-field
-        v-model="searchTerm"
-        label="Search for a workflow"
-        single-line
-        clearable
-        outlined
-      />
-    </div>
+  <v-container>
+    <v-row>
+      <v-col class="my-3">
+        <v-text-field
+          v-model="searchTerm"
+          label="Search for a workflow"
+          single-line
+          clearable
+          outlined
+        />
+      </v-col>
+      <v-col v-if="mdAndUp">
+        <v-spacer />
+      </v-col>
+    </v-row>
+
     <v-row class="my-3">
       <v-col
         v-for="(workflow, index) in filteredWorkflows"
@@ -53,16 +60,26 @@ onMounted(loadData)
         sm="6"
         md="4"
       >
-        <v-card class="mb-4">
-          <nuxt-link
-            :to="`/workflows/${workflow.UUID}`"
-            class="text-decoration-none"
+        <v-hover
+          v-slot="{ isHovering, props }"
+          open-delay="0"
+        >
+          <v-card
+            class="mb-4 'on-hover': isHovering"
+            :height="200 "
+            :elevation="isHovering ? 5 : 2"
+            v-bind="props"
           >
-            <v-card-title>{{ workflow.name }}</v-card-title>
-            <v-card-text>{{ workflow.description }}</v-card-text>
-          </nuxt-link>
-        </v-card>
+            <nuxt-link
+              :to="`/workflows/${workflow.UUID}`"
+              class="text-decoration-none"
+            >
+              <v-card-title>{{ workflow.name }}</v-card-title>
+              <v-card-text>{{ workflow.description }}</v-card-text>
+            </nuxt-link>
+          </v-card>
+        </v-hover>
       </v-col>
     </v-row>
-  </div>
+  </v-container>
 </template>
