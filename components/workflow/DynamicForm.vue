@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, toRefs } from 'vue'
-import type { Version } from './workflow-types'
+import type { Version } from '../../.nuxt/workflow-types'
 
 const props = defineProps({
   version: {
@@ -28,6 +28,8 @@ const getDefaultValues = (parameters) => {
   })
   return defaultValues
 }
+
+// TODO: set rules for required and cusom rule for ending.
 
 const { version } = toRefs(props)
 const data = ref({ ...getDefaultValues(version.value.parameter_definition.parameters), ...props.modelValue })

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, toRefs } from 'vue'
-import type { Version } from './workflow-types'
+import type { Version } from '../../.nuxt/workflow-types'
 
 const props = defineProps<{ versions: Version[] }>()
 const emit = defineEmits<{

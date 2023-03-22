@@ -3,7 +3,7 @@ import { computed, ref, toRefs, watch } from 'vue'
 import { FormKitSchema } from '@formkit/vue'
 // import type { FormKitSchemaComponent } from '@formkit/core'
 
-import type { Version, VersionParameter } from './workflow-types'
+import type { Version, VersionParameter } from '../../.nuxt/workflow-types'
 
 interface FormKitSchemaComponentProps {
   label: string

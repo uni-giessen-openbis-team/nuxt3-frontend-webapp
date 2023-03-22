@@ -2,7 +2,7 @@
 // imports
 import { computed, onMounted, ref } from 'vue'
 import { useDisplay } from 'vuetify'
-import type { Workflow } from './workflow-types'
+import type { Workflow } from '../../.nuxt/workflow-types'
 const { mdAndUp } = useDisplay()
 
 // define const

@@ -1,3 +1,4 @@
+import path from 'path'
 import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
 
@@ -62,5 +63,9 @@ export default defineNuxtConfig({
     },
   },
   pwa,
-
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname),
+    },
+  },
 })
