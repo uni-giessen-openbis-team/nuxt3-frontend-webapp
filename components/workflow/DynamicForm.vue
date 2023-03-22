@@ -19,7 +19,12 @@ const emit = defineEmits(['update:modelValue'])
 const getDefaultValues = (parameters) => {
   const defaultValues = {}
   parameters.forEach((parameter) => {
-    defaultValues[parameter.name] = parameter.default
+    defaultValues[parameter.name]
+    = parameter.default === 'true'
+        ? true
+        : parameter.default === 'false'
+          ? false
+          : parameter.default
   })
   return defaultValues
 }
@@ -30,7 +35,7 @@ const data = ref({ ...getDefaultValues(version.value.parameter_definition.parame
 
 <template>
   <div>Fill in the form with the needed parameters</div>
-  <v-form @update:model-value="() => emit('update:modelValue', data)">
+  <v-form @update:model-value="() => emit('update:modelValue', dat)">
     <template v-for="field in version.parameter_definition.parameters" :key="field.name">
       <v-select
         v-if="field.type === 'string' && field.constraints?.list"
