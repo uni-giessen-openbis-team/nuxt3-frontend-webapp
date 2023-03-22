@@ -72,10 +72,9 @@ watch(selectedVersion, () => {
       </div>
       <div class="table-section mt-4">
         <h2>Table</h2>
-        <WorkflowDynamicForm
-          v-model:model-value="formData"
-          :version="selectedVersion"
-          @update:form-valid="dynamicFormValid = $event"
+        <WorkflowTableGenerator
+          v-model="tableData"
+          :table-definition="selectedVersion.design_table_definition"
         />
       </div>
     </div>

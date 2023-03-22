@@ -35,7 +35,7 @@ const data = ref({ ...getDefaultValues(version.value.parameter_definition.parame
 
 <template>
   <div>Fill in the form with the needed parameters</div>
-  <v-form @update:model-value="() => emit('update:modelValue', dat)">
+  <v-form @update:model-value="() => emit('update:modelValue', data)">
     <template v-for="field in version.parameter_definition.parameters" :key="field.name">
       <v-select
         v-if="field.type === 'string' && field.constraints?.list"
