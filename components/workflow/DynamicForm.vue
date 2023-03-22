@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, toRefs, watch } from 'vue'
+import { ref, toRefs, watch } from 'vue'
 import type { Version } from './workflow-types'
 
 const props = defineProps({
@@ -16,23 +16,8 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 // variables
-const isLoading = ref(false)
 const data = ref(props.modelValue)
 const { version } = toRefs(props)
-
-// computed
-const computedVersionParameters = computed(() => {
-  if (version.value !== undefined)
-    return version.value.parameter_definition.parameters
-
-  else
-    return undefined
-})
-
-// methods
-function updateData(value: any) {
-  emit('update:modelValue', value)
-}
 
 watch(data, () => {
   emit('update:modelValue', data.value)
