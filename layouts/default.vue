@@ -7,15 +7,11 @@ const { name } = useDisplay()
 <template>
   <v-app>
     <TheNavbar />
-    {{ name }}
     <v-main>
       <v-container>
         <slot />
       </v-container>
     </v-main>
-
-    <footer class="container footer mb-2 mt-auto">
-    <!-- <TheFooter /> -->
-    </footer>
+    <TheFooter  />
   </v-app>
 </template>

@@ -58,13 +58,13 @@ function emitTableData() {
 
 <template>
   <div>
-    <div class="mb-3">
+    <div>
       Here, you can generate a sample sheet for your data. The sample sheet is a
       table that contains information about your samples. The columns of the
       table are defined by the workflow. You can add and remove rows to the
       table.
     </div>
-    <table class="table table-striped table-bordered">
+    <table style="width:100%">
       <thead>
         <tr>
           <th v-for="column in tableDefinition.columns" :key="column.name">
@@ -76,39 +76,44 @@ function emitTableData() {
       <tbody>
         <tr v-for="(row, index) in rows" :key="index">
           <td v-for="column in tableDefinition.columns" :key="column.name">
-            <input
+            <v-text-field
               v-if="column.type === 'string' || column.type === 'file'"
               v-model="row[column.name]"
-              type="text"
               :required="column.required"
-              class="form-control"
+              single-line
+              hide-details="auto"
+              variant="underlined"
               @input="emitTableData"
-            >
-            <input
+            />
+            <v-text-field
               v-else-if="column.type === 'int'"
               v-model.number="row[column.name]"
               type="number"
               :required="column.required"
               :min="column.constraints?.interval?.min"
-              class="form-control"
+              single-line
+              hide-details="auto"
+              variant="underlined"
               @input="emitTableData"
-            >
+            />
           </td>
           <td>
-            <button
-              class="btn btn-danger"
+            <v-btn
+              color="error"
+              :rounded="0"
               :disabled="rows.length <= 1"
+              size="small"
               @click="removeRow(index)"
             >
               Remove
-            </button>
+            </v-btn>
           </td>
         </tr>
       </tbody>
     </table>
-    <button class="btn btn-primary" @click="addRow()">
+    <v-btn @click="addRow()">
       Add row
-    </button>
+    </v-btn>
   </div>
 </template>
 

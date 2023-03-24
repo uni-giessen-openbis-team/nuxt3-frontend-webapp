@@ -73,7 +73,7 @@ watch(selectedVersion, () => {
       <div class="table-section mt-4">
         <h2>Table</h2>
         <WorkflowTableGenerator
-          v-model="tableData"
+          v-model:table-data="tableData"
           :table-definition="selectedVersion.design_table_definition"
         />
       </div>

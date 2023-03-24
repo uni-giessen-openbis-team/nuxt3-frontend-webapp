@@ -7,6 +7,7 @@ const { mdAndUp } = useDisplay()
 const navItems = [
   { name: 'Home', icon: 'mdi-home', path: '/' },
   { name: 'Workflows', icon: 'mdi-sitemap', path: '/workflows' },
+  { name: 'Testing', icon: 'mdi-account-question', path: '/testing' },
 ]
 
 const menuItems = [

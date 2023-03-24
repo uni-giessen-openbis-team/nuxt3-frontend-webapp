@@ -1,65 +1,28 @@
-<script lang="ts" setup>
-import { ref } from 'vue'
-
-const themeToggler = ref(false)
-const docElm = document.documentElement
-
-const changeTheme = (e: Event) => {
-  e.preventDefault()
-
-  themeToggler.value = !themeToggler.value
-  docElm.dataset.bsTheme = themeToggler.value ? 'dark' : 'light'
-}
+<script>
+const footerLinks = [{
+  name: 'Impressum',
+}, {
+  name: 'Privacy information',
+}]
 </script>
 
 <template>
-  <div
-    class="border-top py-3 d-flex justify-content-between align-items-center"
-  >
-    <section />
-
-    <section class="d-flex">
-      <a
-        href="#"
-        class="text-decoration-none"
-        @click="(event) => changeTheme(event)"
-      >
-        <div
-          v-if="themeToggler"
-          class="d-flex justify-content-between align-items-center"
-        >
-          <small class="me-1">Light Up</small>
-          <svg
-            class="p-0"
-            width="20"
-            height="20"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </div>
-        <div v-else class="d-flex justify-content-between align-items-center">
-          <small class="me-1">Darken</small>
-          <svg
-            class="pa-0 ma-0"
-            width="20"
-            height="20"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
-            />
-          </svg>
-        </div>
-      </a>
-    </section>
-  </div>
+  <v-footer app width="auto" color="tertiary">
+    <v-container>
+      <v-col>
+        <v-row>
+          Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc.
+        </v-row>
+        <v-divider />
+        <v-row>
+          <v-col>
+            <TheDarkToggle />
+          </v-col>
+          <v-col>
+            {{ new Date().getFullYear() }} — <strong>OpenBiz Team</strong>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-container>
+  </v-footer>
 </template>
