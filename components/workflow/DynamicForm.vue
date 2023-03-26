@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, toRefs } from 'vue'
-import type { Version } from '../../.nuxt/workflow-types'
+import type { Version } from '@/types/workflow-types'
 
 const props = defineProps({
   version: {
