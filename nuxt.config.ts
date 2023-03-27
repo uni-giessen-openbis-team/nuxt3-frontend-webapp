@@ -68,7 +68,4 @@ export default defineNuxtConfig({
       '@': path.resolve(__dirname),
     },
   },
-  plugins: [
-    '@/plugins/useVeeValidate.js',
-  ],
 })
