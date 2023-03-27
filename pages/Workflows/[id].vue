@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import type { Version } from 'test'
+import type { Version } from '@/types/workflow-types'
 
 const dynamicFormValid = ref(false)
 const route = useRoute()
@@ -49,36 +49,38 @@ watch(selectedVersion, () => {
 </script>
 
 <template>
-  <div>
-    <h1>Workflow Data</h1>
-  </div>
-  <div>
-    <WorkflowVersionSelector
-      v-if="versions.length > 1"
-      :versions="versions"
-      @version-selected="setSelectedVersion"
-    />
-    <div v-else-if="versions.length === 1">
-      Version: {{ versions[0].name }}
+  <v-container>
+    <div>
+      <h1>Workflow Data</h1>
     </div>
-    <div v-if="selectedVersion" class="mt-3">
-      <div class="parameter-section">
-        <h2>Parameter</h2>
-        <WorkflowDynamicForm
-          v-model:model-value="formData"
-          :version="selectedVersion"
-          @update:form-valid="dynamicFormValid = $event"
-        />
+    <div>
+      <WorkflowVersionSelector
+        v-if="versions.length > 1"
+        :versions="versions"
+        @version-selected="setSelectedVersion"
+      />
+      <div v-else-if="versions.length === 1">
+        Version: {{ versions[0].name }}
       </div>
-      <div class="table-section mt-4">
-        <h2>Table</h2>
-        <WorkflowTableGenerator
-          v-model:table-data="tableData"
-          :table-definition="selectedVersion.design_table_definition"
-        />
+      <div v-if="selectedVersion" class="mt-3">
+        <div class="parameter-section">
+          <h2>Parameter</h2>
+          <WorkflowDynamicForm
+            v-model:model-value="formData"
+            :version="selectedVersion"
+            @update:form-valid="dynamicFormValid = $event"
+          />
+        </div>
+        <div class="table-section mt-4">
+          <h2>Table</h2>
+          <WorkflowTableGenerator
+            v-model:table-data="tableData"
+            :table-definition="selectedVersion.design_table_definition"
+          />
+        </div>
       </div>
+      <pre>{{ JSON.stringify(formData, null, 2) }}</pre>
+      <pre>{{ JSON.stringify(tableData, null, 2) }}</pre>
     </div>
-    <pre>{{ JSON.stringify(formData, null, 2) }}</pre>
-    <pre>{{ JSON.stringify(tableData, null, 2) }}</pre>
-  </div>
+  </v-container>
 </template>
