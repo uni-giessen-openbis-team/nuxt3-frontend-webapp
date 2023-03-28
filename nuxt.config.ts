@@ -1,5 +1,3 @@
-import path from 'path'
-import { pwa } from './config/pwa'
 import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
@@ -62,10 +60,25 @@ export default defineNuxtConfig({
       ],
     },
   },
-  pwa,
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname),
+  pwa: {
+    // TODO: Change Icon, description, etc.
+    manifest: {
+      name: 'OpenBIZ Plus',
+      short_name: 'OpenBIZ',
+      description: 'Website to store and distribute biological data',
+      icons: [{
+        src: '/icons/icon_144x144.png',
+        sizes: '144x144',
+        type: 'image/png',
+      }],
     },
+    workbox: {
+      navigateFallback: '/',
+    },
+    devOptions: {
+      enabled: true,
+      type: 'module',
+    },
+
   },
 })

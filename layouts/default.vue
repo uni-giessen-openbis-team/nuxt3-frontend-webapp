@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import TheNavbar from '@/components/TheNavbar.vue'
 </script>
 
 <template>
   <v-app>
+    <VitePwaManifest />
     <TheNavbar />
     <v-main>
       <slot />

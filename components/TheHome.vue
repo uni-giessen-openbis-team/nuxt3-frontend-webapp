@@ -1,13 +1,25 @@
 <script setup lang="ts">
 const openBizDescription = [
-
-  { header: 'Store your data', text: 'With openBIS+, you can store all your experimental research data in one central location. Data protection compliant. Your data is encrypted from the moment of upload and can only be read by people who explicitly have been granted access.', link: '/data-storage' },
-
-  { header: 'Analyse your data', text: 'Analyze your Omics data reproducibly and with little effort. openBIS+ is directly connected to a workflow registry that provides standardized analysis pipelines. These pipelines are firmly versioned with all their used tools and therefore always generate the same results with the same input.', link: '/workflows' },
-
-  { header: 'View your data', text: 'Preview project related data or the results of your analysis directly in your browser at any time and at any place.', link: '/projects' },
-
-  { header: 'Share your data', text: '... Coming Soon ..', link: '/data-storage/share-data' },
+  {
+    header: 'Store your data',
+    text: 'With openBIS+, you can store all your experimental research data in one central location. Data protection compliant. Your data is encrypted from the moment of upload and can only be read by people who explicitly have been granted access.',
+    link: '/data-storage',
+  },
+  {
+    header: 'Analyse your data',
+    text: 'Analyze your Omics data reproducibly and with little effort. openBIS+ is directly connected to a workflow registry that provides standardized analysis pipelines. These pipelines are firmly versioned with all their used tools and therefore always generate the same results with the same input.',
+    link: '/workflows',
+  },
+  {
+    header: 'View your data',
+    text: 'Preview project related data or the results of your analysis directly in your browser at any time and at any place.',
+    link: '/projects',
+  },
+  {
+    header: 'Share your data',
+    text: '... Coming Soon ..',
+    link: '/data-storage/share-data',
+  },
 
 ]
 </script>

@@ -26,7 +26,7 @@ const tempDrawer = ref(false)
     />
     <v-spacer />
     <nuxt-link to="/" class="d-flex align-items-center">
-      <img src="logo.png" alt="Logo" height="80" width="80">
+      <img src="/logo.png" alt="Logo" height="80" width="80">
     </nuxt-link>
     <v-spacer />
     <!-- Icons on the right side -->
