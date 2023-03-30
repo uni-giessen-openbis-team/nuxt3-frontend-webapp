@@ -2,6 +2,7 @@
 import { nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import type { Version, Workflow } from '@/types/workflow-types'
+import { worfklowApiRoute } from '@/constants/index'
 
 const dynamicFormValid = ref(false)
 const route = useRoute()
@@ -26,8 +27,9 @@ onMounted(async () => {
 async function loadVersions(wf_UUID: string) {
   try {
     setSelectedVersion(undefined)
+    console.log(`${worfklowApiRoute}/${wf_UUID}/versions`)
     const response = await fetch(
-      `http://localhost:3000/workflows_${wf_UUID}_versions`,
+      `${worfklowApiRoute}/${wf_UUID}/versions`,
     )
     versions.value = await response.json()
     if (versions.value.length === 1)
@@ -56,7 +58,7 @@ const searchTerm = ref('')
 // functions
 async function loadWorkflows(): Promise<void> {
   try {
-    const response = await fetch('http://localhost:3000/workflows')
+    const response = await fetch(`${worfklowApiRoute}`)
     workflows.value = await response.json()
   }
   catch (error) {

@@ -1,4 +1,10 @@
 <script setup lang="ts">
+// import { useTheme } from 'vuetify'
+
+// // dark toggle
+// const theme = useTheme()
+// theme.value = () => theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+// const isDark = ref(theme.global.name.value === 'myCustomLightTheme')
 const openBizDescription = [
   {
     header: 'Store your data',
@@ -26,8 +32,11 @@ const openBizDescription = [
 
 <template>
   <v-parallax src="bg-connections.jpg" height="900">
+    <!-- :class="{ invert: !isDark }" -->
     <v-container>
-      <h1>Welcome</h1>
+      <h1>
+        Welcome
+      </h1>
 
       <h2>BCF openBIS+ Instance</h2>
     </v-container>

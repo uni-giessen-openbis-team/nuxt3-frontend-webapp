@@ -2,7 +2,9 @@
 // imports
 import { computed, onMounted, ref } from 'vue'
 import { useDisplay } from 'vuetify'
+import { worfklowApiRoute } from '@/constants/index'
 import type { Workflow } from '@/types/workflow-types'
+
 const { mdAndUp } = useDisplay()
 
 // define const
@@ -12,7 +14,7 @@ const searchTerm = ref('')
 // functions
 async function loadData(): Promise<void> {
   try {
-    const response = await fetch('http://localhost:3000/workflows')
+    const response = await fetch(`${worfklowApiRoute}`)
     workflows.value = await response.json()
   }
   catch (error) {

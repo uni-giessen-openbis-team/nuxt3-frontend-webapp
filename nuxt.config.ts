@@ -79,9 +79,6 @@ export default defineNuxtConfig({
       enabled: true,
       type: 'module',
     },
-
   },
-  routeRules: {
-    '/**': { ssr: false }, // only client side rendering
-  },
+  ssr: false, // client side rendering only
 })

@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 // https://vuetifyjs.com/en/features/display-and-platform/#breakpoint-conditionals
 import { useDisplay } from 'vuetify'
+
 const { mdAndUp } = useDisplay()
 
 const navItems = [
