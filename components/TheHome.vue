@@ -31,30 +31,31 @@ const openBizDescription = [
 </script>
 
 <template>
-  <v-parallax src="bg-connections.jpg" height="900">
+  <v-parallax src="bg-connections.jpg" :class="[theme.global.current.value.dark ? 'invert' : ''] ">
     <!-- :class="{ invert: !isDark }" -->
-    <v-container>
-      <h1>
-        Welcome
-      </h1>
+    <v-container :class="[theme.global.current.value.dark ? 'invert' : ''] ">
+      <v-container>
+        <h1>
+          Welcome
+        </h1>
 
-      <h2>BCF openBIS+ Instance</h2>
-    </v-container>
+        <h2>BCF openBIS+ Instance</h2>
+      </v-container>
 
-    <v-divider />
+      <v-divider />
 
-    <v-container v-for="item in openBizDescription" :key="item.header">
-      <v-card>
-        <v-card-title>{{ item.header }}</v-card-title>
+      <v-container v-for="item in openBizDescription" :key="item.header">
+        <v-card>
+          <v-card-title>{{ item.header }}</v-card-title>
 
-        <v-card-text>{{ item.text }}</v-card-text>
-      </v-card>
-    </v-container>
-
-    <v-container>
-      <div>
-        This service is part of the Bioinformatics Core Facility (BCF) which provides a centralized IT-infrastructure for high-throughput data analysis.
-      </div>
+          <v-card-text>{{ item.text }}</v-card-text>
+        </v-card>
+      </v-container>
+      <v-container>
+        <div>
+          This service is part of the Bioinformatics Core Facility (BCF) which provides a centralized IT-infrastructure for high-throughput data analysis.
+        </div>
+      </v-container>
     </v-container>
   </v-parallax>
 </template>
