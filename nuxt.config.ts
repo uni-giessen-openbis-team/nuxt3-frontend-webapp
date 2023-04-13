@@ -80,5 +80,5 @@ export default defineNuxtConfig({
       type: 'module',
     },
   },
-  ssr: false, // client side rendering only
+  ssr: false, // client side rendering only,
 })
