@@ -1,29 +1,27 @@
-<script setup lang="ts">
-import { onMounted, reactive } from 'vue'
-import { SpaceFetchOptions, SpaceSearchCriteria, openbis } from 'openbis'
+<script>
+// With "require" call we asynchronously load "openbis", "SpaceSearchCriteria" and "SpaceFetchOptions" classes that we will need for our example.
+// The function that is passed as a second parameter of the require call is a callback that gets executed once requested classes are loaded.
+// In Javascript we work with exactly the same classes as in Java. For instance, "ch.ethz.sis.openbis.generic.asapi.v3.dto.space.search.SpaceSearchCriteria"
+// Java class and "as/dto/space/search/SpaceSearchCriteria" Javascript class have exactly the same methods. In order to find a Javascript class name please
+// check our Javadoc (https://openbis.ch/javadoc/20.10.x/javadoc-api-v3/index.html). The Javascript class name is defined in @JsonObject annotation of each V3 API Java DTO.
 
-const numOfSpaces = reactive({ value: 0 })
-
-onMounted(async () => {
-  // Instantiate the AS API
+require(['openbis', 'as/dto/space/search/SpaceSearchCriteria', 'as/dto/space/fetchoptions/SpaceFetchOptions'], (openbis, SpaceSearchCriteria, SpaceFetchOptions) => {
+  // get a reference to AS API
   const v3 = new openbis()
 
-  // Login to obtain a session token
-  await v3.login('admin', 'password')
+  // login to obtain a session token (the token it is automatically stored in openbis object and will be used for all subsequent API calls)
+  v3.login('admin', 'password').done(() => {
+    // invoke other API methods, for instance search for spaces
+    v3.searchSpaces(new SpaceSearchCriteria(), new SpaceFetchOptions()).done((result) => {
+      alert(`Number of spaces: ${result.getObjects().length}`)
 
-  // Search for spaces
-  const result = await v3.searchSpaces(new SpaceSearchCriteria(), new SpaceFetchOptions())
-
-  // Set the number of spaces
-  numOfSpaces.value = result.getObjects().length
-
-  // Logout to release the resources related with the session
-  await v3.logout()
+      // logout to release the resources related with the session
+      v3.logout()
+    })
+  })
 })
 </script>
 
 <template>
-  <div>
-    <p>Number of spaces: {{ numOfSpaces }}</p>
-  </div>
+  <div />
 </template>

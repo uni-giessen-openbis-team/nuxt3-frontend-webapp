@@ -3,7 +3,7 @@
   "packageManager": "pnpm@7.29.3",
   "scripts": {
     "build": "NUXT_APP_BASE_URL=/openbis/webapp/example-webapp/  nuxi build  --prerender  && mv .output/public/ .output/html && cp -fR .output/html C:/Users/benes/Scripts/openbis-server/state/core-plugins/test-module/1/as/webapps/example-webapp",
-    "dev": "nuxi dev",
+    "dev": "NUXT_APP_BASE_URL=/openbis/webapp/example-webapp/ nuxi dev",
     "dev:pwa": "VITE_PLUGIN_PWA=true nuxi dev",
     "start": "node .output/server/index.mjs",
     "lint": "eslint .",
