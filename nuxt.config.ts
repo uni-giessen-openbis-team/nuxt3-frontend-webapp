@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     '@vue-macros/nuxt',
 
   ],
+
   experimental: {
     // when using generate, payload js assets included in sw precache manifest
     // but missing on offline, disabling extraction it until fixed
@@ -34,6 +35,13 @@ export default defineNuxtConfig({
     classSuffix: '',
   },
   nitro: {
+    devProxy: {
+      '/openbis': {
+        target: 'http://localhost:8080/openbis',
+        changeOrigin: true,
+        prependPath: true,
+      },
+    },
     esbuild: {
       options: {
         target: 'esnext',
@@ -57,6 +65,10 @@ export default defineNuxtConfig({
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'description', content: appDescription },
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+      ],
+      script: [
+        { src: 'http://localhost:3000/openbis/resources/api/v3/config.js' },
+        { src: 'http://localhost:3000/openbis/resources/api/v3/require.js' },
       ],
     },
   },
