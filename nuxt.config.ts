@@ -41,6 +41,7 @@ export default defineNuxtConfig({
         changeOrigin: true,
         prependPath: true,
       },
+
     },
     esbuild: {
       options: {
@@ -93,4 +94,7 @@ export default defineNuxtConfig({
     },
   },
   ssr: false, // client side rendering only,
+  runtimeConfig: {
+    apiBase: process.env.API_BASE_URL,
+  },
 })

@@ -4,30 +4,26 @@
 // SpaceSearchCriteria: http://bene-pc:3000/openbis/resources/api/v3/as/dto/space/search/SpaceSearchCriteria.js
 // SpaceFetchOptions: http://bene-pc:3000/openbis/resources/api/v3/as/dto/space/fetchoptions/SpaceFetchOptions.js
 
-<script>
-// With "require" call we asynchronously load "openbis", "SpaceSearchCriteria" and "SpaceFetchOptions" classes that we will need for our example.
-// The function that is passed as a second parameter of the require call is a callback that gets executed once requested classes are loaded.
-// In Javascript we work with exactly the same classes as in Java. For instance, "ch.ethz.sis.openbis.generic.asapi.v3.dto.space.search.SpaceSearchCriteria"
-// Java class and "as/dto/space/search/SpaceSearchCriteria" Javascript class have exactly the same methods. In order to find a Javascript class name please
-// check our Javadoc (https://openbis.ch/javadoc/20.10.x/javadoc-api-v3/index.html). The Javascript class name is defined in @JsonObject annotation of each V3 API Java DTO.
+<script setup>
+import openbisAdapter from '../../composables/openbisAdapter';
 
-require(['openbis', 'as/dto/space/search/SpaceSearchCriteria', 'as/dto/space/fetchoptions/SpaceFetchOptions'], (openbis, SpaceSearchCriteria, SpaceFetchOptions) => {
-  // get a reference to AS API
-  const v3 = new openbis()
+(async () => {
+  try {
+    // Login
+    const v3 = await openbisAdapter.login('admin', 'password')
+    // Search for spaces
+    const spaces = await openbisAdapter.searchSpaces(v3)
+    console.log(`Number of spaces: ${spaces.length}`)
 
-  // login to obtain a session token (the token it is automatically stored in openbis object and will be used for all subsequent API calls)
-  // v3.login('admin', 'password').done(() => {
-  // invoke other API methods, for instance search for spaces
-  v3.searchSpaces(new SpaceSearchCriteria(), new SpaceFetchOptions()).done((result) => {
-    alert(`Number of spaces: ${result.getObjects().length}`)
-
-    // logout to release the resources related with the session
-    // v3.logout()
-    // })
-  })
-})
+    // Logout
+    await openbisAdapter.logout(v3)
+  }
+  catch (error) {
+    console.error('Error:', error)
+  }
+})()
 </script>
 
-<template>
-  test
+ <template>
+  <div>Number of spaces: {{ numberOfSpaces }}</div>
 </template>
