@@ -41,6 +41,7 @@ export default defineNuxtConfig({
         changeOrigin: true,
         prependPath: true,
       },
+
     },
     esbuild: {
       options: {
@@ -67,8 +68,8 @@ export default defineNuxtConfig({
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
       ],
       script: [
-        { src: 'http://localhost:3000/openbis/resources/api/v3/config.js' },
-        { src: 'http://localhost:3000/openbis/resources/api/v3/require.js' },
+        { src: '/openbis/resources/api/v3/config.js' },
+        { src: '/openbis/resources/api/v3/require.js' },
       ],
     },
   },
@@ -93,4 +94,7 @@ export default defineNuxtConfig({
     },
   },
   ssr: false, // client side rendering only,
+  runtimeConfig: {
+    apiBase: process.env.API_BASE_URL,
+  },
 })
