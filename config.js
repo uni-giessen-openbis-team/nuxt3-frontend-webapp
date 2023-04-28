@@ -1,6 +1,10 @@
 const require = (function () {
   // Replace this with the actual base URL of your openBIS API
+<<<<<<< HEAD
   const baseUrl = 'http://localhost:8080/openbis/resources/api/v3'
+=======
+  const baseUrl = 'http://localhost:3000/openbis/resources/api/v3'
+>>>>>>> deebf7e0dd21e1e54e0603735a7895be7f263fc5
 
   return {
     baseUrl,
