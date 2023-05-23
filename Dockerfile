@@ -1,14 +1,20 @@
-FROM node:14-alpine
+FROM node:18 AS base
+
+RUN npm i -g pnpm 
 
 WORKDIR /app
 
-RUN apk update && apk upgrade
-RUN apk add git
+# Files required by pnpm install
+COPY package.json pnpm-lock.yaml ./
 
-COPY ./package*.json /app/
+# Install dependencies
+RUN pnpm install 
 
-RUN npm install && npm cache clean --force
-
+# Bundle app source
 COPY . .
 
-ENV PATH ./node_modules/.bin/:$PATH
+EXPOSE 3000
+
+RUN pnpm dev 
+
+CMD [ "tail", "-f", "/dev/null" ]

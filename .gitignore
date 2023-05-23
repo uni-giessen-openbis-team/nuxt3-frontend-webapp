@@ -5,5 +5,5 @@ dist
 .nuxt
 .env
 .idea/
-.pmpm-store/
+.pnpm-store/
 pnpm-lock.yaml

@@ -1,0 +1,9 @@
+.git
+node_modules
+docker-compose.yml
+Dockerifle
+.prettierrc
+.gutignore
+.eslintrc.js
+REDAME.md
+
