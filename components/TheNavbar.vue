@@ -5,6 +5,7 @@ import { useDisplay } from 'vuetify'
 import { useOpenBisStore } from '@/composables/openbisAPI.js'
 
 const { mdAndUp } = useDisplay()
+console.log('🚀 ~ file: TheNavbar.vue:8 ~ mdAndUp:', mdAndUp.value)
 const store = useOpenBisStore()
 
 const navItems = [
@@ -16,8 +17,7 @@ const navItems = [
 const menuItems = [
   { name: 'Settings', icon: 'mdi-account-cog', path: '/settings' },
 ]
-
-const tempDrawer = ref(false)
+const tempDrawer = ref(true)
 
 const userId = ref(store.sessionInformation?.permId.userId)
 </script>
@@ -36,7 +36,6 @@ const userId = ref(store.sessionInformation?.permId.userId)
     <v-spacer />
     <!-- Icons on the right side -->
     <!-- Settings Menu -->
-    <span v-if="userId">{{ userId }}</span>
 
     <v-menu
       transition="scale-transition"
@@ -64,7 +63,9 @@ const userId = ref(store.sessionInformation?.permId.userId)
   <!-- Add a navigation drawer on the left side on small screens -->
   <v-navigation-drawer
     v-model="tempDrawer"
-    :permanent="mdAndUp"
+    :permanent="mdAndUp.value"
+
+    app
   >
     <!-- Navigation links on medium to small -->
     <v-list

@@ -20,6 +20,7 @@ onMounted(() => {
   <div>
     <LoginForm v-if="showLoginForm" />
     <NuxtLayout v-else>
+      <TheNavbar />
       <NuxtPage />
     </NuxtLayout>
   </div>

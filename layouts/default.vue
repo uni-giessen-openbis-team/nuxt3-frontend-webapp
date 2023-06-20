@@ -3,8 +3,6 @@
 
 <template>
   <v-app>
-    <VitePwaManifest />
-    <TheNavbar />
     <v-main>
       <slot />
     </v-main>
