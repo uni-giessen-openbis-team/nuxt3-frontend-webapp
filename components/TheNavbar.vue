@@ -1,9 +1,11 @@
 <script setup>
+// TODO: fix disapearing navbar
 import { ref } from 'vue'
-// https://vuetifyjs.com/en/features/display-and-platform/#breakpoint-conditionals
 import { useDisplay } from 'vuetify'
+import { useOpenBisStore } from '@/composables/openbisAPI.js'
 
 const { mdAndUp } = useDisplay()
+const store = useOpenBisStore()
 
 const navItems = [
   { name: 'Home', icon: 'mdi-home', path: '/' },
@@ -16,6 +18,8 @@ const menuItems = [
 ]
 
 const tempDrawer = ref(false)
+
+const userId = ref(store.sessionInformation?.permId.userId)
 </script>
 
 <template>
@@ -31,8 +35,9 @@ const tempDrawer = ref(false)
     </nuxt-link>
     <v-spacer />
     <!-- Icons on the right side -->
-
     <!-- Settings Menu -->
+    <span v-if="userId">{{ userId }}</span>
+
     <v-menu
       transition="scale-transition"
     >

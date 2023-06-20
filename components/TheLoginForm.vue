@@ -5,24 +5,11 @@ import { useOpenBisStore } from '@/composables/openbisAPI.js'
 const username = ref('')
 const password = ref('')
 const error = ref(null)
-const openBisStore = useOpenBisStore()
+const store = useOpenBisStore()
 
 const handleLogin = async () => {
   try {
-    await openBisStore.login(username.value, password.value)
-  }
-  catch (e) {
-    error.value = e
-  }
-}
-
-const checkToken = () => {
-  alert(`Token: ${openBisStore.accessToken}`)
-}
-
-const getSessionInformation = async () => {
-  try {
-    await openBisStore.getSessionInformation()
+    await store.login(username.value, password.value)
   }
   catch (e) {
     error.value = e
@@ -33,40 +20,23 @@ const getSessionInformation = async () => {
 <template>
   <div>
     <h2>Login</h2>
-    <br>
     <form @submit.prevent="handleLogin">
       <label>
         Username:
         <input v-model="username" type="text" required>
       </label>
       <br>
-      <br>
       <label>
         Password:
         <input v-model="password" type="password" required>
       </label>
       <br>
-      <br>
       <button type="submit">
         Log in
       </button>
     </form>
-    <br>
-  </div>
-  <div>
-    <button @click="checkToken">
-      <!-- TODO: token is null!!! Why? -->
-      Check token
-    </button>
-  </div>
-  <div>
-    <br>
-    <button @click="getSessionInformation">
-      Get Session Information
-    </button>
-    <br>
-  </div>
-  <div v-if="error">
-    <p>Error: {{ error }}</p>
+    <div v-if="error">
+      <p>Error: {{ error }}</p>
+    </div>
   </div>
 </template>
