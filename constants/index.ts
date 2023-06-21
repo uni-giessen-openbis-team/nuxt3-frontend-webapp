@@ -3,5 +3,5 @@ export const appDescription = 'Datenverwaltungswerkzeug, das den gesamten Datenl
 
 // API routes
 export const baseURL = 'http://localhost:8080/'
-export const worfklowApiRoute = `${baseURL}api/v1/workflows`
+export const worfklowApiRoute = 'http://localhost:8085/api/v1/workflows'
 export const openbisapi = `${baseURL}openbis/resources/api/v3/openbis.js`

@@ -5,17 +5,20 @@ import { useDisplay } from 'vuetify'
 import { useOpenBisStore } from '@/composables/openbisAPI.js'
 
 const { mdAndUp } = useDisplay()
-console.log('🚀 ~ file: TheNavbar.vue:8 ~ mdAndUp:', mdAndUp.value)
 const store = useOpenBisStore()
 
 const navItems = [
   { name: 'Home', icon: 'mdi-home', path: '/' },
   { name: 'Workflows', icon: 'mdi-sitemap', path: '/workflows' },
   { name: 'Testing', icon: 'mdi-account-question', path: '/testing' },
+  { name: 'Data', icon: 'mdi-folder', path: '/data' },
+  { name: 'Add Project', icon: 'mdi-plus-box', path: '/projects' },
+
 ]
 
 const menuItems = [
   { name: 'Settings', icon: 'mdi-account-cog', path: '/settings' },
+  { name: 'Information', icon: 'mdi-information', path: '/Information' },
 ]
 const tempDrawer = ref(true)
 
@@ -50,11 +53,11 @@ const userId = ref(store.sessionInformation?.permId.userId)
       </template>
 
       <v-list>
-        <v-list-item
-          v-for="(item, i) in menuItems"
-          :key="i"
-        >
-          <v-list-item-title>{{ item.name }}</v-list-item-title>
+        <v-list-item v-for="routeItem in menuItems" :key="routeItem.name">
+          <nuxt-link :to="routeItem.path" class="text-decoration-none">
+            <v-icon>{{ routeItem.icon }}</v-icon>
+            {{ routeItem.name }}
+          </nuxt-link>
         </v-list-item>
       </v-list>
     </v-menu>

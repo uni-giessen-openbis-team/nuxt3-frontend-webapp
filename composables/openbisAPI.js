@@ -51,7 +51,7 @@ export const useOpenBisStore = defineStore('openBis', {
     async getSessionInformation() {
       try {
         const sessionInformation = await new Promise((resolve, reject) => {
-          this
+          this.openbisInstance.getSessionInformation()
             .done(resolve)
             .fail(reject)
         })
@@ -66,28 +66,68 @@ export const useOpenBisStore = defineStore('openBis', {
         throw error
       }
     },
-    // Samples methods
-    async createSample(typeId, spaceId, experimentId, code) {
-      try {
-        const sampleCreation = {
-          typeId,
-          spaceId,
-          experimentId,
-          code,
-        }
 
-        const permIds = await new Promise((resolve, reject) => {
-          this.openbisInstance.createSamples([sampleCreation])
+    // SearchExample
+    async searchSamples(spaceCode, sampleTypeCode) {
+      try {
+        const criteria = new this.loadedResources.SampleSearchCriteria()
+        criteria.withSpace().withCode().thatEquals(spaceCode)
+        criteria.withType().withCode().thatEquals(sampleTypeCode)
+
+        const fetchOptions = new this.loadedResources.SampleFetchOptions()
+        fetchOptions.withProperties()
+
+        const result = await new Promise((resolve, reject) => {
+          this.openbisInstance.searchSamples(criteria, fetchOptions)
             .done(resolve)
             .fail(reject)
         })
 
-        console.log('Perm ids: ', JSON.stringify(permIds))
-
-        return permIds
+        result.getObjects().forEach((sample) => {
+          // because we asked for properties via fetch options we can access them here, otherwise NotFetchedException would be thrown by getProperties method
+          console.log(`Sample ${sample.getIdentifier()} has properties: ${JSON.stringify(sample.getProperties())}`)
+        })
+        return result.getObjects()
       }
       catch (error) {
-        console.error('Error creating sample:', error)
+        console.error('Error searching samples:', error)
+        throw error
+      }
+    },
+
+    // Samples methods
+    // sampleTypeCode - A type of samples to be created/updated.
+    // properties - A map of properties to be set on the sample. maybe the sample data goes here
+    // TODO: Test the function
+
+    async createSampleEntry(sampleTypeCode, spaceCode, projectCode, experimentName, properties = {}) {
+      try {
+        const experimentCode = `${spaceCode}/${projectCode}/${experimentName}`
+        const sample = new this.loadedResources.SampleCreation()
+        sample.setTypeId(new this.loadedResources.EntityTypePermId(sampleTypeCode))
+        sample.setSpaceId(new this.loadedResources.SpacePermId(spaceCode))
+        sample.setExperimentId(new this.loadedResources.ExperimentIdentifier(experimentCode))
+
+        // If the sample code is provided, set it
+        if (properties.sampleCode) {
+          sample.setCode(properties.sampleCode)
+          delete properties.sampleCode // Delete the property to prevent setting it again
+        }
+
+        // Loop through the remaining properties (if any) and set them
+        for (const property in properties) {
+          if (properties.hasOwnProperty(property))
+            sample.setProperty(property, properties[property])
+        }
+
+        return new Promise((resolve, reject) => {
+          this.openbisInstance.createSamples([sample])
+            .done(resolve)
+            .fail(reject)
+        })
+      }
+      catch (error) {
+        console.error('Error creating sample entry:', error)
         throw error
       }
     },
@@ -100,6 +140,14 @@ export const useOpenBisStore = defineStore('openBis', {
         this.openbisInstance.searchSpaces(criteria, fo).done(resolve).fail(reject)
       })
     },
+    // searchProjects() {
+    //   const criteria = new this.loadedResources.ProjectSearchCriteria()
+    //   const fo = new this.loadedResources.ProjectFetchOptions()
+
+    //   return new Promise((resolve, reject) => {
+    //     this.openbisInstance.searchProjects(criteria, fo).done(resolve).fail(reject)
+    //   })
+    // },
   },
   getters: {
     isLoggedIn() {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 /// / imports ////
 import { onMounted, ref } from 'vue'
+import { useOpenBisStore } from '@/composables/openbisAPI.js'
 
 /// / types ////
 export interface MyRow {
@@ -24,8 +25,14 @@ const emit = defineEmits(['update:table-data', 'update:modelValue'])
 
 const rows = ref(props.tableData)
 
-/// / lifecycle ////
-onMounted(() => {
+// OpenBis setup
+const store = useOpenBisStore()
+const samples = ref([]) // This will hold your samples data
+const selectedSample = ref(null)
+
+onMounted(async () => {
+  await store.loadV3API()
+  samples.value = await store.searchSamples()
   addRow()
 })
 
@@ -76,8 +83,19 @@ function emitTableData() {
       <tbody>
         <tr v-for="(row, index) in rows" :key="index">
           <td v-for="column in tableDefinition.columns" :key="column.name">
+            <v-autocomplete
+              v-if="column.type === 'file'"
+              v-model="row[column.name]"
+              :items="samples"
+              label="Select a sample"
+              item-text="name"
+              item-value="value"
+              return-object
+              single-line
+              @change="emitTableData"
+            />
             <v-text-field
-              v-if="column.type === 'string' || column.type === 'file'"
+              v-else-if="column.type === 'string'"
               v-model="row[column.name]"
               :required="column.required"
               single-line
