@@ -5,15 +5,14 @@ export const useOpenBisStore = defineStore('openBis', {
   state: () => ({
     resourcesToLoad,
     loadedResources: {},
-    openbisInstance: null,
+    v3: null,
     sessionToken: null,
 
   }),
   actions: {
     async loadV3API() {
       console.log('loadV3API')
-      console.log('🚀 ~ file: openbisAPI.js:17 ~ loadV3API ~ this.openbisInstance:', this.openbisInstance)
-      if (!this.openbisInstance) {
+      if (!this.v3) {
         const promises = this.resourcesToLoad.map((fullName) => {
           return new Promise((resolve) => {
             require([fullName], (resource) => {
@@ -26,79 +25,248 @@ export const useOpenBisStore = defineStore('openBis', {
         })
 
         await Promise.all(promises)
-        this.openbisInstance = new this.loadedResources.openbis()
-        console.log('🚀 ~ file: openbisAPI.js:17 ~ loadV3API ~ this.openbisInstance:', this.openbisInstance)
-      }
-    },
-    // Login methods
-    async login(user, password) {
-      try {
-        const sessionToken = await new Promise((resolve, reject) => {
-          this.openbisInstance.login(user, password)
-            .done((result) => {
-              resolve(result)
-            })
-            .fail(reject)
-        })
-        console.log('token result:', sessionToken)
-        this.sessionToken = sessionToken
-      }
-      catch (error) {
-        console.error('Login error:', error)
-        throw error
-      }
-    },
-    async getSessionInformation() {
-      try {
-        const sessionInformation = await new Promise((resolve, reject) => {
-          this.openbisInstance.getSessionInformation()
-            .done(resolve)
-            .fail(reject)
-        })
-        console.log('User Name: ', sessionInformation.userName)
-        console.log('Home Group: ', sessionInformation.homeGroupCode)
-        console.log('Person: ', sessionInformation.person)
-        console.log('Creator Person: ', sessionInformation.creatorPerson)
-        return sessionInformation
-      }
-      catch (error) {
-        console.error('Error getting session information:', error)
-        throw error
+        this.v3 = new this.loadedResources.openbis()
+        console.log('🚀 ~ file: openbisAPI.js:17 ~ loadV3API ~ this.openbisInstance:', this.v3)
       }
     },
 
-    // SearchExample
-    async searchSamples(spaceCode, sampleTypeCode) {
-      try {
-        const criteria = new this.loadedResources.SampleSearchCriteria()
-        criteria.withSpace().withCode().thatEquals(spaceCode)
-        criteria.withType().withCode().thatEquals(sampleTypeCode)
-
-        const fetchOptions = new this.loadedResources.SampleFetchOptions()
-        fetchOptions.withProperties()
-
-        const result = await new Promise((resolve, reject) => {
-          this.openbisInstance.searchSamples(criteria, fetchOptions)
-            .done(resolve)
-            .fail(reject)
-        })
-
-        result.getObjects().forEach((sample) => {
-          // because we asked for properties via fetch options we can access them here, otherwise NotFetchedException would be thrown by getProperties method
-          console.log(`Sample ${sample.getIdentifier()} has properties: ${JSON.stringify(sample.getProperties())}`)
-        })
-        return result.getObjects()
-      }
-      catch (error) {
-        console.error('Error searching samples:', error)
-        throw error
-      }
+    promise(dfd) {
+      return new Promise((resolve, reject) => {
+        dfd.then(
+          (result) => {
+            resolve(result)
+          },
+          (error) => {
+            reject(error)
+          },
+        )
+      })
     },
 
-    // Samples methods
-    // sampleTypeCode - A type of samples to be created/updated.
-    // properties - A map of properties to be set on the sample. maybe the sample data goes here
-    // TODO: Test the function
+    login(user, password) {
+      return this.promise(this.v3.login(user, password))
+        .then((sessionToken) => {
+          this.sessionToken = sessionToken
+          return sessionToken
+        })
+    },
+
+   
+    getSessionInformation() {
+      return this.promise(this.v3.getSessionInformation())
+    },
+
+    getServerInformation() {
+      return this.promise(this.v3.getServerInformation())
+    },
+
+    getServerPublicInformation() {
+      return this.promise(this.v3.getServerPublicInformation())
+    },
+
+    logout() {
+      this.sessionToken = null
+      return this.promise(this.v3.logout())
+    },
+
+    getSpaces(ids, fo) {
+      return this.promise(this.v3.getSpaces(ids, fo))
+    },
+    getProjects(ids, fo) {
+      return this.promise(this.v3.getProjects(ids, fo))
+    },
+
+    getExperiments(ids, fo) {
+      return this.promise(this.v3.getExperiments(ids, fo))
+    },
+
+    getSamples(ids, fo) {
+      return this.promise(this.v3.getSamples(ids, fo))
+    },
+
+    getDataSets(ids, fo) {
+      return this.promise(this.v3.getDataSets(ids, fo))
+    },
+
+    getPlugins(ids, fo) {
+      return this.promise(this.v3.getPlugins(ids, fo))
+    },
+
+    getQueries(ids, fo) {
+      return this.promise(this.v3.getQueries(ids, fo))
+    },
+
+    getPropertyTypes(ids, fo) {
+      return this.promise(this.v3.getPropertyTypes(ids, fo))
+    },
+
+    getAuthorizationGroups(ids, fo) {
+      return this.promise(this.v3.getAuthorizationGroups(ids, fo))
+    },
+
+    getPersons(ids, fo) {
+      return this.promise(this.v3.getPersons(ids, fo))
+    },
+
+    updatePersons(updates) {
+      return this.promise(this.v3.updatePersons(updates))
+    },
+
+    searchSpaces(criteria, fo) {
+      return this.promise(this.v3.searchSpaces(criteria, fo))
+    },
+
+    searchProjects(criteria, fo) {
+      return this.promise(this.v3.searchProjects(criteria, fo))
+    },
+
+    searchPropertyTypes(criteria, fo) {
+      return this.promise(this.v3.searchPropertyTypes(criteria, fo))
+    },
+
+    searchPlugins(criteria, fo) {
+      return this.promise(this.v3.searchPlugins(criteria, fo))
+    },
+
+    searchPersonalAccessTokens(criteria, fo) {
+      return this.promise(this.v3.searchPersonalAccessTokens(criteria, fo))
+    },
+
+    searchQueries(criteria, fo) {
+      return this.promise(this.v3.searchQueries(criteria, fo))
+    },
+
+    searchQueryDatabases(criteria, fo) {
+      return this.promise(this.v3.searchQueryDatabases(criteria, fo))
+    },
+
+    searchMaterials(criteria, fo) {
+      return this.promise(this.v3.searchMaterials(criteria, fo))
+    },
+
+    searchSamples(criteria, fo) {
+      return this.promise(this.v3.searchSamples(criteria, fo))
+    },
+
+    searchExperiments(criteria, fo) {
+      return this.promise(this.v3.searchExperiments(criteria, fo))
+    },
+
+    searchDataSets(criteria, fo) {
+      return this.promise(this.v3.searchDataSets(criteria, fo))
+    },
+
+    searchVocabularies(criteria, fo) {
+      return this.promise(this.v3.searchVocabularies(criteria, fo))
+    },
+
+    searchVocabularyTerms(criteria, fo) {
+      return this.promise(this.v3.searchVocabularyTerms(criteria, fo))
+    },
+
+    searchPersons(criteria, fo) {
+      return this.promise(this.v3.searchPersons(criteria, fo))
+    },
+
+    searchAuthorizationGroups(criteria, fo) {
+      return this.promise(this.v3.searchAuthorizationGroups(criteria, fo))
+    },
+
+    searchPropertyAssignments(criteria, fo) {
+      return this.promise(this.v3.searchPropertyAssignments(criteria, fo))
+    },
+
+    searchEvents(criteria, fo) {
+      return this.promise(this.v3.searchEvents(criteria, fo))
+    },
+
+    getSampleTypes(ids, fo) {
+      return this.promise(this.v3.getSampleTypes(ids, fo))
+    },
+
+    getExperimentTypes(ids, fo) {
+      return this.promise(this.v3.getExperimentTypes(ids, fo))
+    },
+
+    getDataSetTypes(ids, fo) {
+      return this.promise(this.v3.getDataSetTypes(ids, fo))
+    },
+
+    getMaterialTypes(ids, fo) {
+      return this.promise(this.v3.getMaterialTypes(ids, fo))
+    },
+
+    getVocabularies(ids, fo) {
+      return this.promise(this.v3.getVocabularies(ids, fo))
+    },
+
+    getOperationExecutions(ids, fo) {
+      return this.promise(this.v3.getOperationExecutions(ids, fo))
+    },
+
+    updateSampleTypes(updates) {
+      return this.promise(this.v3.updateSampleTypes(updates))
+    },
+
+    updateExperimentTypes(updates) {
+      return this.promise(this.v3.updateExperimentTypes(updates))
+    },
+
+    updateDataSetTypes(updates) {
+      return this.promise(this.v3.updateDataSetTypes(updates))
+    },
+
+    updateMaterialTypes(updates) {
+      return this.promise(this.v3.updateMaterialTypes(updates))
+    },
+
+    searchSampleTypes(criteria, fo) {
+      return this.promise(this.v3.searchSampleTypes(criteria, fo))
+    },
+
+    searchExperimentTypes(criteria, fo) {
+      return this.promise(this.v3.searchExperimentTypes(criteria, fo))
+    },
+
+    searchDataSetTypes(criteria, fo) {
+      return this.promise(this.v3.searchDataSetTypes(criteria, fo))
+    },
+
+    searchMaterialTypes(criteria, fo) {
+      return this.promise(this.v3.searchMaterialTypes(criteria, fo))
+    },
+
+    deleteSampleTypes(ids, options) {
+      return this.promise(this.v3.deleteSampleTypes(ids, options))
+    },
+
+    deleteExperimentTypes(ids, options) {
+      return this.promise(this.v3.deleteExperimentTypes(ids, options))
+    },
+
+    deleteDataSetTypes(ids, options) {
+      return this.promise(this.v3.deleteDataSetTypes(ids, options))
+    },
+
+    deleteMaterialTypes(ids, options) {
+      return this.promise(this.v3.deleteMaterialTypes(ids, options))
+    },
+
+    evaluatePlugin(options) {
+      return this.promise(this.v3.evaluatePlugin(options))
+    },
+
+    executeQuery(id, options) {
+      return this.promise(this.v3.executeQuery(id, options))
+    },
+
+    executeSql(sql, options) {
+      return this.promise(this.v3.executeSql(sql, options))
+    },
+
+    executeOperations(operations, options) {
+      return this.promise(this.v3.executeOperations(operations, options))
+    },
 
     async createSampleEntry(sampleTypeCode, spaceCode, projectCode, experimentName, properties = {}) {
       try {
@@ -121,7 +289,7 @@ export const useOpenBisStore = defineStore('openBis', {
         }
 
         return new Promise((resolve, reject) => {
-          this.openbisInstance.createSamples([sample])
+          this.v3.createSamples([sample])
             .done(resolve)
             .fail(reject)
         })
@@ -131,27 +299,14 @@ export const useOpenBisStore = defineStore('openBis', {
         throw error
       }
     },
-
-    searchSpaces() {
-      const criteria = new this.loadedResources.SpaceSearchCriteria()
-      const fo = new this.loadedResources.SpaceFetchOptions()
-
-      return new Promise((resolve, reject) => {
-        this.openbisInstance.searchSpaces(criteria, fo).done(resolve).fail(reject)
-      })
-    },
-    // searchProjects() {
-    //   const criteria = new this.loadedResources.ProjectSearchCriteria()
-    //   const fo = new this.loadedResources.ProjectFetchOptions()
-
-    //   return new Promise((resolve, reject) => {
-    //     this.openbisInstance.searchProjects(criteria, fo).done(resolve).fail(reject)
-    //   })
-    // },
   },
+
   getters: {
     isLoggedIn() {
       return this.sessionToken !== null
+    },
+    isAdmin() {
+      return true
     },
   },
 })

@@ -1,6 +1,11 @@
 <script setup>
+
 </script>
 
 <template>
-  <WorkflowSampleSelector />
+  <div />
 </template>
+
+<style lang="scss" scoped>
+
+</style>

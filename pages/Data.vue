@@ -2,8 +2,6 @@
 import { onMounted, ref } from 'vue'
 import { useOpenBisStore } from '@/composables/openbisAPI.js'
 
-
-
 const store = useOpenBisStore()
 const samples = ref([]) // This will hold your samples data
 const spaces = ref([]) // This will hold your spaces data

@@ -3,9 +3,8 @@
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import { useOpenBisStore } from '@/composables/openbisAPI.js'
-
-const { mdAndUp } = useDisplay()
 const store = useOpenBisStore()
+const { mdAndUp } = useDisplay()
 
 const navItems = [
   { name: 'Home', icon: 'mdi-home', path: '/' },
@@ -13,7 +12,6 @@ const navItems = [
   { name: 'Testing', icon: 'mdi-account-question', path: '/testing' },
   { name: 'Data', icon: 'mdi-folder', path: '/data' },
   { name: 'Add Project', icon: 'mdi-plus-box', path: '/projects' },
-
 ]
 
 const menuItems = [
@@ -29,7 +27,7 @@ const userId = ref(store.sessionInformation?.permId.userId)
   <v-app-bar app>
     <!-- The Icon on the left to open and close the drawer -->
     <v-app-bar-nav-icon
-      class="hidden-md-and-up"
+      class="hidden-lg-and-up"
       @click="tempDrawer = !tempDrawer"
     />
     <v-spacer />
@@ -58,6 +56,9 @@ const userId = ref(store.sessionInformation?.permId.userId)
             <v-icon>{{ routeItem.icon }}</v-icon>
             {{ routeItem.name }}
           </nuxt-link>
+        </v-list-item>
+        <v-list-item>
+          <Logout />
         </v-list-item>
       </v-list>
     </v-menu>

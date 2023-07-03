@@ -4,15 +4,15 @@ import { useOpenBisStore } from '@/composables/openbisAPI.js'
 import LoginForm from '@/components/TheLoginForm.vue'
 
 const store = useOpenBisStore()
-const showLoginForm = ref(!store.sessionToken)
+const showLoginForm = ref(!store.isLoggedIn)
 
-watch(() => store.sessionToken, (newVal) => {
+watch(() => store.isLoggedIn, (newVal) => {
   if (newVal)
     showLoginForm.value = false
 })
 
-onMounted(() => {
-  store.loadV3API()
+onMounted(async () => {
+  await store.loadV3API()
 })
 </script>
 
