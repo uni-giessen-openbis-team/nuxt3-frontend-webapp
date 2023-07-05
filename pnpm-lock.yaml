@@ -28,6 +28,9 @@ dependencies:
   i:
     specifier: ^0.3.7
     version: 0.3.7
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
   material-design-icons-iconfont:
     specifier: ^6.7.0
     version: 6.7.0

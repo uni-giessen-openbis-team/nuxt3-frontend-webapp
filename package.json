@@ -40,6 +40,7 @@
     "bootstrap": "5.3.0-alpha1",
     "http-proxy-middleware": "^2.0.6",
     "i": "^0.3.7",
+    "lodash": "^4.17.21",
     "material-design-icons-iconfont": "^6.7.0",
     "pnpm": "^8.6.5",
     "requirejs": "^2.3.6",
