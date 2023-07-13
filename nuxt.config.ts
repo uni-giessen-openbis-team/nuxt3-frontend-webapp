@@ -13,7 +13,7 @@ export default defineNuxtConfig({
     // own-imports
     '@formkit/nuxt',
     '@vue-macros/nuxt',
-
+    'nuxt-lodash',
   ],
 
   experimental: {

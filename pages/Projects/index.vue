@@ -1,38 +1,48 @@
-<script setup>
+<script setup lang = 'ts'>
 import { ref } from 'vue'
 import { FormWizard, TabContent } from 'vue3-form-wizard'
+import type { TableVariable } from 'types/wizzard'
+import { createCombinations } from '@/composables/utils'
+
 import 'vue3-form-wizard/dist/style.css'
-
-const tab = ref('')
-const projectContext = ref({})
-const projectSamples = ref({
-  tableVariables: ref([
-    {
-      title: 'species',
-      conditions: ref([]),
-      continous: false,
-      unit: null,
-    },
-  ]),
-})
-
-const submitForm = () => {
-  formOutput.value = JSON.stringify(form, null, 2) // The stringify function arguments provide a pretty print format
+const Entry = {
+  conditions: [] as (string | number)[],
+  continous: false,
+  unit: null,
 }
 
-// form wizzard functions
-// export function isValid() {
-//   if (projectContext.value.space === '' || projectContext.value.name === ''
-//     || projectContext.value.description === '' || length(projectContext.value.description) < MINDESCLENGTH
-//   ) {
-//     return true// TODO: Returning true will prevent the user from moving to the next tab
-//     alert('Please enter a project context')
-//   }
-//   return true
-// }
+const speciesEntry: TableVariable = {
+  ...Entry,
+  title: 'species',
+}
+
+const tissueEntry: TableVariable = {
+  ...Entry,
+  title: 'tissue',
+}
+const tab = ref('')
+const projectContext = ref({})
+const entetyVariables = ref([speciesEntry])
+const sampleVariables = ref([tissueEntry])
+
+const entetyConditionCombinations = ref({})
+const sampleConditinCombinatinos = ref({})
+
+const entetyConditionsResult = ref([])
 
 function onComplete() {
-  alert('Yay. Done!')
+  alert('Yay. Done!') 
+}
+
+function updateEntetyConditionsResult() {
+  console.log(' updateEntetyConditionsResult')
+  entetyConditionsResult.value = createCombinations(entetyVariables.value)
+  return true
+}
+
+function updateSampleConditionsResult() {
+  entetyConditionsResult.value = createCombinations(sampleVariables.value)
+  return true
 }
 </script>
 
@@ -53,15 +63,27 @@ function onComplete() {
     <v-window v-model="tab">
       <v-window-item :key="1" value="Create">
         <v-form>
-          <FormWizard @on-complete="onComplete">
+          <FormWizard>
             <TabContent title="Project Context">
               <WizzardProjectContext v-model="projectContext" />
             </TabContent>
-            <TabContent title="Project Samples">
-              <WizzardProjectSamples v-model="projectSamples" />
+            <TabContent title="Project Enteties" :before-change="updateEntetyConditionsResult">
+              <WizzardProjectEnteties v-model="entetyVariables" />
             </TabContent>
+            <TabContent title="Samples Preview">
+              <WizzardPreviewTable v-model="entetyConditionsResult" />
+            </TabContent>
+            <TabContent title="Project Samples" :before-change="updateSampleConditionsResult">
+              <WizzardSampleExtracts v-model="sampleVariables" />
+            </TabContent>
+            <!-- Use the function inside here -->
+            <!-- Combine  projectEnteties and projectSamples and create sampleConditinCombinatinos -->
+            <!-- <TabContent title="Samples Preview">
+              <WizzardPreviewTable v-model="entetyConditionCombinations" />
+            </TabContent> -->
+
             <TabContent title="final Form">
-              Yuhuuu! This seems pretty damn simple
+              <pre>{{ sampleConditions }}</pre>
             </TabContent>
           </FormWizard>
         </v-form>
@@ -82,9 +104,6 @@ function onComplete() {
           Submit
         </v-btn>
       </v-window-item>
-      <div>
-        Sample Preview
-      </div>
     </v-window>
   </v-container>
 </template>

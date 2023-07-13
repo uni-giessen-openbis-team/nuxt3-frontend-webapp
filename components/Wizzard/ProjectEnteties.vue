@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-
-const { modelValue } = defineModels<{ modelValue: Object }>()
+const { modelValue } = defineModels<{ modelValue: Array<Object> }>()
 
 const tab = ref('')
 
@@ -22,7 +21,7 @@ const variables = ref([
 
 <template>
   <v-autocomplete
-    v-model="modelValue.tableVariables"
+    v-model="modelValue"
     label="Experimental variables"
     box
     chips
@@ -33,15 +32,25 @@ const variables = ref([
   <div>
     <v-card>
       <v-tabs v-model="tab" bg-color="primary">
-        <v-tab v-for="(item, index) in modelValue.tableVariables" :key="index" :value="item.title">
+        <v-tab v-for="(item, index) in modelValue" :key="index" :value="item.title">
           {{ item.title }}
         </v-tab>
       </v-tabs>
       <v-card-text>
         <v-window v-model="tab">
-          <v-window-item v-for="(item, index) in modelValue.tableVariables" :key="index" :value="item.title">
+          <v-window-item v-for="(item, index) in modelValue" :key="index" :value="item.title">
             <div>
               <WizzardCrudTable v-model="item.conditions" />
+
+              <v-checkbox
+                v-model="item.continous"
+                label="continous"
+              />
+
+              <div v-if="item.continous === true">
+                Unit
+                <v-text-field v-model="item.unit" />
+              </div>
             </div>
           </v-window-item>
         </v-window>

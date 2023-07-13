@@ -4,7 +4,7 @@ import { useOpenBisStore } from '@/composables/openbisAPI.js'
 
 const MINDESCLENGTH = 20
 
-const { modelValue } = defineModels<{ modelValue: Element }>()
+const { modelValue } = defineModels<{ modelValue: Object }>()
 
 // data from the API
 const store = useOpenBisStore()
