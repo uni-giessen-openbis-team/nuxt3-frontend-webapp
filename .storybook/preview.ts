@@ -1,5 +1,4 @@
 import type { Preview } from "@storybook/vue3";
-import { withVuetify } from 'storybook-addon-vuetify3/dist/decorators'
 import { myCustomLightTheme } from "../plugins/useVuetify";
 
 const preview: Preview = {
@@ -28,6 +27,3 @@ export const globalTypes = {
   }
 }
 
-export const decorators = [
-  withVuetify
-]

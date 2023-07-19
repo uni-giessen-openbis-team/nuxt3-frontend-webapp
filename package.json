@@ -65,6 +65,8 @@
     "requirejs": "^2.3.6",
     "sass": "^1.63.6",
     "storybook-addon-vuetify3": "^2.0.5",
+    "unplugin-auto-import": "^0.16.6",
+    "unplugin-vue-components": "^0.25.1",
     "vue3-form-wizard": "^0.2.1",
     "vuetify": "^3.3.6",
     "zod": "^3.21.4"
