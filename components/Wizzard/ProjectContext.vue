@@ -1,24 +1,30 @@
 <script setup lang = "ts">
 import { onMounted, ref } from 'vue'
 import { useOpenBisStore } from '@/composables/openbisAPI.js'
-
+const store = useOpenBisStore()
 const MINDESCLENGTH = 20
 
-const { modelValue } = defineModels<{ modelValue: Object }>()
+// The type for modelValue is inferred as Object. However, it would be better to have a more specific type.
+// From your template, it seems like it should be something like this:
+export interface ProjectContext {
+  UUID: string
+  space: string | null
+  name: string | null
+  contactPerson: string | null
+  manager: string | null
+  description: string | null
+}
+const { modelValue } = defineModels<{ modelValue: ProjectContext }>()
 
 // data from the API
-const store = useOpenBisStore()
-const people = ref([])
-const projectSpaces = ref([])
+const people = ref<string[]>([])
+const projectSpaces = ref<string[]>([])
 
 onMounted(async () => {
   // Load the spaces from the API
-  const SpaceSearchCriteria = store.loadedResources.SpaceSearchCriteria
-  const SpaceFetchOptions = store.loadedResources.SpaceFetchOptions
-  const criteria = new SpaceSearchCriteria()
-  const fo = new SpaceFetchOptions()
-  const spaces = await store.searchSpaces(criteria, fo)
+  const spaces = await store.getAllSpaces()
   projectSpaces.value = spaces.objects.map(space => space.code)
+  modelValue.UUID = crypto.randomUUID()
 })
 </script>
 

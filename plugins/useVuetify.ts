@@ -3,8 +3,11 @@ import type { ThemeDefinition } from 'vuetify'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+// Styles
+import '@mdi/font/css/materialdesignicons.css'
+import 'vuetify/styles'
 
-const myCustomLightTheme: ThemeDefinition = {
+export const myCustomLightTheme: ThemeDefinition = {
   dark: false,
   colors: {
     // 'background': '#edd7d79b',
@@ -20,7 +23,7 @@ const myCustomLightTheme: ThemeDefinition = {
   },
 }
 
-const myCustomDarkTheme: ThemeDefinition = {
+export const myCustomDarkTheme: ThemeDefinition = {
   dark: true,
   colors: {
     // add colors

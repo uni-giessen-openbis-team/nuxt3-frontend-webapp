@@ -1,10 +1,10 @@
 <script setup>
-// When making web applications and embedding them into an openBIS tab on the core UI 
-// is often required to have information about the context those applications are 
+// When making web applications and embedding them into an openBIS tab on the core UI
+// is often required to have information about the context those applications are
 // being loaded for two particular purposes.
 // https://unlimited.ethz.ch/display/openBISDoc2010/openBIS+V3+API#openBISV3API-VI.Webapplicationcontext
 import { onMounted } from 'vue'
-import { useOpenBisStore } from '@/composables/openbisAPI.js'
+import { useOpenBisStore } from '@/composables/openbisAPI'
 
 const store = useOpenBisStore()
 

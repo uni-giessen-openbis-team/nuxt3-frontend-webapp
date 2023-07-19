@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useOpenBisStore } from '@/composables/openbisAPI.js'
+import { useOpenBisStore } from '@/composables/openbisAPI'
 
 const store = useOpenBisStore()
 const sessionInfo = ref(null)

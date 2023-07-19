@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useOpenBisStore } from '@/composables/openbisAPI.js'
+const store = useOpenBisStore()
 const { modelValue } = defineModels<{ modelValue: Array<Object> }>()
 
 const tab = ref('')
@@ -17,6 +19,9 @@ const variables = ref([
     unit: null,
   },
 ])
+
+const jsonObject = await store.getVocabularyTerms('SPECIES')
+const speciesList = jsonObject.SPECIES.terms.map(term => term.label)
 </script>
 
 <template>
@@ -39,7 +44,14 @@ const variables = ref([
       <v-card-text>
         <v-window v-model="tab">
           <v-window-item v-for="(item, index) in modelValue" :key="index" :value="item.title">
-            <div>
+            <div v-if="item.title === 'species'">
+              <v-autocomplete
+                v-model="item.conditions"
+                :items="speciesList"
+                multiple
+              />
+            </div>
+            <div v-else>
               <WizzardCrudTable v-model="item.conditions" />
 
               <v-checkbox

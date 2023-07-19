@@ -137,6 +137,7 @@ export const resourcesToLoad = [
   'as/dto/roleassignment/delete/DeleteRoleAssignmentsOperation',
   'as/dto/roleassignment/delete/RoleAssignmentDeletionOptions',
   'as/dto/roleassignment/id/RoleAssignmentTechId',
+  'as/dto/roleassignment/fetchoptions/RoleAssignmentFetchOptions', // added
   'as/dto/sample/create/CreateSampleTypesOperation',
   'as/dto/sample/create/SampleTypeCreation',
   'as/dto/sample/delete/DeleteSampleTypesOperation',
@@ -155,8 +156,8 @@ export const resourcesToLoad = [
   'as/dto/service/execute/ExecuteCustomASServiceOperation',
   'as/dto/service/id/CustomASServiceCode',
   'as/dto/space/Space',
-  'as/dto/space/fetchoptions/SpaceFetchOptions',
   'as/dto/space/id/SpacePermId',
+  'as/dto/space/fetchoptions/SpaceFetchOptions',
   'as/dto/space/search/SpaceSearchCriteria',
   'as/dto/vocabulary/Vocabulary',
   'as/dto/vocabulary/VocabularyTerm',
@@ -179,4 +180,7 @@ export const resourcesToLoad = [
   'as/dto/vocabulary/update/VocabularyTermUpdate',
   'as/dto/vocabulary/update/VocabularyUpdate',
   'as/dto/webapp/create/WebAppSettingCreation',
+  'as/dto/project/create/ProjectCreation', // added
+  'as/dto/sample/create/SampleCreation', // added
+
 ]

@@ -9,4 +9,5 @@ export interface TableVariable {
     secondaryName: string
     externalDBIDL: string
     count?: number
+    unit?: string
   }

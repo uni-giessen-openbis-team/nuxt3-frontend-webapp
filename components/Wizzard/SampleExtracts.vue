@@ -2,8 +2,9 @@
 // This comp
 import { ref } from 'vue'
 import type { TableVariable } from 'types/wizzard'
+import { useOpenBisStore } from '@/composables/openbisAPI.js'
 const { modelValue } = defineModels<{ modelValue: Object }>()
-
+const store = useOpenBisStore()
 const tab = ref('')
 
 const variables: Ref<TableVariable[]> = ref([
@@ -19,6 +20,9 @@ const variables: Ref<TableVariable[]> = ref([
     unit: null,
   },
 ])
+
+const jsonObject = await store.getVocabularyTerms('TISSUES')
+const tissues = jsonObject.SPECIES?.terms.map(term => term.label)
 </script>
 
 <template>
@@ -47,7 +51,14 @@ const variables: Ref<TableVariable[]> = ref([
         <v-card-text>
           <v-window v-model="tab">
             <v-window-item v-for="(item, index) in modelValue" :key="index" :value="item.title">
-              <div>
+              <div v-if="item.title === 'tissue'">
+                <v-autocomplete
+                  v-model="item.conditions"
+                  :items="tissues"
+                  multiple
+                />
+              </div>
+              <div v-else>
                 <WizzardCrudTable v-model="item.conditions" />
 
                 <v-checkbox

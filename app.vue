@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
-import { useOpenBisStore } from '@/composables/openbisAPI.js'
+import { useOpenBisStore } from '@/composables/openbisAPI'
 import LoginForm from '@/components/TheLoginForm.vue'
 
 const store = useOpenBisStore()

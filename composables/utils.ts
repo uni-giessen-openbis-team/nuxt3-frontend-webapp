@@ -1,24 +1,26 @@
 import type { TableVariable } from '@/types/wizzard'
 
-export function createCombinations(Variables: TableVariable[]) {
-  const entetyConditionCombinations = generateConditionCombinations(Variables)
+export function createCombinations(Variables: TableVariable[], sampleType: string) {
+  let entetyConditionCombinations = generateConditionCombinations(Variables)
 
   // Check if entetyConditionCombinations is an empty array
   if (!entetyConditionCombinations.length)
     return null
 
-  for (const item of entetyConditionCombinations) {
-    // add count field
-    item.count = '1'
+  entetyConditionCombinations = entetyConditionCombinations.map((combination) => {
+    // Concatenate condition values to form secondaryName
+    const concatName = combination.map(condition => Object.values(condition)[0]).join(' ; ')
 
-    // construct ExternalDBID field
-    const keys = Object.keys(item).filter(key => key !== 'count')
-    const concatProduct = keys.map(key => item[key]).join(' ; ')
-    item.externalDBID = ''
+    // Return the updated object
+    return {
+      conditions: combination,
+      externalDBID: '',
+      secondaryName: concatName,
+      count: '1',
+      sampleType,
+    }
+  })
 
-    // add secondaryName field
-    item.secondaryName = concatProduct // replace this with actual value
-  }
   return entetyConditionCombinations
 }
 
@@ -50,21 +52,23 @@ function generateConditionCombinations(tableVariables: TableVariable[]) {
   const factors = cartesianProduct(titledConditions)
 
   // Initialize an empty array to hold the factor list
-  const factorList: { [key: string]: string }[] = []
+  const factorList: { [key: string]: string }[][] = []
 
   // Iterate over each factor in the factors array
   for (const factor of factors) {
-    // Initialize an object to hold the current combination
-    const combinationObj: { [key: string]: string } = {}
+    // Initialize an array to hold the current combination
+    const combinationArr: { [key: string]: string }[] = []
 
     // Iterate over each item in the current factor
     for (let i = 0; i < factor.length; i++) {
-      // Add a property to the object with the name being the title and the value being the condition
-      combinationObj[titles[i]] = factor[i]
+      // Create an object with the name being the title and the value being the condition
+      const conditionObj = { [titles[i]]: factor[i] }
+      // Add the object to the combination array
+      combinationArr.push(conditionObj)
     }
 
-    // Add the combination object to the factor list
-    factorList.push(combinationObj)
+    // Add the combination array to the factor list
+    factorList.push(combinationArr)
   }
 
   // Return the factor list

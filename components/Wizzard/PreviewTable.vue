@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { modelValue } = defineModels<{ modelValue: Object[] }>()
+const { modelValue, onMounted } = defineModels<{ modelValue: Object[] }>()
 </script>
 
 <template>
@@ -24,5 +24,4 @@ const { modelValue } = defineModels<{ modelValue: Object[] }>()
       </tr>
     </tbody>
   </v-table>
-  <pre>{{ modelValue }}</pre>
 </template>

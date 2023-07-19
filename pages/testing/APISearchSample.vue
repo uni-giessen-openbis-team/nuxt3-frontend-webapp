@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue'
-import { useOpenBisStore } from '@/composables/openbisAPI.js'
+import { useOpenBisStore } from '@/composables/openbisAPI'
 
 const store = useOpenBisStore()
 const projectSample = ref([]) // Populate with your data
@@ -23,7 +23,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div> n
+  <div>
+    n
     <h1>Samples:</h1>
     <ul>
       <li v-for="sample in projectSample" :key="sample.code">

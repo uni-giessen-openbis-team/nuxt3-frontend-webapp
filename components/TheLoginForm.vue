@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { useOpenBisStore } from '@/composables/openbisAPI.js'
+import { useOpenBisStore } from '@/composables/openbisAPI'
 
 const username = ref('')
 const password = ref('')

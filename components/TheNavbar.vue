@@ -2,7 +2,7 @@
 // TODO: fix disapearing navbar
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
-import { useOpenBisStore } from '@/composables/openbisAPI.js'
+import { useOpenBisStore } from '@/composables/openbisAPI'
 const store = useOpenBisStore()
 const { mdAndUp } = useDisplay()
 
