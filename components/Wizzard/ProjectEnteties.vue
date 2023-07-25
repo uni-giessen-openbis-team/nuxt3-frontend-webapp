@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useOpenBisStore } from '@/composables/openbisAPI.js'
+
 const store = useOpenBisStore()
 const { modelValue } = defineModels<{ modelValue: Array<Object> }>()
 
@@ -19,9 +20,6 @@ const variables = ref([
     unit: null,
   },
 ])
-
-const jsonObject = await store.getVocabularyTerms('SPECIES')
-const speciesList = jsonObject.SPECIES.terms.map(term => term.label)
 </script>
 
 <template>
@@ -45,10 +43,9 @@ const speciesList = jsonObject.SPECIES.terms.map(term => term.label)
         <v-window v-model="tab">
           <v-window-item v-for="(item, index) in modelValue" :key="index" :value="item.title">
             <div v-if="item.title === 'species'">
-              <v-autocomplete
+              <APIComponentsAutocompleteVocabulary
                 v-model="item.conditions"
-                :items="speciesList"
-                multiple
+                search-term="NCBI_TAXONOMY"
               />
             </div>
             <div v-else>

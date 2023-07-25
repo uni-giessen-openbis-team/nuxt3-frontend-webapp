@@ -10,4 +10,5 @@ export interface TableVariable {
     externalDBIDL: string
     count?: number
     unit?: string
+    conditions?: Array
   }

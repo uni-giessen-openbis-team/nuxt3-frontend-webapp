@@ -7,7 +7,7 @@ const footerLinks = [{
 </script>
 
 <template>
-  <v-footer app width="auto" color="tertiary">
+  <v-footer app absolute width="auto" color="tertiary">
     <v-container>
       <v-col>
         <v-row>

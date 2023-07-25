@@ -1,6 +1,6 @@
-import type { TableVariable } from '@/types/wizzard'
+import type { TableVariable, combinedVariable } from '@/types/wizzard'
 
-export function createCombinations(Variables: TableVariable[], sampleType: string) {
+export function createTableEntries(Variables: TableVariable[], sampleType: string) {
   let entetyConditionCombinations = generateConditionCombinations(Variables)
 
   // Check if entetyConditionCombinations is an empty array
@@ -83,4 +83,23 @@ function cartesianProduct(arr: Array<any>) {
       })
     }).reduce((acc, val) => acc.concat(val), [])
   }, [[]])
+}
+
+export function crossProductSamples(parents: combinedVariable[], childs: combinedVariable[]) {
+  console.log('🚀 ~ file: utils.ts:89 ~ crossProductSamples ~ childs:', childs)
+  const result = []
+
+  for (const parent of parents) {
+    // Convert the parent's count to a number and check if it's higher than 1
+    if (Number(parent.count) >= 1) {
+      for (const child of childs) {
+        const newEntry = JSON.parse(JSON.stringify(child)) // creating a deep copy
+        newEntry.child = parent.secondaryName // set child attribute to secondaryName of entety
+        newEntry.conditions.push(...parent.conditions) // combine conditions
+        newEntry.secondaryName = `${parent.secondaryName} ; ${child.secondaryName}` // combine secondaryNames
+        result.push(newEntry)
+      }
+    }
+  }
+  return result
 }

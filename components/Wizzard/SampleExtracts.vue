@@ -21,16 +21,12 @@ const variables: Ref<TableVariable[]> = ref([
   },
 ])
 
-const jsonObject = await store.getVocabularyTerms('TISSUES')
-const tissues = jsonObject.SPECIES?.terms.map(term => term.label)
+// const jsonObject = await store.getVocabularyTerms('TISSUES')
+// const tissues = jsonObject.TISSUES?.terms.map(term => term.label)
+const tissues = ['tissue1', 'tissue2']
 </script>
 
 <template>
-  <v-text-field
-    v-model="modelValue.name"
-    label="Experimental step name"
-    required
-  />
   <div>
     <v-autocomplete
       v-model="modelValue"

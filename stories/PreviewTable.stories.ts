@@ -1,4 +1,4 @@
-import { entetyCombinations } from './wizzardTestObjects'
+import { combinedEntetyAndSample, entetyCombinations } from './wizzardTestObjects'
 import PreviewTable from '@/components/Wizzard/PreviewTable.vue'
 
 export default {
@@ -20,4 +20,9 @@ const Template = args => ({
 export const Default = Template.bind({})
 Default.args = {
   modelValue: entetyCombinations,
+}
+
+export const WithCombinedEntetyAndSample = Template.bind({})
+WithCombinedEntetyAndSample.args = {
+  modelValue: combinedEntetyAndSample,
 }

@@ -1,7 +1,6 @@
 <script setup lang = "ts">
-import { onMounted, ref } from 'vue'
-import { useOpenBisStore } from '@/composables/openbisAPI.js'
-const store = useOpenBisStore()
+import { ref } from 'vue'
+import AutocompleteSpaces from '@/components/APIComponents/AutocompleteSpaces.vue'
 const MINDESCLENGTH = 20
 
 // The type for modelValue is inferred as Object. However, it would be better to have a more specific type.
@@ -18,25 +17,13 @@ const { modelValue } = defineModels<{ modelValue: ProjectContext }>()
 
 // data from the API
 const people = ref<string[]>([])
-const projectSpaces = ref<string[]>([])
-
-onMounted(async () => {
-  // Load the spaces from the API
-  const spaces = await store.getAllSpaces()
-  projectSpaces.value = spaces.objects.map(space => space.code)
-  modelValue.UUID = crypto.randomUUID()
-})
 </script>
 
 <template>
   <div>
-    <v-autocomplete
+    <AutocompleteSpaces
       v-model="modelValue.space"
-      :items="projectSpaces"
-      label="Project-Space"
-      :rules="[value => !!value || 'Item is required']"
     />
-
     <v-text-field
       v-model="modelValue.name"
       label="New Project Name"

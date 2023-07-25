@@ -24,4 +24,5 @@ const { modelValue, onMounted } = defineModels<{ modelValue: Object[] }>()
       </tr>
     </tbody>
   </v-table>
+  Set the count to 0 to delte Item
 </template>
