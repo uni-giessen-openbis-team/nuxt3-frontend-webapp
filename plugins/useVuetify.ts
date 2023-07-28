@@ -22,7 +22,7 @@ export const myCustomLightTheme: ThemeDefinition = {
     // 'warning': '#FB8C00',
   },
 }
-
+ 
 export const myCustomDarkTheme: ThemeDefinition = {
   dark: true,
   colors: {
@@ -30,20 +30,20 @@ export const myCustomDarkTheme: ThemeDefinition = {
   },
 }
 
-export default defineNuxtPlugin((nuxtApp) => {
-  const vuetify = createVuetify({
-    theme: {
-      defaultTheme: 'myCustomLightTheme',
-      themes: {
-        myCustomLightTheme,
-        myCustomDarkTheme,
-      },
+export const vuetify = createVuetify({
+  theme: {
+    defaultTheme: 'myCustomLightTheme',
+    themes: {
+      myCustomLightTheme,
+      myCustomDarkTheme,
     },
-    ssr: true,
-    components,
-    directives,
+  },
+  ssr: true,
+  components,
+  directives,
 
-  })
+})
 
+export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use(vuetify)
 })

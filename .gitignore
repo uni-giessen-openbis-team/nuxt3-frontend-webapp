@@ -7,3 +7,5 @@ dist
 .idea/
 .pnpm-store/
 pnpm-lock.yaml
+.nuxt-storybook
+storybook-static

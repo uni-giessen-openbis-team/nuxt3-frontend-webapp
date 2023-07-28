@@ -182,5 +182,6 @@ export const resourcesToLoad = [
   'as/dto/webapp/create/WebAppSettingCreation',
   'as/dto/project/create/ProjectCreation', // added
   'as/dto/sample/create/SampleCreation', // added
+  'as/dto/common/id/CreationId',
 
 ]

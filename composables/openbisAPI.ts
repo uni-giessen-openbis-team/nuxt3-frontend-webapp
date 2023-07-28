@@ -297,42 +297,55 @@ export const useOpenBisStore = defineStore('openBis', {
       return await this.v3.createProjects(creation)
     },
 
-    // @ts-expect-error
-    // async function createSampleHierarchy( ...sampleDetailsList) {
-    //   const { SampleCreation, EntityTypePermId, SpacePermId, CreationId } = this.loadedResources
+    // The main function
+    // pass the sampleGroups in the right order. From top to bottom hiracy
+    async createSamplesFromWizzard(projectContext, sampleGroups) {
+      const { SampleCreation, EntityTypePermId, SpacePermId, CreationId } = this.loadedResources
 
-    //   // List to hold all created samples
-    //   const samples = []
+      const createdSamples = []
+      const sampleCreationsDict = {}
 
-    //   // Loop through all sample details
-    //   for (let i = 0; i < sampleDetailsList.length; i++) {
-    //     const sampleDetails = sampleDetailsList[i]
+      for (const sampleList of sampleGroups) {
+        for (const sample of sampleList) {
+          const sampleCreation = new SampleCreation()
+          sampleCreation.setTypeId(new EntityTypePermId(sample.sampleType))
+          sampleCreation.setSpaceId(new SpacePermId(projectContext.space))
+          sampleCreation.setCreationId(new CreationId(sample.secondaryName))
 
-    //     // Create new sample
-    //     const sample = new SampleCreation()   //
-    //     sample.setTypeId(new EntityTypePermId(sampleDetails.typeId)) //  BIOLOGICAL_ENTETY, BIOLOGICAL_SAMPLE, TECHNICAL_SAMPLE
-    //     sample.setSpaceId(new SpacePermId(sampleDetails.spaceId))    // space Name:DEFAULT
-    //     sample.setCreationId(new CreationId(`generation${i}`))
+          // Iterate over conditions and set property for each
+          for (const condition of sample.conditions) {
+            for (const [key, value] of Object.entries(condition))
+              sampleCreation.setProperty(key, value)
+          }
+          // sampleCreation.setCode('MY_SAMPLE_CODE')
+          // sampleCreation.setExperimentId(new ExperimentIdentifier('/MY_SPACE_CODE/MY_PROJECT_CODE/MY_EXPERIMENT_CODE'))
 
-    //     // If this is not the first sample, set the parent
-    //     if (i > 0) {
-    //       sample.setParentIds([samples[i - 1].getCreationId()])
-    //     }
+          if (sample.parent) {
+            // If the sample has a parent, directly get the parent's SampleCreation object from the dictionary
+            const parentSampleCreation = sampleCreationsDict[sample.parent]
+            if (parentSampleCreation) {
+              sampleCreation.setParentIds([parentSampleCreation.getCreationId()])
 
-    //     // Add sample to list
-    //     samples.push(sample)
-    //   }
+              // Add the sample's creation ID to the parent's child IDs
+              const parentChildIds = parentSampleCreation.getChildIds() || []
+              parentChildIds.push(sampleCreation.getCreationId())
+              parentSampleCreation.setChildIds(parentChildIds)
+            }
+            else { console.log('Parent sample not found') }
+          }
 
-    //   // Create samples
-    //   try {
-    //     const permIds = await this.v3.createSamples(samples)
-    //     console.log(`Perm ids: ${JSON.stringify(permIds)}`)
-    //     return permIds
-    //   } catch (error) {
-    //     console.error(`Error in creating samples: ${error}`)
-    //     throw error
-    //   }
-    // },
+          sample.sampleCreation = sampleCreation
+          // Add the SampleCreation object to the dictionary
+          sampleCreationsDict[sample.secondaryName] = sampleCreation
+          createdSamples.push(sampleCreation)
+        }
+      }
+
+      return await this.v3.createSamples([createdSamples[0]]).done((permIds) => {
+        alert(`Perm ids: ${JSON.stringify(permIds)}`)
+      })
+      // return createdSamples
+    },
 
   },
   getters: {

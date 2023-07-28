@@ -17,6 +17,7 @@ const Entry = {
   identifier: '' as string,
 }
 
+// Project Context
 const projectContext = ref<ProjectContext>({
   UUID: '',
   name: '',
@@ -36,30 +37,6 @@ const entetyVariables = ref([speciesEntry])
 const tempEntetyVariables = ref([])
 const entetyConditionsResult = ref([])
 
-// Biol Sample
-const tissueEntry: TableVariable = {
-  ...Entry,
-  title: 'tissue',
-}
-
-const sampleVariables = ref([tissueEntry])
-const tempSampleVariables = ref([])
-const sampleConditionsResult = ref({})
-const entetyAndSampleResult = ref([])
-const tmpEntetyAndSampleResult = ref([])
-
-// Technical Sample
-const techVariables = ref({})
-const techConditionsResult = ref({})
-const tmpResult = ref([])
-const temptechVariables = ref([])
-const Result = ref([])
-
-async function onComplete() {
-  test.value = await store.createProject(projectContext.value.name, projectContext.value.space, projectContext.value.description)
-  alert(`Project Created: ${test.value}`)
-}
-
 function updateEntety() {
   const SAMPLE_TYPE = 'BIOLOGICAL_ENTITY'
   const isEqual = tempEntetyVariables.value == JSON.stringify(entetyVariables.value)
@@ -69,6 +46,17 @@ function updateEntety() {
   }
   return true
 }
+
+// Biol Sample
+const tissueEntry: TableVariable = {
+  ...Entry,
+  title: 'tissue',
+}
+
+const sampleVariables = ref([tissueEntry])
+const tempSampleVariables = ref([])
+const sampleConditionsResult = ref([])
+const entetyAndSampleResult = ref([])
 
 function updateBiol() {
   const SAMPLE_TYPE = 'BIOLOGICAL_SAMPLE'
@@ -81,16 +69,36 @@ function updateBiol() {
   return true
 }
 
+// Technical Sample
+const methodsEntry: TableVariable = {
+  ...Entry,
+  title: 'methods',
+}
+const techVariables = ref([methodsEntry])
+const techConditionsResult = ref([])
+const tempTechVariables = ref([])
+const Result = ref([])
+const tmpResult = ref([])
+
 function updateTech() {
   const SAMPLE_TYPE = 'TECHNICAL_SAMPLE'
-  const isEqual = temptechVariables.value == JSON.stringify(techVariables.value)
+  const isEqual = tempTechVariables.value == JSON.stringify(techVariables.value)
   if (!isEqual) {
     techConditionsResult.value = createTableEntries(techVariables.value, SAMPLE_TYPE)
-    console.log('🚀 ~ file: index.vue:89 ~ updateTech ~ techConditionsResult:', techConditionsResult)
     Result.value = crossProductSamples(entetyAndSampleResult.value, techConditionsResult.value)
     tmpResult.value = JSON.stringify(Result.value)
   }
   return true
+}
+
+async function onComplete() {
+  // The different Samples from chilt to parent
+  //  - projectContext
+  //  - entetyConditionsResult
+  //  - sampleConditionsResult
+  //  - techConditionsResult
+
+  await store.createProject(projectContext.value.name, projectContext.value.space, projectContext.value.description)
 }
 </script>
 
@@ -152,7 +160,11 @@ function updateTech() {
         </v-form>
       </v-window-item>
     </v-window>
+    <pre>
+    {{ projectContext }}
+   {{ entetyConditionsResult }}
+   {{ sampleConditionsResult }}
+   {{ techConditionsResult }}
+    </pre>
   </v-container>
-  <h3>combined</h3>
-  <pre> {{ techVariables }}</pre>
 </template>

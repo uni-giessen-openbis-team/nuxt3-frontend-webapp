@@ -1,5 +1,5 @@
 import { combinedEntetyAndSample, entetyCombinations } from './wizzardTestObjects'
-import PreviewTable from '@/components/Wizzard/PreviewTable.vue'
+import PreviewTable from '../components/Wizzard/PreviewTable.vue'
 
 export default {
   title: 'Components/PreviewTable',

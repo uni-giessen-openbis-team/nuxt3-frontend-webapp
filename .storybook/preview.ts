@@ -1,5 +1,5 @@
 import type { Preview } from "@storybook/vue3";
-import { myCustomLightTheme } from "../plugins/useVuetify";
+
 
 const preview: Preview = {
   parameters: {
@@ -14,16 +14,4 @@ const preview: Preview = {
 };
 
 export default preview;
-
-// Vuetify integration
-export const globalTypes = {
-  vuetify: {
-    theme: {
-      defaultTheme: 'myCustomLightTheme',
-      themes: {
-        myCustomLightTheme
-      }
-    }
-  }
-}
 

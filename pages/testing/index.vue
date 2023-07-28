@@ -1,66 +1,80 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-import crossProductSamples from '@/composables/utils'
+import { onMounted } from 'vue'
+import { useOpenBisStore } from '@/composables/openbisAPI'
+const store = useOpenBisStore()
 
-const sampleEnteties = ref([
-  {
-    conditions: [
-      {
-        species: 'Mouse',
-      },
-    ],
-    externalDBID: '',
-    secondaryName: 'Mouse',
-    count: '1',
-    sampleType: 'Q_BIOLOGICAL_ENTITY',
-  },
-  {
-    conditions: [
-      {
-        species: 'Hunman',
-      },
-    ],
-    externalDBID: '',
-    secondaryName: 'Hunman',
-    count: '1',
-    sampleType: 'Q_BIOLOGICAL_ENTITY',
-  },
-])
+const test = ref()
 
-const sampleTissues = ref([
-  {
-    conditions: [
-      {
-        tissue: 'tis1',
-      },
-    ],
-    externalDBID: '',
-    secondaryName: 'tis1',
-    count: '1',
-    sampleType: 'Q_BIOLOGICAL_Sample',
-  },
-  {
-    conditions: [
-      {
-        tissue: 'tis2',
-      },
-    ],
-    externalDBID: '',
-    secondaryName: 'tis2',
-    count: '1',
-    sampleType: 'Q_BIOLOGICAL_Sample',
-  },
-])
+const projectContext
+    = {
+      UUID: '',
+      name: '',
+      space: 'DEFAULT',
+      description: '',
+      manager: '',
+      contactPerson: '',
+    }
+const entetyConditionsResult
+  = [
+    {
+      conditions: [
+        {
+          species: 'Human',
+        },
+      ],
+      externalDBID: '',
+      secondaryName: 'Human',
+      count: '1',
+      sampleType: 'BIOLOGICAL_ENTITY',
+    },
+  ]
+const entetyAndSampleResult
+   = [
+     {
+       conditions: [
+         {
+           tissue: 'tissue1',
+         },
+         {
+           species: 'Human',
+         },
+       ],
+       externalDBID: '',
+       secondaryName: 'Human ; tissue1',
+       count: '1',
+       sampleType: 'BIOLOGICAL_SAMPLE',
+       parent: 'Human',
+     },
+   ]
+const Result
+   = [
+     {
+       conditions: [
+         {
+           methods: 'DNA',
+         },
+         {
+           tissue: 'tissue1',
+         },
+         {
+           species: 'Human',
+         },
+       ],
+       externalDBID: '',
+       secondaryName: 'Human ; tissue1 ; DNA',
+       count: '1',
+       sampleType: 'TECHNICAL_SAMPLE',
+       parent: 'Human ; tissue1',
+     },
+   ]
 
-const crossProduct = ref([])
-
-onMounted(() => {
-  crossProduct.value = crossProductSamples(sampleEnteties, sampleTissues)
+onMounted(async () => {
+  test.value = await store.createSamplesFromWizzard(projectContext, [entetyConditionsResult, entetyAndSampleResult, Result])
 })
 </script>
 
 <template>
-  <pre> {{ crossProduct }}</pre>
+  <pre> {{ test }}</pre>
 </template>
 
 <style lang="scss" scoped>

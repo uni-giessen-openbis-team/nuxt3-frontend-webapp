@@ -9,11 +9,9 @@ const config: StorybookConfig = {
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
     "storybook-addon-nuxt",
-    'storybook-addon-vuetify3'
-
   ],
   framework: {
-    name: "@storybook/vue3-vite",
+    name: '@storybook-vue/nuxt',
     options: {},
   },
   docs: {
