@@ -137,7 +137,6 @@ export const resourcesToLoad = [
   'as/dto/roleassignment/delete/DeleteRoleAssignmentsOperation',
   'as/dto/roleassignment/delete/RoleAssignmentDeletionOptions',
   'as/dto/roleassignment/id/RoleAssignmentTechId',
-  'as/dto/roleassignment/fetchoptions/RoleAssignmentFetchOptions', // added
   'as/dto/sample/create/CreateSampleTypesOperation',
   'as/dto/sample/create/SampleTypeCreation',
   'as/dto/sample/delete/DeleteSampleTypesOperation',
@@ -180,8 +179,12 @@ export const resourcesToLoad = [
   'as/dto/vocabulary/update/VocabularyTermUpdate',
   'as/dto/vocabulary/update/VocabularyUpdate',
   'as/dto/webapp/create/WebAppSettingCreation',
-  'as/dto/project/create/ProjectCreation', // added
-  'as/dto/sample/create/SampleCreation', // added
+  // added
+  'as/dto/project/create/ProjectCreation',
+  'as/dto/sample/create/SampleCreation',
   'as/dto/common/id/CreationId',
+  'as/dto/roleassignment/fetchoptions/RoleAssignmentFetchOptions',
+  'as/dto/project/fetchoptions/ProjectFetchOptions',
+  'as/dto/sample/create/SampleCreation',
 
 ]
