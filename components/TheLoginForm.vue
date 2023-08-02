@@ -15,6 +15,14 @@ const handleLogin = async () => {
     error.value = e
   }
 }
+
+const autoLogin = async () => {
+  username.value = 'admin'
+  password.value = 'changeit'
+  await handleLogin()
+}
+
+autoLogin()
 </script>
 
 <template>
