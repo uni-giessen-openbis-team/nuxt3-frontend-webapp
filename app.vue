@@ -18,7 +18,8 @@ onMounted(async () => {
 
 <template>
   <div>
-    <LoginForm v-if="showLoginForm" />
+    <!-- showLoginForm -->
+    <LoginForm v-if="false" />
     <NuxtLayout v-else>
       <TheNavbar />
       <NuxtPage />
