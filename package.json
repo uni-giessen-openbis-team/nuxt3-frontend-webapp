@@ -54,6 +54,7 @@
   },
   "dependencies": {
     "@formkit/nuxt": "^0.16.5",
+    "@jridgewell/sourcemap-codec": "^1.4.15",
     "@mdi/font": "^7.2.96",
     "@nuxt/test-utils": "^3.6.5",
     "@nuxt/webpack-builder": "^3.6.1",
@@ -80,6 +81,7 @@
     "vite-plugin-vuetify": "^1.0.2",
     "vue3-form-wizard": "^0.2.1",
     "vuetify": "^3.3.6",
+    "workbox-cacheable-response": "^7.0.0",
     "zod": "^3.21.4"
   },
   "eslintConfig": {

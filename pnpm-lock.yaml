@@ -8,6 +8,9 @@ dependencies:
   '@formkit/nuxt':
     specifier: ^0.16.5
     version: 0.16.5(vue@3.3.4)
+  '@jridgewell/sourcemap-codec':
+    specifier: ^1.4.15
+    version: 1.4.15
   '@mdi/font':
     specifier: ^7.2.96
     version: 7.2.96
@@ -86,6 +89,9 @@ dependencies:
   vuetify:
     specifier: ^3.3.6
     version: 3.3.6(typescript@5.1.6)(vite-plugin-vuetify@1.0.2)(vue@3.3.4)
+  workbox-cacheable-response:
+    specifier: ^7.0.0
+    version: 7.0.0
   zod:
     specifier: ^3.21.4
     version: 3.21.4
@@ -8185,7 +8191,7 @@ packages:
     dependencies:
       debug: 3.2.7(supports-color@8.1.1)
       is-core-module: 2.12.1
-      resolve: 1.22.3
+      resolve: 1.22.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -15204,9 +15210,19 @@ packages:
       workbox-core: 6.6.0
     dev: true
 
+  /workbox-cacheable-response@7.0.0:
+    resolution: {integrity: sha512-0lrtyGHn/LH8kKAJVOQfSu3/80WDc9Ma8ng0p2i/5HuUndGttH+mGMSvOskjOdFImLs2XZIimErp7tSOPmu/6g==}
+    dependencies:
+      workbox-core: 7.0.0
+    dev: false
+
   /workbox-core@6.6.0:
     resolution: {integrity: sha512-GDtFRF7Yg3DD859PMbPAYPeJyg5gJYXuBQAC+wyrWuuXgpfoOrIQIvFRZnQ7+czTIQjIr1DhLEGFzZanAT/3bQ==}
     dev: true
+
+  /workbox-core@7.0.0:
+    resolution: {integrity: sha512-81JkAAZtfVP8darBpfRTovHg8DGAVrKFgHpOArZbdFd78VqHr5Iw65f2guwjE2NlCFbPFDoez3D3/6ZvhI/rwQ==}
+    dev: false
 
   /workbox-expiration@6.6.0:
     resolution: {integrity: sha512-baplYXcDHbe8vAo7GYvyAmlS4f6998Jff513L4XvlzAOxcl8F620O91guoJ5EOf5qeXG4cGdNZHkkVAPouFCpw==}
