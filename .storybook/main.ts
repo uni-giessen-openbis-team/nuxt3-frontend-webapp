@@ -1,6 +1,5 @@
-import type { StorybookConfig } from "@storybook/react-vite";
 
-const config: StorybookConfig = {
+const config = {
   stories: [
     "../stories/**/*.mdx",
     "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
@@ -12,7 +11,7 @@ const config: StorybookConfig = {
     "@storybook/addon-interactions",
   ],
   framework: {
-    name: "@storybook/react-vite",
+    name: "@storybook-vue/nuxt",
     options: {},
   },
   docs: {
