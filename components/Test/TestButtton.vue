@@ -1,5 +1,5 @@
 <template>
-<v-app>
+  <v-app>
     <v-button>Hello World</v-button>
-</v-app>
-  </template>
+  </v-app>
+</template>

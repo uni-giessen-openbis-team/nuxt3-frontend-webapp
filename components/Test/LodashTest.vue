@@ -1,7 +1,14 @@
 <script setup>
-const text = useToUpper('it works!')
+const users = [
+  { user: 'fred', age: 48 },
+  { user: 'barney', age: 36 },
+  { user: 'fred', age: 40 },
+  { user: 'barney', age: 34 },
+]
+
+const test = useSortBy(users, ['user', 'age'])
 </script>
 
 <template>
-  <div>{{ text }}</div>
+  <p>{{ test }}</p>
 </template>

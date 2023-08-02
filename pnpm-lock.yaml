@@ -62,6 +62,12 @@ dependencies:
   pnpm:
     specifier: ^8.6.5
     version: 8.6.5
+  react:
+    specifier: ^18.2.0
+    version: 18.2.0
+  react-dom:
+    specifier: ^18.2.0
+    version: 18.2.0(react@18.2.0)
   requirejs:
     specifier: ^2.3.6
     version: 2.3.6
@@ -184,12 +190,6 @@ devDependencies:
   postcss:
     specifier: '8'
     version: 8.0.0
-  react:
-    specifier: 18.2.0
-    version: 18.2.0
-  react-dom:
-    specifier: 18.2.0
-    version: 18.2.0(react@18.2.0)
   storybook:
     specifier: 7.1.1
     version: 7.1.1

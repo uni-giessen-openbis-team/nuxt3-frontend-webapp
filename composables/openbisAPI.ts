@@ -252,6 +252,19 @@ export const useOpenBisStore = defineStore('openBis', {
       return this.promise(this.v3.executeOperations(criteria, options))
     },
 
+    // answer from email. How create VocabTerms
+    // var creation = new VocabularyTermCreation();
+    // creation.setVocabularyId(new VocabularyPermId("MY_VOCABULARY_CODE"));
+    // creation.setCode("MY_TERM_CODE");
+    // creation.setLabel("My term label");
+    // creation.setDescription("My term description");
+
+    // v3.createVocabularyTerms([ creation ]).done(function(result) {
+    //     alert("Created term: " + result[0]);
+    // }).fail(function(error){
+    //     alert("Something went wrong: " + JSON.stringify(error))
+    // });
+
     /* ----- Person API Methods ---------------------------------------------------------------- */
 
     listPersons({ sessionToken, criteria, options }) {
@@ -622,9 +635,6 @@ export const useOpenBisStore = defineStore('openBis', {
       }
     },
 
-
-    
-
     login(user, password) {
       return this.promise(this.v3.login(user, password))
         .then((sessionToken) => {
@@ -636,7 +646,7 @@ export const useOpenBisStore = defineStore('openBis', {
     // Vocabulary code is something like "SPECIES"
     async getVocabularyTerms(vocavularyCode) {
       const { VocabularyFetchOptions, VocabularyPermId } = this.loadedResources
-      const fo = new VocabularyFetchOptions()
+      const fo = new this.v3.VocabularyFetchOptions()
       fo.withRegistrator()
       fo.withTerms()
       const id = new VocabularyPermId(vocavularyCode)
