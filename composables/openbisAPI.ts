@@ -27,7 +27,6 @@ export const useOpenBisStore = defineStore('openBis', {
         console.log('🚀 ~ file: openbisAPI.js:17 ~ loadV3API ~ this.openbisInstance:', this.v3)
       }
     },
-
     promise(dfd) {
       return new Promise((resolve, reject) => {
         dfd.then(
