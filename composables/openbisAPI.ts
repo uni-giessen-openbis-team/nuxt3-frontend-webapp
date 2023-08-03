@@ -6,7 +6,6 @@ export const useOpenBisStore = defineStore('openBis', {
     loadedResources: {},
     v3: null,
     sessionToken: null,
-
   }),
   actions: {
     async loadV3API() {

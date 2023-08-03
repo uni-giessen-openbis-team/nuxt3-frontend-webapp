@@ -1,11 +1,12 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useOpenBisStore } from '@/composables/openbisAPI'
 
 const username = ref('')
 const password = ref('')
 const error = ref(null)
 const store = useOpenBisStore()
+const v3 = ref(store.v3)
 
 const handleLogin = async () => {
   try {
@@ -22,7 +23,10 @@ const autoLogin = async () => {
   await handleLogin()
 }
 
-autoLogin()
+watch(v3, (newVal) => {
+  if (newVal)
+    autoLogin()
+}, { deep: true })
 </script>
 
 <template>
