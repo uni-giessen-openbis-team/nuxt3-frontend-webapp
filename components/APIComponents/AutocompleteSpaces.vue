@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
 import { useOpenBisStore } from '@/composables/openbisAPI'
 const store = useOpenBisStore()
 

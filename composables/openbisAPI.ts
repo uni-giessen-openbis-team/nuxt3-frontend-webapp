@@ -285,16 +285,16 @@ export const useOpenBisStore = defineStore('openBis', {
       return this.listPersons({ criteria: new PersonSearchCriteria(), options: this.fetchPersonCompletely() })
     },
 
-    listPersonsOfSpace({ spaceCode }) {
+    listPersonsOfSpace(spaceCode: string) {
+      const { RoleAssignmentSearchCriteria } = this.loadedResources
       try {
-        const { RoleAssignmentSearchCriteria } = this.loadedResources
         const criteria = new RoleAssignmentSearchCriteria().withSpace().withCode().thatEquals(spaceCode)
         const roleAssignments = this.v3.searchRoleAssignments(criteria, this.fetchRoleAssignmentWithSpaceAndUser())
         return roleAssignments.objects.map(roleAssignment => roleAssignment.user)
       }
       catch (error) {
         console.error(`${error.constructor.name}: ${error.message}`)
-        console.warn(`listPersonsOfSpace(<TOKEN>,${spaceCode}) failed and returned an empty list.`)
+        console.warn(`listPersonsOfSpace(${spaceCode}) failed and returned an empty list.`)
         return []
       }
     },

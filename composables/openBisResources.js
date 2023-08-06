@@ -186,5 +186,5 @@ export const resourcesToLoad = [
   'as/dto/roleassignment/fetchoptions/RoleAssignmentFetchOptions',
   'as/dto/project/fetchoptions/ProjectFetchOptions',
   'as/dto/sample/create/SampleCreation',
-
+  'as/dto/roleassignment/search/RoleAssignmentSearchCriteria',
 ]
