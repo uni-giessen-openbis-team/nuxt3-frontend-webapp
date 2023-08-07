@@ -249,19 +249,6 @@ export const useOpenBisStore = defineStore('openBis', {
       return this.promise(this.v3.executeOperations(criteria, options))
     },
 
-    // answer from email. How create VocabTerms
-    // var creation = new VocabularyTermCreation();
-    // creation.setVocabularyId(new VocabularyPermId("MY_VOCABULARY_CODE"));
-    // creation.setCode("MY_TERM_CODE");
-    // creation.setLabel("My term label");
-    // creation.setDescription("My term description");
-
-    // v3.createVocabularyTerms([ creation ]).done(function(result) {
-    //     alert("Created term: " + result[0]);
-    // }).fail(function(error){
-    //     alert("Something went wrong: " + JSON.stringify(error))
-    // });
-
     /* ----- Person API Methods ---------------------------------------------------------------- */
 
     listPersons({ criteria, options }) {
@@ -285,12 +272,15 @@ export const useOpenBisStore = defineStore('openBis', {
       return this.listPersons({ criteria: new PersonSearchCriteria(), options: this.fetchPersonCompletely() })
     },
 
-    listPersonsOfSpace(spaceCode: string) {
-      const { RoleAssignmentSearchCriteria } = this.loadedResources
+    async listPersonsOfSpace(spaceCode: string): searchResult {
+      const { RoleAssignmentSearchCriteria, SpacePermId } = this.loadedResources
       try {
-        const criteria = new RoleAssignmentSearchCriteria().withSpace().withCode().thatEquals(spaceCode)
-        const roleAssignments = this.v3.searchRoleAssignments(criteria, this.fetchRoleAssignmentWithSpaceAndUser())
-        return roleAssignments.objects.map(roleAssignment => roleAssignment.user)
+        const criteria = new RoleAssignmentSearchCriteria()
+        criteria.withSpace().withCode().thatEquals(spaceCode)
+        const roleAssignments = await this.v3.searchRoleAssignments(criteria, this.fetchRoleAssignmentWithSpaceAndUser())
+        const listOfPers = roleAssignments.objects.map(roleAssignment => roleAssignment.user)
+        console.log('🚀 ~ file: openbisAPI.ts:297 ~ listPersonsOfSpace ~ listOfPers:', listOfPers)
+        return listOfPers
       }
       catch (error) {
         console.error(`${error.constructor.name}: ${error.message}`)
@@ -304,9 +294,7 @@ export const useOpenBisStore = defineStore('openBis', {
       const criteria = new RoleAssignmentSearchCriteria().withOrOperator()
       criteria.withProject().withId().thatEquals(project.getIdentifier())
       criteria.withSpace().withId().thatEquals(project.getSpace().getPermId())
-
       const results = await this.v3.searchRoleAssignments(
-
         criteria,
         this.fetchRoleAssignmentWithUserAndAuthorizationGroupUsersCompletely(),
       )
@@ -332,28 +320,22 @@ export const useOpenBisStore = defineStore('openBis', {
 
     async getPerson({ userId, options = this.fetchPersonCompletely() }) {
       const result = await this.v3.getPersons(
-
         [userId],
         options,
       )
-
       return result.get(userId)
     },
 
-    preparePersonCreation({ userId, spaceId }) {
+    preparePersonCreation({ userId, spaceId }): creationType {
+      const { PersonCreation } = this.loadedResources
       const creation = new PersonCreation()
       creation.setUserId(userId)
-      creation.setSpaceId(spaceId)
+      if (spaceId)
+        creation.setSpaceId(spaceId)
       return creation
     },
 
-    preparePersonCreationWithoutSpace({ userId }) {
-      const creation = new PersonCreation()
-      creation.setUserId(userId)
-      return creation
-    },
-
-    async createPerson({ creation }) {
+    async createPerson(creation: creationType) {
       const result = await this.v3.createPersons([creation])
       return result[0]
     },
@@ -1108,9 +1090,22 @@ export const useOpenBisStore = defineStore('openBis', {
 
     createVocabularyTerm(creation: VocabularyTermCreation): IVocabularyTermId {
       const { VocabularyTermCreation } = this.loadedResources
-
       return this.v3.createVocabularyTerms([creation])[0]
     },
+
+    // answer from email. How create VocabTerms
+
+    // var creation = new VocabularyTermCreation();
+    // creation.setVocabularyId(new VocabularyPermId("MY_VOCABULARY_CODE"));
+    // creation.setCode("MY_TERM_CODE");
+    // creation.setLabel("My term label");
+    // creation.setDescription("My term description");
+
+    // v3.createVocabularyTerms([ creation ]).done(function(result) {
+    //     alert("Created term: " + result[0]);
+    // }).fail(function(error){
+    //     alert("Something went wrong: " + JSON.stringify(error))
+    // });
 
     createVocabularyTermByVocabulary(vocabularyId: IVocabularyId, code: string, label?: string, description?: string): IVocabularyTermId {
       const { VocabularyTermCreation } = this.loadedResources
@@ -1157,10 +1152,10 @@ export const useOpenBisStore = defineStore('openBis', {
     },
 
     // Vocabulary code is something like "SPECIES"
-
-    getVocabularyTerms(vocabularyTermIds: IVocabularyTermId[]): Map<IVocabularyTermId, VocabularyTerm> {
+    async getVocabularyTerms(vocabularyTermIds: IVocabularyTermId[]): Map<IVocabularyTermId, VocabularyTerm> {
       const { VocabularyTermPermId, VocabularyTermFetchOptions } = this.loadedResources
-      return this.v3.getVocabularyTerms(vocabularyTermIds, this.fetchVocabularyTermCompletely())
+      const VocabularyTerms = await this.v3.getVocabularyTerms(vocabularyTermIds, this.fetchVocabularyTermCompletely())
+      return VocabularyTerms
     },
 
     // One space for each working group

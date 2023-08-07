@@ -5,7 +5,8 @@ import { useOpenBisStore } from '@/composables/openbisAPI'
 const { space = 'DEFAULT' } = defineProps<{
   space: spaceCode
 }>()
-const { person } = defineModels<{ person: any }>()
+
+const { modelValue } = defineModels<{ modelValue: any }>()
 
 const store = useOpenBisStore()
 const projectPersons = ref<string[]>([])
@@ -13,13 +14,13 @@ const projectPersons = ref<string[]>([])
 onMounted(async () => {
   // Load the persons from the API
   const persons = await store.listPersonsOfSpace(space)
-  projectPersons.value = persons.objects.map((person: { code: string }) => person.code)
+  projectPersons.value = await persons.objects.map((person: { code: string }) => person.code)
 })
 </script>
 
 <template>
   <v-autocomplete
-    v-model="person"
+    v-model="modelValue"
     :items="projectPersons"
     label="Project-person"
     :rules="[(value: any) => !!value || 'Item is required']"

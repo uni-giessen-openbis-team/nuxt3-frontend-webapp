@@ -1,13 +1,12 @@
-<script setup>
-import AutocompletePersonsOfSpace from '@/components/APIComponents/AutocompletePersonsOfSpace.vue'
-const spaceName = 'DEFAULT'
-const person = [{ test: 'test' }]
+<script setup lang="ts">
+const conditions = ref([])
 </script>
 
 <template>
-  <AutocompletePersonsOfSpace v-model="person" :space="spaceName" />
+  <div>
+    <APIComponentsAutocompleteVocabulary
+      v-model="conditions"
+      search-term="NCBI_TAXONOMY"
+    />
+  </div>
 </template>
-
-<style lang="scss" scoped>
-
-</style>
