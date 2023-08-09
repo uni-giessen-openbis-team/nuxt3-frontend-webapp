@@ -14,6 +14,8 @@ export default defineNuxtConfig({
     '@formkit/nuxt',
     '@vue-macros/nuxt',
     'nuxt-lodash',
+    'nuxt-vitest',
+
   ],
 
   experimental: {
