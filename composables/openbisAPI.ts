@@ -1107,16 +1107,26 @@ export const useOpenBisStore = defineStore('openBis', {
     //     alert("Something went wrong: " + JSON.stringify(error))
     // });
 
-    createVocabularyTermByVocabulary(vocabularyId: IVocabularyId, code: string, label?: string, description?: string): IVocabularyTermId {
-      const { VocabularyTermCreation } = this.loadedResources
+    createVocabularyTermByVocabulary(vocabularyId: string, code: string, label?: string, description?: string): IVocabularyTermId {
+      console.log('🚀 ~ file: openbisAPI.ts:1111 ~ createVocabularyTermByVocabulary ~ code:', code)
+      const { VocabularyTermCreation, VocabularyPermId } = this.loadedResources
 
       const creation = new VocabularyTermCreation()
-      creation.setVocabularyId(vocabularyId)
+      creation.setVocabularyId(new VocabularyPermId(vocabularyId))
       creation.setCode(code)
-      creation.setLabel(label)
-      creation.setDescription(description)
+      creation.setLabel(code)
+      if (description)
+        creation.setDescription(description)
 
-      return this.createVocabularyTerm(creation)
+      try {
+        // Assuming createVocabularyTerm can throw an error
+        return this.createVocabularyTerm(creation)
+      }
+      catch (error) {
+        // Log the error message here
+        console.error('Error creating vocabulary term:', error.message || error)
+        throw error // re-throw if you want the error to propagate further
+      }
     },
 
     updateVocabularyTerm(update: VocabularyTermUpdate): boolean {
@@ -1143,6 +1153,7 @@ export const useOpenBisStore = defineStore('openBis', {
       return this.updateVocabularyTerm(update)
     },
 
+    // tested and worked
     login(user, password) {
       return this.promise(this.v3.login(user, password))
         .then((sessionToken) => {
@@ -1151,13 +1162,21 @@ export const useOpenBisStore = defineStore('openBis', {
         })
     },
 
-    // Vocabulary code is something like "SPECIES"
-    async getVocabularyTerms(vocabularyTermIds: IVocabularyTermId[]): Map<IVocabularyTermId, VocabularyTerm> {
-      const { VocabularyTermPermId, VocabularyTermFetchOptions } = this.loadedResources
-      const VocabularyTerms = await this.v3.getVocabularyTerms(vocabularyTermIds, this.fetchVocabularyTermCompletely())
-      return VocabularyTerms
+    // tested and worked
+    // vocavularyCode = DEFAULT
+    getVocabularyTerms(vocavularyCode: string): Map<IVocabularyTermId, VocabularyTerm> {
+      try {
+        const { VocabularyPermId } = this.loadedResources
+        const fo = this.fetchVocabularyCompletely()
+        const id = new VocabularyPermId(vocavularyCode)
+        return this.getVocabularies(id, fo)
+      }
+      catch (error) {
+        console.log(error)
+      }
     },
 
+    // tested and worked
     // One space for each working group
     async getAllSpaces() {
       const { SpaceSearchCriteria, SpaceFetchOptions } = this.loadedResources
@@ -1187,7 +1206,7 @@ export const useOpenBisStore = defineStore('openBis', {
     // The main function
     // pass the sampleGroups in the right order. From top to bottom hiracy
     async createSamplesFromWizzard(projectContext, sampleGroups) {
-      const { SampleCreation, EntityTypePermId, SpacePermId, CreationId } = this.loadedResources
+      const { SampleCreation, EntityTypePermId, SpacePermId, CreationId, ExperimentIdentifier } = this.loadedResources
 
       const createdSamples = []
       const sampleCreationsDict = {}
@@ -1204,9 +1223,9 @@ export const useOpenBisStore = defineStore('openBis', {
             for (const [key, value] of Object.entries(condition))
               sampleCreation.setProperty(key, value)
           }
-          // sampleCreation.setCode('MY_SAMPLE_CODE')
-          // sampleCreation.setExperimentId(new ExperimentIdentifier('/MY_SPACE_CODE/MY_PROJECT_CODE/MY_EXPERIMENT_CODE'))
-
+          sampleCreation.setCode(sample.secondaryName)
+          //                                                      '/MY_SPACE_CODE         /MY_PROJECT_CODE              /MY_EXPERIMENT_CODE'
+          sampleCreation.setExperimentId(new ExperimentIdentifier('{projectContext.space}/{projectContext.projectName}/{sample.experimentName}'))
           if (sample.parent) {
             // If the sample has a parent, directly get the parent's SampleCreation object from the dictionary
             const parentSampleCreation = sampleCreationsDict[sample.parent]

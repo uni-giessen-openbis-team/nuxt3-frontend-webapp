@@ -4,9 +4,11 @@ const conditions = ref([])
 
 <template>
   <div>
-    <APIComponentsAutocompleteVocabulary
-      v-model="conditions"
-      search-term="NCBI_TAXONOMY"
-    />
+    <v-container>
+      <WizzardAddAndSelectVocabularyTerm
+        v-model="conditions"
+        search-term="NCBI_TAXONOMY"
+      />
+    </v-container>
   </div>
 </template>
