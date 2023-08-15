@@ -278,9 +278,10 @@ export const useOpenBisStore = defineStore('openBis', {
         const criteria = new RoleAssignmentSearchCriteria()
         criteria.withSpace().withCode().thatEquals(spaceCode)
         const roleAssignments = await this.v3.searchRoleAssignments(criteria, this.fetchRoleAssignmentWithSpaceAndUser())
-        const listOfPers = roleAssignments.objects.map(roleAssignment => roleAssignment.user)
-        console.log('🚀 ~ file: openbisAPI.ts:297 ~ listPersonsOfSpace ~ listOfPers:', listOfPers)
-        return listOfPers
+        console.log('🚀 ~ file: openbisAPI.ts:281 ~ listPersonsOfSpace ~ roleAssignments:', roleAssignments)
+        // const listOfPers = roleAssignments.objects.map(roleAssignment => roleAssignment.user)
+        // console.log('🚀 ~ file: openbisAPI.ts:297 ~ listPersonsOfSpace ~ listOfPers:', listOfPers)
+        return roleAssignments
       }
       catch (error) {
         console.error(`${error.constructor.name}: ${error.message}`)
@@ -326,12 +327,12 @@ export const useOpenBisStore = defineStore('openBis', {
       return result.get(userId)
     },
 
-    preparePersonCreation({ userId, spaceId }): creationType {
-      const { PersonCreation } = this.loadedResources
+    preparePersonCreation(userId, spaceId): creationType {
+      const { PersonCreation, PersonPermId, SpacePermId } = this.loadedResources
       const creation = new PersonCreation()
-      creation.setUserId(userId)
-      if (spaceId)
-        creation.setSpaceId(spaceId)
+      creation.setUserId(new PersonPermId(userId))
+      if ((spaceId))
+        creation.setSpaceId(new SpacePermId(spaceId))
       return creation
     },
 
@@ -777,7 +778,7 @@ export const useOpenBisStore = defineStore('openBis', {
     },
 
     createCollection(collection) {
-      return v3.createExperiments([collection]).get(0)
+      return this.v3.createExperiments([collection]).get(0)
     },
 
     updateCollection(collection) {
@@ -785,7 +786,7 @@ export const useOpenBisStore = defineStore('openBis', {
       update.setExperimentId(collection.getIdentifier())
       update.setProjectId(collection.getProject().getIdentifier())
       update.setProperties(collection.getProperties())
-      v3.updateExperiments([update])
+      this.v3.updateExperiments([update])
       return true
     },
 
@@ -1186,7 +1187,8 @@ export const useOpenBisStore = defineStore('openBis', {
     },
 
     prepareProjectCreation(projectCode, spaceCode, description = null) {
-      const { ProjectCreation, SpacePermId } = this.loadedResources
+      console.log('🚀 ~ file: openbisAPI.ts:1189 ~ prepareProjectCreation ~ projectCode:', projectCode)
+      const { ProjectCreation, SpacePermId, ProjectPermId } = this.loadedResources
 
       const creation = new ProjectCreation()
       creation.setCode(projectCode)
@@ -1199,8 +1201,9 @@ export const useOpenBisStore = defineStore('openBis', {
     },
 
     async createProject(projectCode, spaceCode, description) {
+      console.log('🚀 ~ file: openbisAPI.ts:1202 ~ createProject ~ projectCode:', projectCode)
       const creation = await this.prepareProjectCreation(projectCode, spaceCode, description)
-      return await this.v3.createProjects(creation)
+      return await this.createProjects(creation)
     },
 
     // The main function
@@ -1215,6 +1218,7 @@ export const useOpenBisStore = defineStore('openBis', {
         for (const sample of sampleList) {
           const sampleCreation = new SampleCreation()
           sampleCreation.setTypeId(new EntityTypePermId(sample.sampleType))
+          console.log('🚀 ~ file: openbisAPI.ts:1220 ~ createSamplesFromWizzard ~ sampleCreation:', sampleCreation)
           sampleCreation.setSpaceId(new SpacePermId(projectContext.space))
           sampleCreation.setCreationId(new CreationId(sample.secondaryName))
 
@@ -1225,7 +1229,8 @@ export const useOpenBisStore = defineStore('openBis', {
           }
           sampleCreation.setCode(sample.secondaryName)
           //                                                      '/MY_SPACE_CODE         /MY_PROJECT_CODE              /MY_EXPERIMENT_CODE'
-          sampleCreation.setExperimentId(new ExperimentIdentifier('{projectContext.space}/{projectContext.projectName}/{sample.experimentName}'))
+          sampleCreation.setExperimentId(new ExperimentIdentifier(`${projectContext.space}/${projectContext.projectName}/${sample.experimentName}`),
+          )
           if (sample.parent) {
             // If the sample has a parent, directly get the parent's SampleCreation object from the dictionary
             const parentSampleCreation = sampleCreationsDict[sample.parent]

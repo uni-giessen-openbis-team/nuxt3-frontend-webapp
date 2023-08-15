@@ -1,17 +1,20 @@
-<script setup lang="ts">
+<!-- List people from Space -->
+<script setup>
 import { useOpenBisStore } from '@/composables/openbisAPI'
 const store = useOpenBisStore()
 
-const creation = ref({})
+const people = ref({})
 
 onMounted(async () => {
-  creation.value = await store.preparePersonCreation('12345', 'DEFAULT')
-  await store.createPerson(creation)
+  people.value = await store.listPersonsOfSpace('DEFAULT')
 })
 </script>
 
 <template>
-  <pre>{{ creation }}</pre>
+  <pre>
+
+    {{ people }}
+  </pre>
 </template>
 
 <style lang="scss" scoped>

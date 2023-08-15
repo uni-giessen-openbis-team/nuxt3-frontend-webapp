@@ -91,14 +91,19 @@ function updateTech() {
   return true
 }
 
+const createProjectMessage = ref({})
+
 async function onComplete() {
   // The different Samples from chilt to parent
   //  - projectContext
   //  - entetyConditionsResult
   //  - sampleConditionsResult
   //  - techConditionsResult
+  console.log('🚀 ~ file: index.vue:102 ~ onComplete ~ projectContext.value.name:', projectContext.value.name)
 
-  await store.createProject(projectContext.value.name, projectContext.value.space, projectContext.value.description)
+  // TODO:How to bubble error/ success and display it
+  createProjectMessage.value = await store.createProject(projectContext.value.name, projectContext.value.space, projectContext.value.description)
+  await store.createSamplesFromWizzard(projectContext, sampleGroups)
 }
 </script>
 
@@ -165,6 +170,11 @@ async function onComplete() {
    {{ entetyConditionsResult }}
    {{ sampleConditionsResult }}
    {{ techConditionsResult }}
+   {{ createProjectMessage }}
     </pre>
   </v-container>
 </template>
+
+<!-- "permId": "20230810114924798-37",
+"@type": "as.dto.project.id.ProjectPermId",
+"@id": 1 -->
