@@ -1,5 +1,7 @@
 <template>
   <v-app>
-    <v-button>Hello World</v-button>
+    <v-button text="sm red">
+      Hello World
+    </v-button>
   </v-app>
 </template>
