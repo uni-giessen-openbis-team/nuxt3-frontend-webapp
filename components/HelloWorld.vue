@@ -1,9 +1,13 @@
 <script setup lang="ts">
-
+defineProps<{
+  text: string
+}>()
 </script>
 
 <template>
   <div>
-    Hello World
+    <v-text>
+      {{ text }}
+    </v-text>
   </div>
 </template>

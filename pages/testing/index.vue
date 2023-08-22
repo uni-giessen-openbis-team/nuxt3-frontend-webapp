@@ -1,19 +1,13 @@
 <script setup lang="ts">
-import { useOpenBisStore } from '@/composables/openbisAPI'
-const store = useOpenBisStore()
 
-const creation = ref({})
-
-onMounted(async () => {
-  creation.value = await store.preparePersonCreation('12345', 'DEFAULT')
-  await store.createPerson(creation)
-})
 </script>
 
 <template>
-  <pre>{{ creation }}</pre>
+  <div>
+    <HelloWorld text="Hello from test" />
+  </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 
 </style>
