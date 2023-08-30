@@ -341,77 +341,87 @@ export const useOpenBisStore = defineStore('openBis', {
       return result[0]
     },
 
-    async isPersonAdmin({ personId, userId, person, spaceId, projectId }) {
-      if (personId || userId) {
-        const { PersonPermId, PersonSearchCriteria, Role, RoleLevel } = this.loadedResources
+    async isAdminAtInstanceLevel(person) {
+      const { Role, RoleLevel } = this.loadedResources
 
-        personId = personId || new PersonPermId(userId)
-        const criteria = new PersonSearchCriteria()
-        criteria.withId().thatEquals(personId)
-
-        const persons = await this.v3.searchPersons(
-          criteria,
-          this.fetchPersonCompletely(),
-        )
-
-        if (persons.getTotalCount() < 1)
-          throw new Error(`Could not find person with user id: ${personId}`)
-
-        for (const role of persons.getObjects()[0].getRoleAssignments()) {
-          if (role.getRoleLevel().equals(RoleLevel.INSTANCE) && role.getRole().equals(Role.ADMIN))
-            return true
-        }
-      }
-
-      if (person) {
-        try {
-          const { Role, RoleLevel } = this.loadedResources
-
-          for (const role of person.getRoleAssignments()) {
-            if (role.getRoleLevel().equals(RoleLevel.INSTANCE) && role.getRole().equals(Role.ADMIN))
-              return true
-          }
-        }
-        catch (error) {
-          return this.isPersonAdmin({ personId: person.getPermId() })
-        }
-      }
-
-      if (spaceId || projectId) {
-        if (await this.isPersonAdmin({ personId }))
+      for (const role of person.getRoleAssignments()) {
+        if (role.getRoleLevel().equals(RoleLevel.INSTANCE) && role.getRole().equals(Role.ADMIN))
           return true
+      }
 
-        const { RoleAssignmentSearchCriteria, Role, RoleLevel } = this.loadedResources
-        const criteria = new RoleAssignmentSearchCriteria()
-        criteria.withSpace().withId().thatEquals(spaceId)
-        criteria.withProject().withId().thatEquals(projectId)
+      return false
+    },
 
-        const result = await this.v3.searchRoleAssignments(
-          criteria,
-          this.fetchRoleAssignmentWithUserAndAuthorizationGroupUsersCompletely(),
-        )
+    async isAdminFromPersonObj(person) {
+      try {
+        return await this.isAdminAtInstanceLevel(person)
+      }
+      catch (error) {
+        return this.isPersonAdmin({ personId: person.getPermId() })
+      }
+    },
 
-        for (const roleAssignment of result.getObjects()) {
-          if (roleAssignment.getRole() === Role.ADMIN && roleAssignment.getRoleLevel() === RoleLevel.SPACE) {
-            if (roleAssignment.getUser() && roleAssignment.getUser().getPermId().equals(personId))
-              return true
+    async isAdminAtSpaceOrProjectLevel(personId, spaceId, projectId) {
+      const { RoleAssignmentSearchCriteria, Role, RoleLevel } = this.loadedResources
 
-            if (roleAssignment.getAuthorizationGroup() && roleAssignment.getAuthorizationGroup().getUsers().map(user => user.getPermId()).includes(personId))
-              return true
-          }
+      const criteria = new RoleAssignmentSearchCriteria()
+      criteria.withSpace().withId().thatEquals(spaceId)
+      criteria.withProject().withId().thatEquals(projectId)
+
+      const result = await this.v3.searchRoleAssignments(
+        criteria,
+        this.fetchRoleAssignmentWithUserAndAuthorizationGroupUsersCompletely(),
+      )
+
+      for (const roleAssignment of result.getObjects()) {
+        if (roleAssignment.getRole() === Role.ADMIN && roleAssignment.getRoleLevel() === RoleLevel.SPACE) {
+          if (roleAssignment.getUser() && roleAssignment.getUser().getPermId().equals(personId))
+            return true
+
+          if (roleAssignment.getAuthorizationGroup() && roleAssignment.getAuthorizationGroup().getUsers().map(user => user.getPermId()).includes(personId))
+            return true
         }
       }
 
       return false
     },
 
+    async isPersonAdmin({ personId, userId, person, spaceId, projectId }) {
+      if (personId || userId) {
+        const { PersonPermId, PersonSearchCriteria } = this.loadedResources
+
+        personId = personId || new PersonPermId(userId)
+        const criteria = new PersonSearchCriteria()
+        criteria.withId().thatEquals(personId)
+
+        const persons = await this.v3.searchPersons(criteria, this.fetchPersonCompletely())
+
+        if (persons.getTotalCount() < 1)
+          throw new Error(`Could not find person with user id: ${personId}`)
+
+        if (await this.isAdminAtInstanceLevel(persons.getObjects()[0]))
+          return true
+      }
+
+      if (person && await this.isAdminFromPersonObj(person))
+        return true
+
+      if ((spaceId || projectId) && await this.isAdminAtSpaceOrProjectLevel(personId, spaceId, projectId))
+        return true
+
+      return false
+    },
+
+    async isUserAdmin() {
+      return 0
+    },
+
     /* ----------------------------------------------------------------------------------------- */
-    /* ----- AuthorizationGroup API Methods ---------------------------------------------------- */
+    /* ----- AuthorizationGroup API Methods ---------------------------------------------------- * /
     /* ----------------------------------------------------------------------------------------- */
 
     async getAuthorizationGroups({
-
-      criteria = new AuthorizationGroupSearchCriteria(),
+      criteria = new this.loadedResources.AuthorizationGroupSearchCriteria(),
       options = this.fetchAuthorizationGroupCompletely(),
       authorizationGroupId,
     } = {}) {
@@ -476,7 +486,7 @@ export const useOpenBisStore = defineStore('openBis', {
       return creation
     },
 
-    async createAuthorizationGroup({ creation }) {
+    async createAuthorizationGroup(creation) {
       try {
         const result = await this.v3.createAuthorizationGroups([creation])
         return result[0]
@@ -547,10 +557,11 @@ export const useOpenBisStore = defineStore('openBis', {
       }
       catch (error) {
         console.error(`${error.name}: ${error.message}`)
-        console.warn(`listRoleAssignments(<TOKEN>,${criteria},${options}) failed and returned an empty list.`)
+        console.warn(`listRoleAssignments (${criteria},${options}) failed and returned an empty list.`)
         return []
       }
     },
+
     async getRoleAssignment({ roleAssignmentId, options }) {
       try {
         const result = await this.v3.getRoleAssignments([roleAssignmentId], options)
@@ -563,7 +574,7 @@ export const useOpenBisStore = defineStore('openBis', {
       }
     },
 
-    async getRoleAssignments({ roleAssignmentIds }) {
+    async getRoleAssignments(roleAssignmentIds) {
       try {
         return await this.v3.getRoleAssignments(roleAssignmentIds, this.fetchRoleAssignmentCompletely())
       }
