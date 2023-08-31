@@ -8,6 +8,7 @@ export const useOpenBisStore = defineStore('openBis', {
     loadedResources: {},
     v3: null,
     sessionToken: null,
+    isAdmin: false,
   }),
   actions: {
     async loadV3API() {
@@ -413,7 +414,9 @@ export const useOpenBisStore = defineStore('openBis', {
     },
 
     async isUserAdmin() {
-      return 0
+      const sessionInformation = await this.getSessionInformation()
+      const currentUser = sessionInformation.getPerson()
+      return this.isAdminFromPersonObj(currentUser)
     },
 
     /* ----------------------------------------------------------------------------------------- */
@@ -1166,12 +1169,11 @@ export const useOpenBisStore = defineStore('openBis', {
     },
 
     // tested and worked
-    login(user, password) {
-      return this.promise(this.v3.login(user, password))
-        .then((sessionToken) => {
-          this.sessionToken = sessionToken
-          return sessionToken
-        })
+    async login(user, password) {
+      const sessionToken = await this.v3.login(user, password)
+      this.sessionToken = sessionToken
+      this.isAdmin = this.isUserAdmin()
+      return sessionToken
     },
 
     // tested and worked

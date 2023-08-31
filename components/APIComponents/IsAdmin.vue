@@ -3,7 +3,7 @@ import { useOpenBisStore } from '@/composables/openbisAPI'
 
 const store = useOpenBisStore()
 
-const information = await store.getRoleAssignments('1')
+const information = await store.isAdmin
 </script>
 
 <template>
