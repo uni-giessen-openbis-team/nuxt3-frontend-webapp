@@ -121,33 +121,34 @@ async function onComplete() {
         Upload
       </v-tab>
     </v-tabs>
+    <br>
     <v-window v-model="tab">
       <v-window-item :key="1" value="Create">
         <v-form>
-          <FormWizard @on-complete="onComplete">
-            <TabContent title="Project Context">
+          <FormWizard color="#094899" @on-complete="onComplete">
+            <TabContent title="Project Context" icon="mdi mdi-account">
               <WizzardProjectContext v-model="projectContext" />
             </TabContent>
             <!-- arrow https://github.com/BinarCode/vue-form-wizard/issues/40 -->
-            <TabContent title="Project Enteties" :before-change="() => updateEntety() ">
+            <TabContent icon="mdi mdi-alien" title="Project Enteties" :before-change="() => updateEntety() ">
               <WizzardProjectEnteties v-model="entetyVariables" />
             </TabContent>
-            <TabContent title="Entety Preview">
+            <TabContent title="Entety Preview" icon="mdi mdi-list-box-outline">
               <WizzardPreviewTable v-model="entetyConditionsResult" />
             </TabContent>
-            <TabContent title="Biological Samples" :before-change="() => updateBiol()">
+            <TabContent icon="fa fa-grin-beam" title="Biological Samples" :before-change="() => updateBiol()">
               <WizzardSampleExtracts v-model="sampleVariables" />
             </TabContent>
-            <TabContent title="Biological Samples Preview">
+            <TabContent icon="mdi mdi-list-box-outline" title="Biological Samples Preview">
               <WizzardPreviewTable v-model="entetyAndSampleResult" />
             </TabContent>
-            <TabContent title="Technical Samples" :before-change="() => updateTech()">
+            <TabContent icon="mdi mdi-abacus" title="Technical Samples" :before-change="() => updateTech()">
               <WizzardTechnical v-model="techVariables" />
             </TabContent>
-            <TabContent title="Technical Samples Preview">
+            <TabContent icon="mdi mdi-list-box-outline" title="Technical Samples Preview">
               <WizzardPreviewTable v-model="Result" />
             </TabContent>
-            <TabContent title="final Form" />
+            <TabContent title="final Form" icon="mdi mdi-check" />
           </FormWizard>
         </v-form>
       </v-window-item>
@@ -165,13 +166,6 @@ async function onComplete() {
         </v-form>
       </v-window-item>
     </v-window>
-    <pre>
-    {{ projectContext }}
-   {{ entetyConditionsResult }}
-   {{ sampleConditionsResult }}
-   {{ techConditionsResult }}
-   {{ createProjectMessage }}
-    </pre>
   </v-container>
 </template>
 

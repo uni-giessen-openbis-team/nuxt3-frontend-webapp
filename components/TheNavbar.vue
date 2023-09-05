@@ -68,8 +68,8 @@ const userId = ref(store.sessionInformation?.permId.userId)
   <v-navigation-drawer
     v-model="tempDrawer"
     :permanent="mdAndUp.value"
-
     app
+    style="background-image: url('@/public/winter-blue-pink-gradient-background-vector_53876-117276.avif'); background-size: cover;"
   >
     <!-- Navigation links on medium to small -->
     <v-list

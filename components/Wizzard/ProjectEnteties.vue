@@ -66,9 +66,4 @@ const variables = ref([
       </v-card-text>
     </v-card>
   </div>
-  <pre>{{ modelValue }}</pre>
 </template>
-
-<style lang="scss" scoped>
-
-</style>

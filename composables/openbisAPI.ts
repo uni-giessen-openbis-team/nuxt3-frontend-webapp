@@ -154,10 +154,6 @@ export const useOpenBisStore = defineStore('openBis', {
       return this.promise(this.v3.searchPersons(criteria, fo))
     },
 
-    searchAuthorizationGroups(criteria, fo) {
-      return this.promise(this.v3.searchAuthorizationGroups(criteria, fo))
-    },
-
     searchPropertyAssignments(criteria, fo) {
       return this.promise(this.v3.searchPropertyAssignments(criteria, fo))
     },
@@ -423,53 +419,53 @@ export const useOpenBisStore = defineStore('openBis', {
     /* ----- AuthorizationGroup API Methods ---------------------------------------------------- * /
     /* ----------------------------------------------------------------------------------------- */
 
-    async getAuthorizationGroups({
-      criteria = new this.loadedResources.AuthorizationGroupSearchCriteria(),
-      options = this.fetchAuthorizationGroupCompletely(),
-      authorizationGroupId,
-    } = {}) {
+    async getSingleAuthorizationGroup(authorizationGroupId, options) {
+      const result = await this.v3.getAuthorizationGroups([authorizationGroupId], options)
+      return result.get(authorizationGroupId)
+    },
+
+    async getMultipleAuthorizationGroups(authorizationGroupIds, options) {
+      return await this.v3.getAuthorizationGroups(authorizationGroupIds, options)
+    },
+
+    async searchAuthorizationGroups(criteria, options) {
+      const result = await this.v3.searchAuthorizationGroups(criteria, options)
+      return result.getObjects()
+    },
+
+    handleError(e, authorizationGroupId, options, criteria) {
+      console.error(`${e.constructor.name}: ${e.message}`)
+
+      if (authorizationGroupId) {
+        if (Array.isArray(authorizationGroupId))
+          console.warn(`getAuthorizationGroups(<TOKEN>,${authorizationGroupId}) failed and returned null.`)
+        else
+          console.warn(`getAuthorizationGroup(<TOKEN>,${authorizationGroupId},${options}) failed and returned null.`)
+      }
+      else {
+        console.warn(`listAuthorizationGroups(<TOKEN>,${criteria},${options}) failed and returned an empty list.`)
+      }
+
+      return authorizationGroupId ? (Array.isArray(authorizationGroupId) ? {} : null) : []
+    },
+
+    async getAuthorizationGroups({ criteria = new this.loadedResources.AuthorizationGroupSearchCriteria(), options = this.fetchAuthorizationGroupCompletely(), authorizationGroupId } = {}) {
       try {
         if (authorizationGroupId) {
-          let result
-          if (Array.isArray(authorizationGroupId)) {
-            result = await this.v3.getAuthorizationGroups(
+          if (Array.isArray(authorizationGroupId))
+            return await this.getMultipleAuthorizationGroups(authorizationGroupId, options)
 
-              authorizationGroupId,
-              options,
-            )
-          }
-          else {
-            result = await this.v3.getAuthorizationGroups(
-
-              [authorizationGroupId],
-              options,
-            )
-            result = result.get(authorizationGroupId)
-          }
-
-          return result
+          else
+            return await this.getSingleAuthorizationGroup(authorizationGroupId, options)
         }
         else {
-          const result = await this.v3.searchAuthorizationGroups(criteria, options)
-          return result.getObjects()
+          return await this.searchAuthorizationGroups(criteria, options)
         }
       }
       catch (e) {
-        console.error(`${e.constructor.name}: ${e.message}`)
-        if (authorizationGroupId) {
-          if (Array.isArray(authorizationGroupId))
-            console.warn(`getAuthorizationGroups(<TOKEN>,${authorizationGroupId}) failed and returned null.`)
-
-          else
-            console.warn(`getAuthorizationGroup(<TOKEN>,${authorizationGroupId},${options}) failed and returned null.`)
-        }
-        else {
-          console.warn(`listAuthorizationGroups(<TOKEN>,${criteria},${options}) failed and returned an empty list.`)
-        }
-        return authorizationGroupId ? (Array.isArray(authorizationGroupId) ? {} : null) : []
+        return this.handleError(e, authorizationGroupId, options, criteria)
       }
     },
-
     // Call prepareAuthorizationGroupCreation:
     // let group1 = prepareAuthorizationGroupCreation({ code: 'myCode', description: 'myDescription', userIds: ['id1', 'id2'] });
     // let group2 = prepareAuthorizationGroupCreation({ code: 'myCode2', description: 'myDescription2' });
@@ -729,13 +725,11 @@ export const useOpenBisStore = defineStore('openBis', {
 
     updateProject(project) {
       this.v3.updateProjects([project])
-
       return true
     },
 
     updateProjects(projects) {
       this.v3.updateProjects(projects)
-
       return true
     },
 
@@ -751,22 +745,30 @@ export const useOpenBisStore = defineStore('openBis', {
     /* ----- Collection API Methods ------------------------------------------------------------ */
     /* ----------------------------------------------------------------------------------------- */
 
-    listCollections(criteria = new ExperimentSearchCriteria(), options = this.fetchCollectionCompletely()) {
-      const result = v3.searchExperiments(criteria, options)
+    async listCollections(options = this.fetchCollectionCompletely()) {
+      const { ExperimentSearchCriteria } = this.loadedResources
+      const criteria = new ExperimentSearchCriteria()
+      const result = await this.searchExperiments(criteria, options)
       return result.getObjects()
     },
 
     listCollectionsOfType(typeId) {
+      const { ExperimentSearchCriteria } = this.loadedResources
+
       const criteria = new ExperimentSearchCriteria().withType().withId().thatEquals(typeId)
       return this.listCollections(criteria)
     },
 
     listCollectionsOfSpace(spaceCode) {
+      const { ExperimentSearchCriteria } = this.loadedResources
+
       const criteria = new ExperimentSearchCriteria().withProject().withSpace().withCode().thatEquals(spaceCode)
       return this.listCollections(criteria)
     },
 
     listCollectionsOfProject(projectId) {
+      const { ExperimentSearchCriteria } = this.loadedResources
+
       const criteria = new ExperimentSearchCriteria().withProject().withId().thatEquals(projectId)
       return this.listCollections(criteria)
     },
@@ -805,11 +807,14 @@ export const useOpenBisStore = defineStore('openBis', {
     },
 
     deleteCollection(collectionId, reason) {
+      gggggggggggsdfggggggggggg
+      const { ExperimentDeletionOptions } = this.loadedResources
       const options = new ExperimentDeletionOptions().setReason(reason)
       return v3.deleteExperiments([collectionId], options)
     },
 
     deleteCollections(collections, reason) {
+      const { ExperimentDeletionOptions } = this.loadedResources
       const collectionIds = collections.map(collection => collection.getIdentifier())
       const options = new ExperimentDeletionOptions().setReason(reason)
       return v3.deleteExperiments(collectionIds, options)
@@ -824,36 +829,41 @@ export const useOpenBisStore = defineStore('openBis', {
     /* ----------------------------------------------------------------------------------------- */
     /* ----- Object API Methods ---------------------------------------------------------------- */
     /* ----------------------------------------------------------------------------------------- */
-    listObjects(criteria, options) {
+    listObjects(criteria, options = this.fetchObjectCompletely(),
+    ) {
       const result = this.v3.searchSamples(criteria, options)
-      return result.getObjects()
+      return result
     },
 
-    listObjectsOfType(typeId) {
+    listObjectsOfType(typeId, options = this.fetchObjectCompletely()) {
+      const { SampleSearchCriteria } = this.loadedResources
       const criteria = new SampleSearchCriteria()
       criteria.withType().withId().thatEquals(typeId)
-      return this.listObjects(criteria)
+      return this.listObjects(criteria, options)
     },
 
     listObjectsOfSpace(spaceCode) {
+      const { SampleSearchCriteria } = this.loadedResources
       const criteria = new SampleSearchCriteria()
       criteria.withSpace().withCode().thatEquals(spaceCode)
       return this.listObjects(criteria)
     },
 
     listObjectsOfProject(projectId) {
+      const { SampleSearchCriteria } = this.loadedResources
       const criteria = new SampleSearchCriteria()
       criteria.withProject().withId().thatEquals(projectId)
       return this.listObjects(criteria)
     },
 
     listObjectsOfCollection(collectionId) {
+      const { SampleSearchCriteria } = this.loadedResources
       const criteria = new SampleSearchCriteria()
       criteria.withExperiment().withId().thatEquals(collectionId)
       return this.listObjects(criteria)
     },
 
-    getObject(objectId, options) {
+    getObject(objectId, options = this.fetchObjectCompletely()) {
       const result = this.v3.getSamples([objectId], options)
       return result.get(objectId)
     },
@@ -868,6 +878,7 @@ export const useOpenBisStore = defineStore('openBis', {
     },
 
     updateObjectParents(objectId, parentIds) {
+      const { SampleUpdate } = this.loadedResources
       const update = new SampleUpdate()
       update.setSampleId(objectId)
       update.getParentIds().set(parentIds)
@@ -876,6 +887,7 @@ export const useOpenBisStore = defineStore('openBis', {
     },
 
     updateObjectChildren(objectId, childrenIds) {
+      const { SampleUpdate } = this.loadedResources
       const update = new SampleUpdate()
       update.setSampleId(objectId)
       update.getChildIds().set(childrenIds)
@@ -883,7 +895,7 @@ export const useOpenBisStore = defineStore('openBis', {
       return true
     },
 
-    deleteObjects(objects, reason, permanently = false) {
+    deleteObject11111111111111111111111111111111111ddddddds(objects, reason, permanently = false) {
       const objectIds = Array.isArray(objects) ? objects.map(obj => obj.getIdentifier()) : [objects.getIdentifier()]
       const pdo = new SampleDeletionOptions().setReason(reason)
       const deletionId = this.v3.deleteSamples(objectIds, pdo)

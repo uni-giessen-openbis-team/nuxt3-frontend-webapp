@@ -52,7 +52,5 @@ const computedLabel = computed(() => {
 
   <pre
     :key="forceRerender"
-  >
-  {{ speciesList }}
-</pre>
+  />
 </template>

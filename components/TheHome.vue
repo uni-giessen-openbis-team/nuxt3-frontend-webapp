@@ -4,12 +4,12 @@
 const openBizDescription = [
   {
     header: 'Store your data',
-    text: 'With openBIS+, you can store all your experimental research data in one central location. Data protection compliant. Your data is encrypted from the moment of upload and can only be read by people who explicitly have been granted access.',
+    text: 'With openBIS, you can store all your experimental research data in one central location. Data protection compliant. Your data is encrypted from the moment of upload and can only be read by people who explicitly have been granted access.',
     link: '/data-storage',
   },
   {
     header: 'Analyse your data',
-    text: 'Analyze your Omics data reproducibly and with little effort. openBIS+ is directly connected to a workflow registry that provides standardized analysis pipelines. These pipelines are firmly versioned with all their used tools and therefore always generate the same results with the same input.',
+    text: 'Analyze your Omics data reproducibly and with little effort. openBIS is directly connected to a workflow registry that provides standardized analysis pipelines. These pipelines are firmly versioned with all their used tools and therefore always generate the same results with the same input.',
     link: '/workflows',
   },
   {
@@ -32,7 +32,7 @@ const openBizDescription = [
       Welcome
     </h1>
 
-    <h2>BCF openBIS+ Instance</h2>
+    <h2>BCF openBIS Instance</h2>
   </v-container>
 
   <v-divider />

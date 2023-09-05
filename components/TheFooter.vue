@@ -19,7 +19,7 @@ const footerLinks = [{
             <TheDarkToggle />
           </v-col>
           <v-col>
-            {{ new Date().getFullYear() }} — <strong>OpenBiz Team</strong>
+            {{ new Date().getFullYear() }} — <strong>JLU Team</strong>
           </v-col>
         </v-row>
       </v-col>

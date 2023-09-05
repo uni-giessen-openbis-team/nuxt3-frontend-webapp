@@ -49,6 +49,4 @@ const people = ref<string[]>([])
       :rules="[value => !!value || 'Item is required', value => (value && value.length >= MINDESCLENGTH) || 'Item must be at least 20 characters']"
     />
   </div>
-  Iside projectContext.vue
-  <pre>{{ modelValue }}</pre>
 </template>
