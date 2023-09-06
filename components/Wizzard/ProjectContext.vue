@@ -48,5 +48,5 @@ const people = ref<string[]>([])
       label="Description"
       :rules="[value => !!value || 'Item is required', value => (value && value.length >= MINDESCLENGTH) || 'Item must be at least 20 characters']"
     />
-  </div>
+  </div><pre>{{ modelValue }}</pre>
 </template>
