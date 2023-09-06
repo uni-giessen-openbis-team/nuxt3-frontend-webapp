@@ -3,7 +3,5 @@
 </script>
 
 <template>
-  <div>
-    <TablesLuckysheet />
-  </div>
+  <div />
 </template>
