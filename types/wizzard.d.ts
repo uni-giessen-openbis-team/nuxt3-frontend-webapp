@@ -12,3 +12,9 @@ export interface TableVariable {
     unit?: string
     conditions?: Array
   }
+
+ export interface Pool {
+  id: string;
+  name: string;
+  samples: combinedVariable[];
+ }

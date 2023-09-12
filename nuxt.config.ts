@@ -1,6 +1,7 @@
 import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
+
   modules: [
     // pre-installed
     '@vueuse/nuxt',
@@ -17,7 +18,6 @@ export default defineNuxtConfig({
     'nuxt-vitest',
 
   ],
-
   experimental: {
     // when using generate, payload js assets included in sw precache manifest
     // but missing on offline, disabling extraction it until fixed
