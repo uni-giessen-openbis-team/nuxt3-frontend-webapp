@@ -1,15 +1,25 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue'
 import { useOpenBisStore } from '@/composables/openbisAPI'
-const store = useOpenBisStore()
+import { useUserSettingsStore } from '@/composables/stores/userSettingsStore'
 
-const { space } = defineModels<{ space }>()
+const openBisStore = useOpenBisStore()
+const settingsStore = useUserSettingsStore()
+
+// Set the initial value of space from the userSettingsStore
+const { space } = defineModels<{ space: any }>()
 
 const projectSpaces = ref<string[]>([])
 
+const onSpaceChange = (newSpace: string) => {
+  emit('update:space', newSpace)
+}
+
 onMounted(async () => {
-  // Load the spaces from the API
-  const spaces = await store.getAllSpaces()
+  console.log('mounted autocompleteSpaces')
+  const spaces = await openBisStore.getAllSpaces()
   projectSpaces.value = spaces.objects.map(space => space.code)
+  space.value = settingsStore.selectedSpace
 })
 </script>
 
@@ -19,5 +29,6 @@ onMounted(async () => {
     :items="projectSpaces"
     label="Project-Space"
     :rules="[value => !!value || 'Item is required']"
+    @change="onSpaceChange"
   />
 </template>
