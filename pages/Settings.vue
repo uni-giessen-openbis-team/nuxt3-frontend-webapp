@@ -3,10 +3,7 @@
 </script>
 
 <template>
-  Settings
-  <div />
+  <v-container>
+    <SettingsWorkspaceSelection />
+  </v-container>
 </template>
-
-<style scoped>
-
-</style>
