@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
     '@nuxt/devtools',
+    '@nuxtjs/storybook',
 
     // own-imports
     '@formkit/nuxt',
@@ -81,5 +82,10 @@ export default defineNuxtConfig({
   ssr: false, // client side rendering only,
   runtimeConfig: {
     apiBase: process.env.API_BASE_URL,
+  },
+  storybook: {
+    url: 'http://localhost:6006',
+    storybookRoute: '/__storybook__',
+    port: 6006,
   },
 })
