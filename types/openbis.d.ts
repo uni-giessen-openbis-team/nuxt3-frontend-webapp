@@ -27,3 +27,4 @@ declare module 'openbis' {
   declare class Space {
     constructor();
   }
+

@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import { useOpenBisStore } from '@/composables/openbisAPI'
-import LoginForm from '@/components/TheLoginForm.vue'
 
 const store = useOpenBisStore()
 const showLoginForm = ref(!store.isLoggedIn)
@@ -18,7 +17,9 @@ onMounted(async () => {
 
 <template>
   <div>
-    <LoginForm v-if="showLoginForm" />
+    <!-- <LoginForm v-if="showLoginForm" /> -->
+    <TestLogin v-if="showLoginForm" />
+
     <NuxtLayout v-else>
       <TheNavbar />
       <NuxtPage />

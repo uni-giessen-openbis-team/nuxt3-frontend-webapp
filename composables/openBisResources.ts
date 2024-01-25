@@ -188,3 +188,21 @@ export const resourcesToLoad = [
   'as/dto/sample/create/SampleCreation',
   'as/dto/roleassignment/search/RoleAssignmentSearchCriteria',
 ]
+
+// Function to transform the array into an object of resourceName: resourcePath
+function createResourceMap(resources: string[]) {
+  const resourceMap: Record<string, string> = {};
+  resources.forEach(fullName => {
+    const shortName = fullName.includes('/') ? fullName.substring(fullName.lastIndexOf('/') + 1) : fullName;
+    resourceMap[shortName] = fullName;
+  });
+  return resourceMap;
+}
+
+// Create the resource map
+const resourceMap = createResourceMap(resourcesToLoad);
+
+// Define the LoadedResources type based on the keys of the resourceMap
+export type LoadedResources = {
+  [K in keyof typeof resourceMap]: any; // Replace 'any' with more specific types if possible
+};

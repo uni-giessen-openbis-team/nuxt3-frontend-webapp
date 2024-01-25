@@ -67,6 +67,7 @@ export default defineNuxtConfig({
         { name: 'description', content: appDescription },
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
       ],
+
       script: [
         {
           src: '/openbis/resources/api/v3/config.bundle.js',
@@ -74,7 +75,10 @@ export default defineNuxtConfig({
         {
           src: '/openbis/resources/api/v3/require.js',
         },
-
+        {
+          src: 'http://localhost:3000/openbis/resources/api/v3/openbis.esm.js',
+          hid: 'openbis',
+        },
       ],
     },
   },
@@ -87,4 +91,5 @@ export default defineNuxtConfig({
   //   storybookRoute: '/__storybook__',
   //   port: 6006,
   // },
+  plugins: ['~/plugins/openbis.client.js'],
 })
