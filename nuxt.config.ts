@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
     '@nuxt/devtools',
-    '@nuxtjs/storybook',
+    // '@nuxtjs/storybook',
 
     // own-imports
     '@formkit/nuxt',
@@ -21,7 +21,7 @@ export default defineNuxtConfig({
     // when using generate, payload js assets included in sw precache manifest
     // but missing on offline, disabling extraction it until fixed
     payloadExtraction: false,
-    inlineSSRStyles: false,
+    // inlineSSRStyles: false,
   },
   css: [
     '@unocss/reset/tailwind.css',
@@ -42,7 +42,6 @@ export default defineNuxtConfig({
         changeOrigin: true,
         prependPath: true,
       },
-
     },
     esbuild: {
       options: {
@@ -83,9 +82,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     apiBase: process.env.API_BASE_URL,
   },
-  storybook: {
-    url: 'http://localhost:6006',
-    storybookRoute: '/__storybook__',
-    port: 6006,
-  },
+  // storybook: {
+  //   url: 'http://localhost:6006',
+  //   storybookRoute: '/__storybook__',
+  //   port: 6006,
+  // },
 })

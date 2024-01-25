@@ -1,8 +1,8 @@
 <script setup lang = 'ts'>
 import { ref } from 'vue'
 import { FormWizard, TabContent } from 'vue3-form-wizard'
-import type { TableVariable } from 'types/wizzard'
-import type { ProjectContext } from 'components/Wizzard/ProjectContext.vue'
+import type { TableVariable } from '@/types/wizzard'
+import type { ProjectContext } from '@/components/Wizzard/ProjectContext.vue'
 import { createTableEntries, crossProductSamples } from '@/composables/utils'
 import { useOpenBisStore } from '@/composables/openbisAPI'
 

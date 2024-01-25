@@ -6,11 +6,13 @@ const username = ref('')
 const password = ref('')
 const error = ref(null)
 const store = useOpenBisStore()
-const v3 = ref(store.v3)
+const v3 = store.v3
 
 const handleLogin = async () => {
   try {
-    await store.login(username.value, password.value)
+    console.log("login")
+    store.login(username.value, password.value)
+    console.log("logged in")
   }
   catch (e) {
     error.value = e
