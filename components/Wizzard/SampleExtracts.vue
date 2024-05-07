@@ -1,8 +1,8 @@
 <script setup lang="ts">
 // This comp
 import { ref } from 'vue'
-import type { TableVariable } from 'types/wizzard'
-import { useOpenBisStore } from '@/composables/openbisAPI.js'
+import type { TableVariable } from '@/types/wizzard'
+
 const { modelValue } = defineModels<{ modelValue: Object }>()
 const store = useOpenBisStore()
 const tab = ref('')

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useOpenBisStore } from '@/composables/openbisAPI'
 const store = useOpenBisStore()
 
 const { space } = defineModels<{ space:string }>()

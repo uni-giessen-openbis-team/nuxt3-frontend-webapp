@@ -1,6 +1,5 @@
 <script setup>
 import { onMounted } from 'vue'
-import { useOpenBisStore } from '@/composables/openbisAPI'
 
 const store = useOpenBisStore()
 const projectSample = ref([]) // Populate with your data

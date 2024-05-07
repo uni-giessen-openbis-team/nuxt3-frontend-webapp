@@ -4,7 +4,6 @@
 // being loaded for two particular purposes.
 // https://unlimited.ethz.ch/display/openBISDoc2010/openBIS+V3+API#openBISV3API-VI.Webapplicationcontext
 import { onMounted } from 'vue'
-import { useOpenBisStore } from '@/composables/openbisAPI'
 
 const store = useOpenBisStore()
 

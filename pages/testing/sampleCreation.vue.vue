@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue'
-import { useOpenBisStore } from '@/composables/openbisAPI'
 const store = useOpenBisStore()
 
 const testEntry = ref({

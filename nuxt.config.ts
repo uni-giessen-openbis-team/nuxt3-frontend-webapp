@@ -4,18 +4,16 @@ export default defineNuxtConfig({
   modules: [
     // pre-installed
     '@vueuse/nuxt',
-    '@unocss/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
-    '@vite-pwa/nuxt',
     '@nuxt/devtools',
-
 
     // own-imports
     '@formkit/nuxt',
     '@vue-macros/nuxt',
     'nuxt-lodash',
   ],
+
 
   experimental: {
     // when using generate, payload js assets included in sw precache manifest
@@ -24,17 +22,8 @@ export default defineNuxtConfig({
     // inlineSSRStyles: false,
   },
   css: [
-    '@unocss/reset/tailwind.css',
-    'vuetify/lib/styles/main.sass',
-    '@mdi/font/css/materialdesignicons.min.css',
-    'bootstrap/dist/css/bootstrap.min.css',
   ],
-  build: {
-    transpile: ['vuetify'],
-  },
-  colorMode: {
-    classSuffix: '',
-  },
+ 
   nitro: {
     devProxy: {
       '/openbis': {
@@ -69,18 +58,15 @@ export default defineNuxtConfig({
       ],
 
       script: [
+     
         {
-          src: '/openbis/resources/api/v3/config.bundle.js',
+          src: '/openbis/resources/api/v3/openbis.esm.js',
+          type: 'module',
         },
-        {
-          src: '/openbis/resources/api/v3/require.js',
-        },
-        {
-          src: 'http://localhost:3000/openbis/resources/api/v3/openbis.esm.js',
-          hid: 'openbis',
-        },
+
       ],
     },
+
   },
   ssr: false, // client side rendering only,
   runtimeConfig: {
@@ -91,5 +77,5 @@ export default defineNuxtConfig({
   //   storybookRoute: '/__storybook__',
   //   port: 6006,
   // },
-  plugins: ['~/plugins/openbis.client.js'],
+
 })

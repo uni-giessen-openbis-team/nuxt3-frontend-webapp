@@ -1,7 +1,6 @@
 <script setup lang="ts">
 /// / imports ////
 import { onMounted, ref } from 'vue'
-import { useOpenBisStore } from '@/composables/openbisAPI.js'
 
 /// / types ////
 export interface MyRow {

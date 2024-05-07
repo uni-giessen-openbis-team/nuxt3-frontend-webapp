@@ -1,7 +1,6 @@
 <script setup lang="ts">
 // TODO: add type spaceCode
 import { onMounted, ref } from 'vue'
-import { useOpenBisStore } from '@/composables/openbisAPI'
 const { space = 'DEFAULT' } = defineProps<{
   space: spaceCode
 }>()

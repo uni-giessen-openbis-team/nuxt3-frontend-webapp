@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useOpenBisStore } from '@/composables/openbisAPI.js'
 
 const store = useOpenBisStore()
 const { modelValue } = defineModels<{ modelValue: Array<Object> }>()

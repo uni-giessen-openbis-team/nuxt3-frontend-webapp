@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useOpenBisStore } from '@/composables/openbisAPI'
+
 const { searchTerm } = defineProps<{
   // descructuring props
   searchTerm: string
