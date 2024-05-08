@@ -4,7 +4,7 @@ Spaces are used to group projects and experiments.
 */
 
 import { defineStore } from 'pinia';
-import openbis from './openbis.js';
+import  openbis  from '@bschwab/types-api-openbis';
 
 export const useSpaceStore = defineStore('spaces', {
   state: () => ({

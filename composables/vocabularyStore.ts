@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import openbis from '../openbis-module/openbis.ems'
+import  openbis  from '@bschwab/types-api-openbis';
 
 
 export const useVocabularyStore = defineStore('vocabulary', {

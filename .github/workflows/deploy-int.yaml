@@ -21,7 +21,7 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - name: Install dependencies
-        run: pnpm i 
+        run: bun i 
 
       - name: Generate
         run: nuxi generate

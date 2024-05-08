@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const store = useOpenBisStore()
+const store = useSpaceStore()
 
 const { space } = defineModels<{ space:string }>()
 

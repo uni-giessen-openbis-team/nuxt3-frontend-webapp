@@ -1,3 +1,4 @@
+import { defineNuxtConfig } from 'nuxt/config'
 import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
@@ -14,7 +15,6 @@ export default defineNuxtConfig({
     'nuxt-lodash',
   ],
 
-
   experimental: {
     // when using generate, payload js assets included in sw precache manifest
     // but missing on offline, disabling extraction it until fixed
@@ -23,7 +23,7 @@ export default defineNuxtConfig({
   },
   css: [
   ],
- 
+
   nitro: {
     devProxy: {
       '/openbis': {
@@ -36,11 +36,6 @@ export default defineNuxtConfig({
       options: {
         target: 'esnext',
       },
-    },
-    prerender: {
-      crawlLinks: false,
-      routes: ['/'],
-      ignore: ['/hi'],
     },
   },
   app: {
@@ -58,7 +53,7 @@ export default defineNuxtConfig({
       ],
 
       script: [
-     
+
         {
           src: '/openbis/resources/api/v3/openbis.esm.js',
           type: 'module',
