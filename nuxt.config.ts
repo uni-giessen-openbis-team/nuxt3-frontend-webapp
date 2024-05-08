@@ -26,8 +26,8 @@ export default defineNuxtConfig({
 
   nitro: {
     devProxy: {
-      '/openbis': {
-        target: 'http://localhost:8080/openbis',
+      '/': {
+        target: 'http://localhost:8080/',
         changeOrigin: true,
         prependPath: true,
       },
