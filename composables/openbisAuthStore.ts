@@ -1,5 +1,9 @@
+// Disable auto linting
+
+//
+
 import { defineStore } from 'pinia'
-import openbis from './openbis-api'
+import openbis from './openbis.esm'
 
 /*
 The openbisStore is used to interact with the openBIS API.
@@ -18,12 +22,13 @@ export const useOpenBisStore = defineStore('openBis', {
 
   actions: {
     async initialize() {
-      this.v3 = await new openbis.Openbis()
+      // eslint-disable-next-line
+      this.v3 = await new openbis.openbis
       await this.autoLogin()
     },
 
     async autoLogin() {
-      await this.login('admin', 'whatever_value')
+      await this.login('admin', 'password')
     },
 
     async login(username: string, password: string) {

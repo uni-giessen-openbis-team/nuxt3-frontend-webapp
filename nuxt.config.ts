@@ -26,8 +26,8 @@ export default defineNuxtConfig({
 
   nitro: {
     devProxy: {
-      '/': {
-        target: 'http://localhost:8080/',
+      '/openbis': {
+        target: 'http://localhost:8080/openbis',
         changeOrigin: true,
         prependPath: true,
       },
@@ -64,9 +64,7 @@ export default defineNuxtConfig({
 
   },
   ssr: false, // client side rendering only,
-  runtimeConfig: {
-    apiBase: process.env.API_BASE_URL,
-  },
+
   // storybook: {
   //   url: 'http://localhost:6006',
   //   storybookRoute: '/__storybook__',

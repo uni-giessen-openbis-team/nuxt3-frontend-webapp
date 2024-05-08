@@ -4,6 +4,7 @@ const online = useOnline()
 
 <template>
   <div>
+    {{ openbis }}
     <Suspense>
       <ClientOnly>
         <TheHome v-if="online" />

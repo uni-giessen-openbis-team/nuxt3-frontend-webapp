@@ -1,54 +1,53 @@
-
-//ts-nocheck
+// ts-nocheck
 
 import { defineStore } from 'pinia'
 
-export const useProjectStore = defineStore('project',{
-    state:() => ({
-    }),
-    actions : {
-      async listProjects(criteria = {}, options = {}): Promise<openbis.SearchResult<openbis.Project>>{
-        const projects = await useOpenBisStore().v3.searchProjects(
-            new openbis.ProjectSearchCriteria(),
-            new openbis.ProjectFetchOptions())
-        return projects
-      },
-
-    async listProjectsOfSpace( space ):Promise<Project[]> {
-        const psc = new openbis.ProjectSearchCriteria()
-        psc.withSpace().withCode().thatEquals(space.code)
-        const result = await useOpenBisStore().v3.searchProjects(psc, new openbis.ProjectFetchOptions())
-        return result.objects
+export const useProjectStore = defineStore('project', {
+  state: () => ({
+  }),
+  actions: {
+    async listProjects(criteria = {}, options = {}): Promise<openbis.SearchResult<openbis.Project>> {
+      const projects = await useOpenBisStore().v3.searchProjects(
+        new openbis.ProjectSearchCriteria(),
+        new openbis.ProjectFetchOptions())
+      return projects
     },
 
-      getProject(projectId, options = {}) {
-        const result = this.v3.getProjects([new ProjectPermId(projectId)], new ProjectFetchOptions(options))
-        return result.get(projectId)
-      },
+    async listProjectsOfSpace(space): Promise<Project[]> {
+      const psc = new openbis.ProjectSearchCriteria()
+      psc.withSpace().withCode().thatEquals(space.code)
+      const result = await useOpenBisStore().v3.searchProjects(psc, new openbis.ProjectFetchOptions())
+      return result.objects
+    },
 
-      createProjects(projects) {
-        return useOpenBisStore().v3.createProjects(projects)
-      },
+    getProject(projectId, options = {}) {
+      const result = this.v3.getProjects([new ProjectPermId(projectId)], new ProjectFetchOptions(options))
+      return result.get(projectId)
+    },
 
-      updateProject(project) {
-        useOpenBisStore().v3.updateProjects([project])
-        return true
-      },
+    createProjects(projects) {
+      return useOpenBisStore().v3.createProjects(projects)
+    },
 
-      updateProjects(projects) {
-        useOpenBisStore().v3.updateProjects(projects)
+    updateProject(project) {
+      useOpenBisStore().v3.updateProjects([project])
+      return true
+    },
 
-        return true
-      },
+    updateProjects(projects) {
+      useOpenBisStore().v3.updateProjects(projects)
 
-      deleteProject(projectId, reason) {
-        const { ProjectDeletionOptions } = this.loadedResources
-        const pdo = new ProjectDeletionOptions().setReason(reason)
+      return true
+    },
 
-        useOpenBisStore().v3.deleteProjects([projectId], pdo)
+    deleteProject(projectId, reason) {
+      const { ProjectDeletionOptions } = this.loadedResources
+      const pdo = new ProjectDeletionOptions().setReason(reason)
 
-        return true
-      },
+      useOpenBisStore().v3.deleteProjects([projectId], pdo)
 
-    }
+      return true
+    },
+
+  },
 })
