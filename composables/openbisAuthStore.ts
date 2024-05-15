@@ -16,19 +16,19 @@ created and used throughout the application.
 
 export const useOpenBisStore = defineStore('openBis', {
   state: () => ({
-    v3: openbis.openbis,
+    v3: null,
     sessionToken: null as string | null,
   }),
 
   actions: {
     async initialize() {
-      // eslint-disable-next-line
-      this.v3 = await new openbis.openbis
+      this.v3 = await new openbis.openbis()
+      console.log('🚀 ~ initialize ~ this.v3:', this.v3)
       await this.autoLogin()
     },
 
     async autoLogin() {
-      await this.login('admin', 'password')
+      await this.login('admin', '123456789')
     },
 
     async login(username: string, password: string) {

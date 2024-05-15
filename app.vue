@@ -1,6 +1,6 @@
 <script setup>
-const store = useOpenBisStore()
-const showLoginForm = ref(!store.isLoggedIn)
+// const store = useOpenBisStore()
+// const showLoginForm = ref(!store.isLoggedIn)
 </script>
 
 <template>
