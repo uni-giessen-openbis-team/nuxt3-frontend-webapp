@@ -1,16 +1,14 @@
 <script setup lang="ts">
 const store = useSpaceStore()
 
-const { space } = defineModels<{ space:string }>()
-
+const { space } = defineModels<{ space: string }>()
 
 const projectSpaces = ref<string[]>([])
-
 
 onMounted(async () => {
   // Load the spaces from the API
   const spaces = await store.getAllSpaces()
-  console.log("🚀 ~ onMounted ~ spaces:", JSON.stringify( spaces))
+  console.log('🚀 ~ onMounted ~ spaces:', JSON.stringify(spaces))
   projectSpaces.value = spaces.objects.map(space => space.code)
 })
 </script>

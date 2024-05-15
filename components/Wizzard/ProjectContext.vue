@@ -1,6 +1,5 @@
 <script setup lang = "ts">
 import { ref } from 'vue'
-import AutocompleteSpaces from '@/components/APIComponents/AutocompleteSpaces.vue'
 const MINDESCLENGTH = 20
 
 // The type for modelValue is inferred as Object. However, it would be better to have a more specific type.
