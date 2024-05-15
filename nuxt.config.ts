@@ -19,11 +19,20 @@ export default defineNuxtConfig({
     // when using generate, payload js assets included in sw precache manifest
     // but missing on offline, disabling extraction it until fixed
     payloadExtraction: false,
-    // inlineSSRStyles: false,
+    inlineSSRStyles: false,
   },
   css: [
+    '@unocss/reset/tailwind.css',
+    'vuetify/lib/styles/main.sass',
+    '@mdi/font/css/materialdesignicons.min.css',
+    'bootstrap/dist/css/bootstrap.min.css',
   ],
-
+  build: {
+    transpile: ['vuetify'],
+  },
+  colorMode: {
+    classSuffix: '',
+  },
   nitro: {
     devProxy: {
       '/openbis': {
@@ -31,11 +40,17 @@ export default defineNuxtConfig({
         changeOrigin: true,
         prependPath: true,
       },
+
     },
     esbuild: {
       options: {
         target: 'esnext',
       },
+    },
+    prerender: {
+      crawlLinks: false,
+      routes: ['/'],
+      ignore: ['/hi'],
     },
   },
   app: {
@@ -51,24 +66,39 @@ export default defineNuxtConfig({
         { name: 'description', content: appDescription },
         { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
       ],
-
       script: [
-
         {
-          src: '/openbis/resources/api/v3/openbis.esm.js',
-          type: 'module',
+          src: '/openbis/resources/api/v3/config.bundle.js',
+        },
+        {
+          src: '/openbis/resources/api/v3/require.js',
         },
 
       ],
     },
-
   },
-  ssr: false, // client side rendering only,
-
-  // storybook: {
-  //   url: 'http://localhost:6006',
-  //   storybookRoute: '/__storybook__',
-  //   port: 6006,
+  // pwa: {
+  //   // TODO: Change Icon, description, etc.
+  //   manifest: {
+  //     name: 'OpenBIZ Plus',
+  //     short_name: 'OpenBIZ',
+  //     description: 'Website to store and distribute biological data',
+  //     icons: [{
+  //       src: '/icons/icon_144x144.png',
+  //       sizes: '144x144',
+  //       type: 'image/png',
+  //     }],
+  //   },
+  //   workbox: {
+  //     navigateFallback: '/',
+  //   },
+  //   devOptions: {
+  //     enabled: true,
+  //     type: 'module',
+  //   },
   // },
-
+  ssr: false, // client side rendering only,
+  runtimeConfig: {
+    apiBase: process.env.API_BASE_URL,
+  },
 })
