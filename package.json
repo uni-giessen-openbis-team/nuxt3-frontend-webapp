@@ -1,12 +1,14 @@
 {
   "private": true,
   "scripts": {
-    "dev": "nuxi dev",
-    "build": "nuxt build",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
+    "build": "NUXT_APP_BASE_URL=/openbis/webapp/example-webapp/  nuxi build  --prerender  && mv .output/public/ .output/html && cp -fR .output/html C:/Users/benes/Scripts/openbis-server/state/core-plugins/test-module/1/as/webapps/example-webapp",
+    "dev": "NUXT_APP_BASE_URL=/test/webapp/example-webapp/ nuxi dev",
+    "dev:pwa": "VITE_PLUGIN_PWA=true nuxi dev",
+    "start": "node .output/server/index.mjs",
     "lint": "eslint .",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxi prepare",
+    "generate": "nuxi generate",
+    "start:generate": "npx serve .output/public"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.35.3",
