@@ -1,247 +1,226 @@
 import { defineStore } from 'pinia'
-import  openbis  from '@bschwab/types-api-openbis';
-
+import openbis from './openbis.esm'
 
 export const useVocabularyStore = defineStore('vocabulary', {
-    state:() => ({
-        
-    }),
-    actions: {
-      // works
-      async listVocabularies(criteria?: VocabularySearchCriteria, options?: VocabularyFetchOptions): Vocabulary[] {
-              const result = await useOpenBisStore().v3.searchVocabularies(criteria, options)
-              return result.objects
-      },
+  state: () => ({
 
-      // works
-      listAllVocabularies(): Vocabulary[] {
-          return this.listVocabularies(new openbis.VocabularySearchCriteria(), fetchVocabularyCompletely())
-      },
+  }),
+  actions: {
+    // works
+    async listVocabularies(criteria: openbis.VocabularySearchCriteria, options: openbis.VocabularyFetchOptions): Promise<openbis.SearchResult<openbis.Vocabulary> > {
+      const result = await useOpenBisStore().v3?.searchVocabularies(criteria, options)
+      return result || new openbis.SearchResult<openbis.Vocabulary>()
+    },
 
-      async getVocabulary(vocabularyId: IVocabularyId, options?: VocabularyFetchOptions): Vocabulary {
-        const result = await useOpenBisStore().v3.getVocabularies([vocabularyId], options)
-        return result.get(vocabularyId)
-      },
+    // works
+    listAllVocabularies(): openbis.Vocabulary[] {
+      return this.listVocabularies(new openbis.VocabularySearchCriteria(), fetchVocabularyCompletely())
+    },
 
-      getVocabularyById(vocabularyId: IVocabularyId): Vocabulary {
+    async getVocabulary(vocabularyId: openbis.IVocabularyId, options?: openbis.VocabularyFetchOptions): openbis.Vocabulary {
+      const result = await useOpenBisStore().v3.getVocabularies([vocabularyId], options)
+      return result.get(vocabularyId)
+    },
 
-        return this.getVocabulary(vocabularyId, this.fetchVocabularyCompletely())
-      },
+    getVocabularyById(vocabularyId: IVocabularyId): Vocabulary {
+      return this.getVocabulary(vocabularyId, this.fetchVocabularyCompletely())
+    },
 
-      getVocabularyByCode(vocabularyCode: string): Vocabulary {
+    // getVocabularyB  yCode(vocabularyCode: string): openbis.Vocabulary {
+    //   return this.getVocabulary(new VocabularyPermId(vocabularyCode), this.fetchVocabularyCompletely())
+    // },
 
-        return this.getVocabulary(new VocabularyPermId(vocabularyCode), this.fetchVocabularyCompletely())
-      },
+    getVocabulariesByCodes(vocabularyCodes: string[]): Map<IVocabularyId, Vocabulary> {
+      const vocabularyIds = vocabularyCodes.map(code => new VocabularyPermId(code))
+      return useOpenBisStore().v3.getVocabularies(vocabularyIds, this.fetchVocabularyCompletely())
+    },
 
-      getVocabulariesByCodes(vocabularyCodes: string[]): Map<IVocabularyId, Vocabulary> {
+    /* ----------------------------------------------------------------------------------------- */
+    /* ----- VocabularyTerm API Methods -------------------------------------------------------- */
+    /* ----------------------------------------------------------------------------------------- */
 
-        const vocabularyIds = vocabularyCodes.map(code => new VocabularyPermId(code))
-        return useOpenBisStore().v3.getVocabularies(vocabularyIds, this.fetchVocabularyCompletely())
-      },
+    async listVocabularyTerms(criteria: openbis.VocabularyTermSearchCriteria, options: openbis.VocabularyTermFetchOptions): Promise<openbis.VocabularyTerm[]> {
+      const result = await useOpenBisStore().v3?.searchVocabularyTerms(criteria, options)
+      return result?.getObjects() || []
+    },
 
+    listAllVocabularyTerms(): VocabularyTerm[] {
+      return this.listVocabularyTerms(new openbis.VocabularyTermSearchCriteria(), this.fetchVocabularyTermCompletely())
+    },
 
+    listVocabularyTermsByVocabularyId(vocabularyId) {
+      const criteria = new openbis.VocabularyTermSearchCriteria().withVocabulary().withId().thatEquals(vocabularyId)
+      return this.listVocabularyTerms(criteria)
+    },
 
-      /* ----------------------------------------------------------------------------------------- */
-      /* ----- VocabularyTerm API Methods -------------------------------------------------------- */
-      /* ----------------------------------------------------------------------------------------- */
+    listVocabularyTermsByVocabularyCode(vocabularyCode: string) {
+      const criteria = new openbis.VocabularyTermSearchCriteria().withVocabulary().withCode().thatEquals(vocabularyCode)
+      return this.listVocabularyTerms(criteria)
+    },
 
-      listVocabularyTerms(criteria?: VocabularyTermSearchCriteria, options?: VocabularyTermFetchOptions): VocabularyTerm[] {
+    // listVocabularyTermsByProperty(property: openbis.PropertyType): openbis.VocabularyTerm[] {
+    //   try {
+    //     const fullProperty = await useOpenBisStore().v3?.getPropertyTypes(
+    //       [property.getPermId()],
+    //       this.fetchPropertyTypeWithVocabularyAndTerms()
+    //     ).get(property.getPermId())
 
-        const result = useOpenBisStore().v3.searchVocabularyTerms(criteria, options)
-        return result.getObjects()
-      },
+    //     if (fullProperty === null)
+    //       throw new Error(`PropertyType ${property.getCode()} does not exist.`)
 
-      listAllVocabularyTerms(): VocabularyTerm[] {
+    //     return fullProperty.getVocabulary().getTerms()
+    //   }
+    //   catch (error) {
+    //     logger.error(`${error.constructor.name}: ${error.message}`)
+    //     logger.warn(`listVocabularyTerms(<TOKEN>,${property}) failed and returned an empty list.`)
+    //     return []
+    //   }
+    // },
 
-        return this.listVocabularyTerms(new VocabularyTermSearchCriteria(), this.fetchVocabularyTermCompletely())
-      },
+    // getVocabularyTerm(vocabularyTermId: openbis.IVocabularyTermId, options?): openbis.VocabularyTerm {
+    //   const result = useOpenBisStore().v3.getVocabularyTerms([vocabularyTermId], options)
+    //   return result.get(vocabularyTermId)
+    // },
 
-      listVocabularyTermsByVocabularyId(vocabularyId: IVocabularyId): VocabularyTerm[] {
+    // getVocabularyTermById(vocabularyTermId): VocabularyTerm {
+    //   return this.getVocabularyTerm(vocabularyTermId, this.fetchVocabularyTermCompletely())
+    // },
 
-        const criteria = new VocabularyTermSearchCriteria().withVocabulary().withId().thatEquals(vocabularyId)
-        return this.listVocabularyTerms(criteria)
-      },
+    // getVocabularyTermByCode(vocabularyTermCode: string, vocabularyCode: string): VocabularyTerm {
+    //   return this.getVocabularyTerm(
+    //     new openbis.VocabularyTermPermId(vocabularyTermCode, vocabularyCode),
+    //     this.fetchVocabularyTermCompletely(),
+    //   )
+    // },
 
-      listVocabularyTermsByVocabularyCode(vocabularyCode: string): VocabularyTerm[] {
+    // getVocabularyTermsByCodes(vocabularyTermIds: Map<string, string>): Map<IVocabularyTermId, VocabularyTerm> {
+    //   const vocabularyTermIdList = Array.from(vocabularyTermIds, ([key, value]) => new VocabularyTermPermId(key, value))
+    //   return this.getVocabularyTerms(vocabularyTermIdList)
+    // },
 
-        const criteria = new VocabularyTermSearchCriteria().withVocabulary().withCode().thatEquals(vocabularyCode)
-        return this.listVocabularyTerms(criteria)
-      },
+    // createVocabularyTerm(creation: VocabularyTermCreation): IVocabularyTermId {
+    //   return useOpenBisStore().v3.createVocabularyTerms([creation])[0]
+    // },
 
-      listVocabularyTermsByProperty(property: PropertyType): VocabularyTerm[] {
-        try {
-          const fullProperty = useOpenBisStore().v3.getPropertyTypes(
-            List.of(property.getPermId()),
-            this.fetchPropertyTypeWithVocabularyAndTerms(),
-          ).get(property.getPermId())
+    // answer from email. How create VocabTerms
 
-          if (fullProperty === null)
-            throw new IllegalArgumentException(`PropertyType ${property.getCode()} does not exist.`)
+    // var creation = new VocabularyTermCreation();
+    // creation.setVocabularyId(new VocabularyPermId("MY_VOCABULARY_CODE"));
+    // creation.setCode("MY_TERM_CODE");
+    // creation.setLabel("My term label");
+    // creation.setDescription("My term description");
 
-          return fullProperty.getVocabulary().getTerms()
-        }
-        catch (error) {
-          logger.error(`${error.constructor.name}: ${error.message}`)
-          logger.warn(`listVocabularyTerms(<TOKEN>,${property}) failed and returned an empty list.`)
-          return []
-        }
-      },
+    // v3.createVocabularyTerms([ creation ]).done(function(result) {
+    //     alert("Created term: " + result[0]);
+    // }).fail(function(error){
+    //     alert("Something went wrong: " + JSON.stringify(error))
+    // });
 
-      getVocabularyTerm(vocabularyTermId: IVocabularyTermId, options?: VocabularyTermFetchOptions): VocabularyTerm {
+    // createVocabularyTermByVocabulary(vocabularyId: IVocabularyId, code: string, label?: string, description?: string): IVocabularyTermId {
+    //   const creation = new VocabularyTermCreation()
+    //   creation.setVocabularyId(vocabularyId)
+    //   creation.setCode(code)
+    //   creation.setLabel(label)
+    //   creation.setDescription(description)
 
-        const result = useOpenBisStore().v3.getVocabularyTerms([vocabularyTermId], options)
-        return result.get(vocabularyTermId)
-      },
+    //   return this.createVocabularyTerm(creation)
+    // },
 
-      getVocabularyTermById(vocabularyTermId: IVocabularyTermId): VocabularyTerm {
+    // updateVocabularyTerm(update: VocabularyTermUpdate): boolean {
+    //   try {
+    //     useOpenBisStore().v3.updateVocabularyTerms([update])
+    //     return true
+    //   }
+    //   catch (error) {
+    //     logger.error(`${error.constructor.name}: ${error.message}`)
+    //     logger.warn(`updateVocabularyTerm(<TOKEN>,${update}) failed and returned null.`)
+    //     return false
+    //   }
+    // },
 
-        return this.getVocabularyTerm(vocabularyTermId, this.fetchVocabularyTermCompletely())
-      },
+    // updateVocabularyTermLabel(vocabularyTermId: IVocabularyTermId, label: string): boolean {
+    //   const update = new VocabularyTermUpdate()
+    //   update.setVocabularyTermId(vocabularyTermId)
+    //   update.setLabel(label)
 
-      getVocabularyTermByCode(vocabularyTermCode: string, vocabularyCode: string): VocabularyTerm {
+    //   return this.updateVocabularyTerm(update)
+    // },
 
-        return this.getVocabularyTerm(
-          new VocabularyTermPermId(vocabularyTermCode, vocabularyCode),
-          this.fetchVocabularyTermCompletely(),
-        )
-      },
+    // // Vocabulary code is something like "SPECIES"
+    // async getVocabularyTerms(vocabularyTermIds: openbis.IVocabularyTermId[]) {
+    //   const VocabularyTerms = await useOpenBisStore().v3?.getVocabularyTerms(vocabularyTermIds, this.fetchVocabularyTermCompletely())
+    //   return VocabularyTerms
+    // },
 
-      getVocabularyTermsByCodes(vocabularyTermIds: Map<string, string>): Map<IVocabularyTermId, VocabularyTerm> {
+    // // One space for each working group
+    // async getAllSpaces(): Promise<openbis.Space[]> {
+    //   const criteria = new openbis.SpaceSearchCriteria()
+    //   const fo = new openbis.SpaceFetchOptions()
+    //   return await this.searchSpaces(criteria, fo)
+    // },
 
-        const vocabularyTermIdList = Array.from(vocabularyTermIds, ([key, value]) => new VocabularyTermPermId(key, value))
-        return this.getVocabularyTerms(vocabularyTermIdList)
-      },
+    // prepareProjectCreation(projectCode: openbis.projectCode, spaceCode, description = null) {
+    //   const creation = new openbis.ProjectCreation()
+    //   creation.setCode(projectCode)
+    //   creation.setSpaceId(new openbis.SpacePermId(spaceCode))
 
-      createVocabularyTerm(creation: VocabularyTermCreation): IVocabularyTermId {
-        return useOpenBisStore().v3.createVocabularyTerms([creation])[0]
-      },
+    //   if (description)
+    //     creation.setDescription(description)
 
-      // answer from email. How create VocabTerms
+    //   return creation
+    // },
 
-      // var creation = new VocabularyTermCreation();
-      // creation.setVocabularyId(new VocabularyPermId("MY_VOCABULARY_CODE"));
-      // creation.setCode("MY_TERM_CODE");
-      // creation.setLabel("My term label");
-      // creation.setDescription("My term description");
+    // async createProject(projectCode, spaceCode, description) {
+    //   const creation = await this.prepareProjectCreation(projectCode, spaceCode, description)
+    //   return await useOpenBisStore().v3.createProjects(creation)
+    // },
 
-      // v3.createVocabularyTerms([ creation ]).done(function(result) {
-      //     alert("Created term: " + result[0]);
-      // }).fail(function(error){
-      //     alert("Something went wrong: " + JSON.stringify(error))
-      // });
+    // // The main function
+    // // pass the sampleGroups in the right order. From top to bottom hiracy
+    // async createSamplesFromWizzard(projectContext, sampleGroups) {
+    //   const createdSamples = []
+    //   const sampleCreationsDict = {}
 
-      createVocabularyTermByVocabulary(vocabularyId: IVocabularyId, code: string, label?: string, description?: string): IVocabularyTermId {
+    //   for (const sampleList of sampleGroups) {
+    //     for (const sample of sampleList) {
+    //       const sampleCreation = new SampleCreation()
+    //       sampleCreation.setTypeId(new EntityTypePermId(sample.sampleType))
+    //       sampleCreation.setSpaceId(new SpacePermId(projectContext.space))
+    //       sampleCreation.setCreationId(new CreationId(sample.secondaryName))
 
-        const creation = new VocabularyTermCreation()
-        creation.setVocabularyId(vocabularyId)
-        creation.setCode(code)
-        creation.setLabel(label)
-        creation.setDescription(description)
+    //       // Iterate over conditions and set property for each
+    //       for (const condition of sample.conditions) {
+    //         for (const [key, value] of Object.entries(condition))
+    //           sampleCreation.setProperty(key, value)
+    //       }
+    //       // sampleCreation.setCode('MY_SAMPLE_CODE')
+    //       // sampleCreation.setExperimentId(new ExperimentIdentifier('/MY_SPACE_CODE/MY_PROJECT_CODE/MY_EXPERIMENT_CODE'))
 
-        return this.createVocabularyTerm(creation)
-      },
+    //       if (sample.parent) {
+    //         // If the sample has a parent, directly get the parent's SampleCreation object from the dictionary
+    //         const parentSampleCreation = sampleCreationsDict[sample.parent]
+    //         if (parentSampleCreation) {
+    //           sampleCreation.setParentIds([parentSampleCreation.getCreationId()])
 
-      updateVocabularyTerm(update: VocabularyTermUpdate): boolean {
+    //           // Add the sample's creation ID to the parent's child IDs
+    //           const parentChildIds = parentSampleCreation.getChildIds() || []
+    //           parentChildIds.push(sampleCreation.getCreationId())
+    //           parentSampleCreation.setChildIds(parentChildIds)
+    //         }
+    //         else { console.log('Parent sample not found') }
+    //       }
 
-        try {
-          useOpenBisStore().v3.updateVocabularyTerms([update])
-          return true
-        }
-        catch (error) {
-          logger.error(`${error.constructor.name}: ${error.message}`)
-          logger.warn(`updateVocabularyTerm(<TOKEN>,${update}) failed and returned null.`)
-          return false
-        }
-      },
+    //       sample.sampleCreation = sampleCreation
+    //       // Add the SampleCreation object to the dictionary
+    //       sampleCreationsDict[sample.secondaryName] = sampleCreation
+    //       createdSamples.push(sampleCreation)
+    //     }
+    //   }
 
-      updateVocabularyTermLabel(vocabularyTermId: IVocabularyTermId, label: string): boolean {
-
-        const update = new VocabularyTermUpdate()
-        update.setVocabularyTermId(vocabularyTermId)
-        update.setLabel(label)
-
-        return this.updateVocabularyTerm(update)
-      },
-
-
-      // Vocabulary code is something like "SPECIES"
-      async getVocabularyTerms(vocabularyTermIds: IVocabularyTermId[]): Map<IVocabularyTermId, VocabularyTerm> {
-        const VocabularyTerms = await useOpenBisStore().v3.getVocabularyTerms(vocabularyTermIds, this.fetchVocabularyTermCompletely())
-        return VocabularyTerms
-      },
-
-      // One space for each working group
-      async getAllSpaces(): Promise<Space[]> {
-        const criteria = new SpaceSearchCriteria()
-        const fo = new SpaceFetchOptions()
-        return await this.searchSpaces(criteria, fo)
-      },
-
-      prepareProjectCreation(projectCode, spaceCode, description = null) {
-
-        const creation = new ProjectCreation()
-        creation.setCode(projectCode)
-        creation.setSpaceId(new SpacePermId(spaceCode))
-
-        if (description)
-          creation.setDescription(description)
-
-        return creation
-      },
-
-      async createProject(projectCode, spaceCode, description) {
-        const creation = await this.prepareProjectCreation(projectCode, spaceCode, description)
-        return await useOpenBisStore().v3.createProjects(creation)
-      },
-
-      // The main function
-      // pass the sampleGroups in the right order. From top to bottom hiracy
-      async createSamplesFromWizzard(projectContext, sampleGroups) {
-
-        const createdSamples = []
-        const sampleCreationsDict = {}
-
-        for (const sampleList of sampleGroups) {
-          for (const sample of sampleList) {
-            const sampleCreation = new SampleCreation()
-            sampleCreation.setTypeId(new EntityTypePermId(sample.sampleType))
-            sampleCreation.setSpaceId(new SpacePermId(projectContext.space))
-            sampleCreation.setCreationId(new CreationId(sample.secondaryName))
-
-            // Iterate over conditions and set property for each
-            for (const condition of sample.conditions) {
-              for (const [key, value] of Object.entries(condition))
-                sampleCreation.setProperty(key, value)
-            }
-            // sampleCreation.setCode('MY_SAMPLE_CODE')
-            // sampleCreation.setExperimentId(new ExperimentIdentifier('/MY_SPACE_CODE/MY_PROJECT_CODE/MY_EXPERIMENT_CODE'))
-
-            if (sample.parent) {
-              // If the sample has a parent, directly get the parent's SampleCreation object from the dictionary
-              const parentSampleCreation = sampleCreationsDict[sample.parent]
-              if (parentSampleCreation) {
-                sampleCreation.setParentIds([parentSampleCreation.getCreationId()])
-
-                // Add the sample's creation ID to the parent's child IDs
-                const parentChildIds = parentSampleCreation.getChildIds() || []
-                parentChildIds.push(sampleCreation.getCreationId())
-                parentSampleCreation.setChildIds(parentChildIds)
-              }
-              else { console.log('Parent sample not found') }
-            }
-
-            sample.sampleCreation = sampleCreation
-            // Add the SampleCreation object to the dictionary
-            sampleCreationsDict[sample.secondaryName] = sampleCreation
-            createdSamples.push(sampleCreation)
-          }
-        }
-
-        return await useOpenBisStore().v3.createSamples([createdSamples[0]]).done((permIds) => {
-          alert(`Perm ids: ${JSON.stringify(permIds)}`)
-        })
-        // return createdSamples
-      },
-    }
+    //   return await useOpenBisStore().v3.createSamples([createdSamples[0]]).done((permIds) => {
+    //     alert(`Perm ids: ${JSON.stringify(permIds)}`)
+    //   })
+    // return createdSamples
+    // },
+  },
 })
-   

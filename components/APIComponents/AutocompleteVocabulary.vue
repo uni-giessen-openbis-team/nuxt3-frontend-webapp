@@ -1,26 +1,25 @@
 <script setup lang="ts">
+import openbis from '@/composables/openbis.esm'
 const { searchTerm } = defineProps<{
-  // descructuring props
   searchTerm: string
 }>()
 
 const { modelValue } = defineModels<{ modelValue: string[] }>()
-useOpenBisStore().v3
-const speciesList = ref([])
+
+const vocabularyTermList = ref([])
 onMounted(async () => {
-  const jsonObject = await useVocabularyStore().getVocabularyTerms(
-    useOpenBisStore()
-      .v3.vocabularyPermId(searchTerm),
+  const vocabularyTerms = await useVocabularyStore().getVocabulary(
+    new openbis.VocabularyPermId(searchTerm),
   )
-  console.log('🚀 ~ file: AutocompleteVocabulary.vue:16 ~ onMounted ~  jsonObject:', jsonObject)
-  speciesList.value = jsonObject[searchTerm].terms.map(term => term.label)
+  console.log('🚀 ~ onMounted ~ vocabularyTerms:', vocabularyTerms)
+  vocabularyTermList.value = vocabularyTerms
 })
 </script>
 
 <template>
   <v-autocomplete
     v-model="modelValue"
-    :items="speciesList"
+    :items="vocabularyTermList"
     multiple
   />
 </template>

@@ -16,7 +16,7 @@ created and used throughout the application.
 
 export const useOpenBisStore = defineStore('openBis', {
   state: () => ({
-    v3: null,
+    v3: null as openbis.openbis | null,
     sessionToken: null as string | null,
   }),
 
