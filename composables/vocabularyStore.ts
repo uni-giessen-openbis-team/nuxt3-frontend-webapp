@@ -9,7 +9,7 @@ export const useVocabularyStore = defineStore('vocabulary', {
     // works
     async listVocabularies(criteria: openbis.VocabularySearchCriteria, options: openbis.VocabularyFetchOptions): Promise<openbis.SearchResult<openbis.Vocabulary> > {
       const result = await useOpenBisStore().v3?.searchVocabularies(criteria, options)
-      return result || new openbis.SearchResult<openbis.Vocabulary>()
+      return result
     },
 
     // works
@@ -17,9 +17,9 @@ export const useVocabularyStore = defineStore('vocabulary', {
       return this.listVocabularies(new openbis.VocabularySearchCriteria(), fetchVocabularyCompletely())
     },
 
-    async getVocabulary(vocabularyId: openbis.IVocabularyId, options?: openbis.VocabularyFetchOptions): openbis.Vocabulary {
-      const result = await useOpenBisStore().v3.getVocabularies([vocabularyId], options)
-      return result.get(vocabularyId)
+    async getVocabulary(vocabularyId: openbis.IVocabularyId, options: openbis.VocabularyFetchOptions): Promise<openbis.Vocabulary > {
+      const result = await useOpenBisStore().v3?.getVocabularies([vocabularyId], options)
+      return result
     },
 
     getVocabularyById(vocabularyId: IVocabularyId): Vocabulary {

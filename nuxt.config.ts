@@ -2,18 +2,9 @@ import { defineNuxtConfig } from 'nuxt/config'
 import { appDescription } from './constants/index'
 
 export default defineNuxtConfig({
-  modules: [
-    // pre-installed
-    '@vueuse/nuxt',
-    '@pinia/nuxt',
-    '@nuxtjs/color-mode',
-    '@nuxt/devtools',
-
-    // own-imports
-    '@formkit/nuxt',
-    '@vue-macros/nuxt',
-    'nuxt-lodash',
-  ],
+  modules: [// pre-installed
+    '@vueuse/nuxt', '@pinia/nuxt', '@nuxtjs/color-mode', // own-imports
+    '@formkit/nuxt', 'vuetify-nuxt-module'],
 
   experimental: {
     // when using generate, payload js assets included in sw precache manifest
