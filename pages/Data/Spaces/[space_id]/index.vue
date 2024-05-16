@@ -47,7 +47,7 @@ const projectStore = useProjectStore()
 
 const fetchSpaceDetails = async () => {
   try {
-    const spaceId = String(route.params.space_id)
+    const spaceId = route.params.space_id
     space.value = await spaceStore.getSpace(spaceId)
     projects.value = await projectStore.getProjectsOfSpace(spaceId)
   } catch (err) {
@@ -56,7 +56,7 @@ const fetchSpaceDetails = async () => {
 }
 
 const goToProject = (projectId: string) => {
-  router.push(`/data/spaces/${String(route.params.space_id)}/projects/${projectId}`)
+  router.push(`/data/spaces/${route.params.space_id}/projects/${projectId}`)
 }
 
 onMounted(fetchSpaceDetails)
