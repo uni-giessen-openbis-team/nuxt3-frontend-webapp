@@ -1,4 +1,4 @@
-import  openbis  from '@bschwab/types-api-openbis';
+import  openbis  from './openbis.esm';
 
 /*  
     This is a collection of fetch options for openBis\

@@ -1,6 +1,8 @@
-//@ts-nocheck
-
 import { defineStore } from 'pinia'
+
+/*
+The store is used for fetching, creating, updating and deleting persons.
+*/
 
 
 export const usePersonStore = defineStore('person',{

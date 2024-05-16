@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const store = useSpaceStore()
 
-const { space } = defineModels<{ space: string }>()
+const space = defineModel<{ space: string }>()
 
 const projectSpaces = ref<string[]>([])
 

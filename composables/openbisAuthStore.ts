@@ -1,7 +1,3 @@
-// Disable auto linting
-
-//
-
 import { defineStore } from 'pinia'
 import openbis from './openbis.esm'
 
@@ -12,8 +8,9 @@ V3 instance created here, is used in all the other stores.
 This ensures that only one instance of the v3 object is
 created and used throughout the application.
 */
-// Rest of the code...
 
+// TODO: Perist the V3 Object. https://prazdevs.github.io/pinia-plugin-persistedstate/guide/limitations.html
+ 
 export const useOpenBisStore = defineStore('openBis', {
   state: () => ({
     v3: null as openbis.openbis | null,
@@ -22,37 +19,67 @@ export const useOpenBisStore = defineStore('openBis', {
 
   actions: {
     async initialize() {
-      this.v3 = await new openbis.openbis()
-      console.log('🚀 ~ initialize ~ this.v3:', this.v3)
-      await this.autoLogin()
+      try {
+        this.v3 = await new openbis.openbis()
+        console.log('🚀 ~ initialize ~ this.v3:', this.v3)
+      } catch (error) {
+        console.error('Error initializing v3 object:', error)
+      }
     },
 
     async autoLogin() {
-      await this.login('admin', '123456789')
+      try {
+        await this.login('admin', '123456789')
+      } catch (error) {
+        console.error('Error auto logging in:', error)
+      }
     },
 
     async login(username: string, password: string) {
-      // Perform login; on success, update isLoggedIn
-      if (!this.v3)
-        throw new Error('v3 object not initialized')
+      try {
+        if (!this.v3)
+          throw new Error('v3 object not initialized')
 
-      this.sessionToken = await this.v3.login(username, password)
-      console.log('🚀 ~ login ~ sessionToken:', this.sessionToken)
+        this.sessionToken = await this.v3.login(username, password)
+        console.log('🚀 ~ login ~ sessionToken:', this.sessionToken)
+      } catch (error) {
+        console.error('Error logging in:', error)
+      }
     },
-
+    
     async logout() {
-      if (!this.v3)
-        throw new Error('v3 object not initialized')
+      try {
+        if (!this.v3)
+          throw new Error('v3 object not initialized')
 
-      // Perform logout; on success, update isLoggedIn
-      await this.v3.logout()
-      console.log('Logged out successfully')
+        await this.v3.logout()
+        console.log('Logged out successfully')
+      } catch (error) {
+        console.error('Error logging out:', error)
+      }
     },
   },
 
   getters: {
-    getSessionToken(state): string | null {
-      return state.sessionToken
+    async getSessionInformation(state): Promise<string | null> {
+      try {
+        return await state.v3?.getSessionInformation()
+      } catch (error) {
+        console.error('Error getting session information:', error)
+        return null
+      }
     },
+    async isLoggedIn(state): Promise<boolean> {
+      try {
+        if (await this.getSessionInformation)
+          return true
+        return false
+      } catch (error) {
+        console.error('Error checking if logged in:', error)
+        return false
+      }
+    },
+    
   },
+  persist: true
 })

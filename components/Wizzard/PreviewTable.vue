@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { modelValue, onMounted } = defineModels<{ modelValue: Object[] }>()
+const  modelValue= defineModel<{ modelValue: Object[] }>()
 </script>
 
 <template>

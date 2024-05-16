@@ -5,7 +5,7 @@ const { space = 'DEFAULT' } = defineProps<{
   space: spaceCode
 }>()
 
-const { modelValue } = defineModels<{ modelValue: any }>()
+const  modelValue = defineModel<{ modelValue: any }>()
 
 const store = useOpenBisStore()
 const projectPersons = ref<string[]>([])

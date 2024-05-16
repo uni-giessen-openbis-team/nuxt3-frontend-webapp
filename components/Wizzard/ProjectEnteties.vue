@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 
 const store = useOpenBisStore()
-const { modelValue } = defineModels<{ modelValue: Array<Object> }>()
+const  modelValue  = defineModel<{ modelValue: Array<Object> }>()
 
 const tab = ref('')
 

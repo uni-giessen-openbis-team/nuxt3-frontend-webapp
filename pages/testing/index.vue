@@ -1,12 +1,14 @@
 <script setup lang="ts">
-const conditions = ref([])
+import openbis from '@/composables/openbis.esm'
+
+const sessionInformation = await  useOpenBisStore().isLoggedIn
 </script>
 
 <template>
   <div>
-    <APIComponentsAutocompleteVocabulary
-      v-model="conditions"
-      search-term="NCBI_TAXONOMY"
-    />
+    <pre>
+        {{ sessionInformation }}
+    </pre>
+
   </div>
 </template>

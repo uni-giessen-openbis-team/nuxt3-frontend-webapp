@@ -23,16 +23,16 @@ export const useVocabularyStore = defineStore('vocabulary', {
     },
 
     getVocabularyById(vocabularyId: IVocabularyId): Vocabulary {
-      return this.getVocabulary(vocabularyId, this.fetchVocabularyCompletely())
+      return this.getVocabulary(vocabularyId, fetchVocabularyCompletely())
     },
 
-    // getVocabularyB  yCode(vocabularyCode: string): openbis.Vocabulary {
-    //   return this.getVocabulary(new VocabularyPermId(vocabularyCode), this.fetchVocabularyCompletely())
+    // getVocabularyByCode(vocabularyCode: string): openbis.Vocabulary {
+    //   return this.getVocabulary(new VocabularyPermId(vocabularyCode), fetchVocabularyCompletely())
     // },
 
     getVocabulariesByCodes(vocabularyCodes: string[]): Map<IVocabularyId, Vocabulary> {
       const vocabularyIds = vocabularyCodes.map(code => new VocabularyPermId(code))
-      return useOpenBisStore().v3.getVocabularies(vocabularyIds, this.fetchVocabularyCompletely())
+      return useOpenBisStore().v3.getVocabularies(vocabularyIds, fetchVocabularyCompletely())
     },
 
     /* ----------------------------------------------------------------------------------------- */
@@ -45,7 +45,7 @@ export const useVocabularyStore = defineStore('vocabulary', {
     },
 
     listAllVocabularyTerms(): VocabularyTerm[] {
-      return this.listVocabularyTerms(new openbis.VocabularyTermSearchCriteria(), this.fetchVocabularyTermCompletely())
+      return this.listVocabularyTerms(new openbis.VocabularyTermSearchCriteria(), fetchVocabularyTermCompletely())
     },
 
     listVocabularyTermsByVocabularyId(vocabularyId) {
@@ -54,15 +54,15 @@ export const useVocabularyStore = defineStore('vocabulary', {
     },
 
     listVocabularyTermsByVocabularyCode(vocabularyCode: string) {
-      const criteria = new openbis.VocabularyTermSearchCriteria().withVocabulary().withCode().thatEquals(vocabularyCode)
-      return this.listVocabularyTerms(criteria)
+      const criteria : openbis.VocabularyTermSearchCriteria = new openbis.VocabularyTermSearchCriteria().withVocabulary().withCode().thatEquals(vocabularyCode)
+      return this.listVocabularyTerms(criteria, fetchVocabularyTermCompletely())
     },
 
     // listVocabularyTermsByProperty(property: openbis.PropertyType): openbis.VocabularyTerm[] {
     //   try {
     //     const fullProperty = await useOpenBisStore().v3?.getPropertyTypes(
     //       [property.getPermId()],
-    //       this.fetchPropertyTypeWithVocabularyAndTerms()
+    //       fetchPropertyTypeWithVocabularyAndTerms()
     //     ).get(property.getPermId())
 
     //     if (fullProperty === null)
@@ -83,13 +83,13 @@ export const useVocabularyStore = defineStore('vocabulary', {
     // },
 
     // getVocabularyTermById(vocabularyTermId): VocabularyTerm {
-    //   return this.getVocabularyTerm(vocabularyTermId, this.fetchVocabularyTermCompletely())
+    //   return this.getVocabularyTerm(vocabularyTermId, fetchVocabularyTermCompletely())
     // },
 
     // getVocabularyTermByCode(vocabularyTermCode: string, vocabularyCode: string): VocabularyTerm {
     //   return this.getVocabularyTerm(
     //     new openbis.VocabularyTermPermId(vocabularyTermCode, vocabularyCode),
-    //     this.fetchVocabularyTermCompletely(),
+    //     fetchVocabularyTermCompletely(),
     //   )
     // },
 
@@ -148,7 +148,7 @@ export const useVocabularyStore = defineStore('vocabulary', {
 
     // // Vocabulary code is something like "SPECIES"
     // async getVocabularyTerms(vocabularyTermIds: openbis.IVocabularyTermId[]) {
-    //   const VocabularyTerms = await useOpenBisStore().v3?.getVocabularyTerms(vocabularyTermIds, this.fetchVocabularyTermCompletely())
+    //   const VocabularyTerms = await useOpenBisStore().v3?.getVocabularyTerms(vocabularyTermIds, fetchVocabularyTermCompletely())
     //   return VocabularyTerms
     // },
 

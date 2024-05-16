@@ -1,53 +1,53 @@
-// ts-nocheck
-
 import { defineStore } from 'pinia'
+import openbis from '@/composables/openbis.esm'
 
 export const useProjectStore = defineStore('project', {
   state: () => ({
+    projects: [] as openbis.Project[]
   }),
   actions: {
-    async listProjects(criteria = {}, options = {}): Promise<openbis.SearchResult<openbis.Project>> {
-      const projects = await useOpenBisStore().v3.searchProjects(
-        new openbis.ProjectSearchCriteria(),
-        new openbis.ProjectFetchOptions())
-      return projects
+    async listProjects(criteria = {}, options = {}): Promise<void> {
+      const openBisStore = useOpenBisStore()
+      const result = await openBisStore.v3!.searchProjects(
+        new openbis.ProjectSearchCriteria().withSpace().withCode().thatEquals("DEFAULT"),
+        new openbis.ProjectFetchOptions()
+      )
+      this.projects = result.objects
     },
 
-    async listProjectsOfSpace(space): Promise<Project[]> {
+    async listProjectsOfSpace(space: { code: string }): Promise<void> {
+      const openBisStore = useOpenBisStore()
       const psc = new openbis.ProjectSearchCriteria()
       psc.withSpace().withCode().thatEquals(space.code)
-      const result = await useOpenBisStore().v3.searchProjects(psc, new openbis.ProjectFetchOptions())
-      return result.objects
+      const result = await openBisStore.v3!.searchProjects(psc, new openbis.ProjectFetchOptions())
+      this.projects = result.objects
     },
 
-    getProject(projectId, options = {}) {
-      const result = this.v3.getProjects([new ProjectPermId(projectId)], new ProjectFetchOptions(options))
+    async getProject(projectId: string, options = {}) {
+      const openBisStore = useOpenBisStore()
+      const result = await openBisStore.v3!.getProjects([new openbis.ProjectPermId(projectId)], new openbis.ProjectFetchOptions(options))
       return result.get(projectId)
     },
 
-    createProjects(projects) {
-      return useOpenBisStore().v3.createProjects(projects)
+    async createProjects(projects: openbis.Project[]): Promise<void> {
+      const openBisStore = useOpenBisStore()
+      await openBisStore.v3!.createProjects(projects)
     },
 
-    updateProject(project) {
-      useOpenBisStore().v3.updateProjects([project])
-      return true
+    async updateProject(project: openbis.Project): Promise<void> {
+      const openBisStore = useOpenBisStore()
+      await openBisStore.v3!.updateProjects([project])
     },
 
-    updateProjects(projects) {
-      useOpenBisStore().v3.updateProjects(projects)
-
-      return true
+    async updateProjects(projects: openbis.Project[]): Promise<void> {
+      const openBisStore = useOpenBisStore()
+      await openBisStore.v3!.updateProjects(projects)
     },
 
-    deleteProject(projectId, reason) {
-      const { ProjectDeletionOptions } = this.loadedResources
-      const pdo = new ProjectDeletionOptions().setReason(reason)
-
-      useOpenBisStore().v3.deleteProjects([projectId], pdo)
-
-      return true
+    async deleteProject(projectId: string, reason: string): Promise<void> {
+      const openBisStore = useOpenBisStore()
+      const pdo = new openbis.ProjectDeletionOptions().setReason(reason)
+      await openBisStore.v3!.deleteProjects([new openbis.ProjectPermId(projectId)], pdo)
     },
-
   },
 })

@@ -7,29 +7,23 @@ import { defineStore } from 'pinia'
 import openbis from './openbis.esm'
 
 export const useSpaceStore = defineStore('spaces', {
-  state: () => ({
-    // Initialize spaces as an empty array.
-    // Using ref here is optional since Pinia manages reactivity,
-    // but included to align with your usage of async functions and external modules.
-    spaces: ref([]),
-  }),
   actions: {
-    async getAllSpaces(): Promise<Space[]> {
+    async getAllSpaces(): Promise< openbis.SearchResult<openbis.Space> > {
       const criteria = new openbis.SpaceSearchCriteria()
       const fo = new openbis.SpaceFetchOptions()
-      const result = await useOpenBisStore().v3.searchSpaces(criteria, fo)
-      return result.objects
-    },
+      const result = await useOpenBisStore().v3?.searchSpaces(criteria, fo)
+      return result?.getObjects() || []
+    }, 
 
-    async getSpace(spaceId: string, options = {}): Promise<Space | null> {
-      const openBisStore = useOpenBisStore()
-      if (!openBisStore)
-        return null
-      const result = await openBisStore().v3.getSpaces(
-        new openbis.SpacePermId(spaceId),
-        new openbis.SpaceFetchOptions(options),
-      )
-      return result.get(spaceId)
+    async getSpace(spaceId: openbis.ISpaceId):Promise< openbis.Space | undefined> {
+        const result = await useOpenBisStore().v3?.getSpaces(
+          [spaceId], // Pass spaceId as an array
+          new openbis.SpaceFetchOptions()
+        )
+        if (result) 
+        return result[0] 
+      else
+      return undefined
     },
 
     async createSpace(spaceCode: string, description: string | null = null): Promise<Space | undefined> {
@@ -37,7 +31,7 @@ export const useSpaceStore = defineStore('spaces', {
       creation.setCode(spaceCode)
       if (description)
         creation.setDescription(description)
-      const response = await useOpenBisStore().v3.createSpaces([creation])
+      const response = await useOpenBisStore().v3?.createSpaces([creation])
       return response[0] // Assuming the method returns an array of created spaces
     },
 

@@ -3,7 +3,7 @@
 import { ref } from 'vue'
 import type { TableVariable } from '@/types/wizzard'
 
-const { modelValue } = defineModels<{ modelValue: Object }>()
+const modelValue  = defineModel<{ modelValue: Object }>()
 const store = useOpenBisStore()
 const tab = ref('')
 

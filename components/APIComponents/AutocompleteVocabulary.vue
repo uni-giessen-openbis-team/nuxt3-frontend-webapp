@@ -4,15 +4,11 @@ const { searchTerm } = defineProps<{
   searchTerm: string
 }>()
 
-const { modelValue } = defineModels<{ modelValue: string[] }>()
+const  modelValue = defineModel<{ modelValue: string[] }>()
 
 const vocabularyTermList = ref([])
 onMounted(async () => {
-  const vocabularyTerms = await useVocabularyStore().getVocabulary(
-    new openbis.VocabularyPermId(searchTerm),
-  )
-  console.log('🚀 ~ onMounted ~ vocabularyTerms:', vocabularyTerms)
-  vocabularyTermList.value = vocabularyTerms
+  const vocabularyTerms = await useVocabularyStore().listVocabularyTermsByVocabularyCode(searchTerm)
 })
 </script>
 

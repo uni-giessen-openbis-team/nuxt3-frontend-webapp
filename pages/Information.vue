@@ -4,9 +4,7 @@ import { onMounted, ref } from 'vue'
 const store = useOpenBisStore()
 const sessionInfo = ref(null)
 
-onMounted(async () => {
-  sessionInfo.value = await store.getSessionInformation()
-})
+
 </script>
 
 <template>

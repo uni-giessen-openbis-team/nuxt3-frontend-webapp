@@ -12,7 +12,7 @@ export interface ProjectContext {
   manager: string | null
   description: string | null
 }
-const { modelValue } = defineModels<{ modelValue: ProjectContext }>()
+const  modelValue  = defineModel<{ modelValue: ProjectContext }>()
 
 // data from the API
 const people = ref<string[]>([])
@@ -20,7 +20,7 @@ const people = ref<string[]>([])
 
 <template>
   <div>
-    <AutocompleteSpaces
+    <APIComponentsAutocompleteSpaces
       v-model="modelValue.space"
     />
     <v-text-field
