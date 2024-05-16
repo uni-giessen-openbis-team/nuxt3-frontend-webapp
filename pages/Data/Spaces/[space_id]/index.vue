@@ -36,6 +36,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useLogger } from '@/composables/logger'
 
 const space = ref(null)
 const projects = ref([])
@@ -45,7 +46,10 @@ const route = useRoute()
 const spaceStore = useSpaceStore()
 const projectStore = useProjectStore()
 
+const logger = useLogger()
+
 const fetchSpaceDetails = async () => {
+  logger.info('Fetching space details started')
   try {
     const spaceId = route.params.space_id
     space.value = await spaceStore.getSpace(spaceId)
