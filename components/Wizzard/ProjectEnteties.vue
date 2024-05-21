@@ -1,23 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useProjectEntitiesStore } from '@/store/projectEntities';
 
 const  modelValue  = defineModel<{ modelValue: Array<Object> }>()
 
 const tab = ref('')
 
-const variables = ref([
-  {
-    title: 'genotype',
-    conditions: ref([]),
-    continous: false,
-    unit: null,
-  }, {
-    title: 'color',
-    conditions: ref([]),
-    continous: false,
-    unit: null,
-  },
-])
+const store = useProjectEntitiesStore();
+const variables = store.variables;
 </script>
 
 <template>
