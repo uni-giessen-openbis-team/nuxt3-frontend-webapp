@@ -1,19 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-type ProjectEntity = {
-  title: string;
-  conditions: Array<any>;
-  continous: boolean;
-  unit: string | null;
-}
-
-const store = useOpenBisStore()
-const  modelValue  = defineModel<{ modelValue: ProjectEntity[] }>()
+const  modelValue  = defineModel<{ modelValue: Array<Object> }>()
 
 const tab = ref('')
 
-const variables = ref<ProjectEntity[]>([
+const variables = ref([
   {
     title: 'genotype',
     conditions: ref([]),
