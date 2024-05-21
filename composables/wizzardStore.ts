@@ -7,7 +7,16 @@ type ProjectEntity = {
   unit: string | null;
 }
 
-export const useProjectEntitiesStore = defineStore('wizzardStore', {
+export interface ProjectContext {
+  UUID: string;
+  space: string | null;
+  name: string | null;
+  contactPerson: string | null;
+  manager: string | null;
+  description: string | null;
+}
+
+export const useWizzardStore = defineStore('wizzardStore', {
   state: () => ({
     variables: [
       { 
