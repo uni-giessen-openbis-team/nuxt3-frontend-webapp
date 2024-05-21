@@ -2,30 +2,30 @@ import { defineStore } from 'pinia'
 import openbis from '@/composables/openbis.esm'
 
 export const useProjectStore = defineStore('project', {
-  state: () => ({
-    projects: [] as openbis.Project[]
-  }),
   actions: {
-    async listProjects(criteria = {}, options = {}): Promise<void> {
+    async getProjects(criteria = {}, options = {}): Promise<openbis.Project[]> {
       const openBisStore = useOpenBisStore()
       const result = await openBisStore.v3!.searchProjects(
-        new openbis.ProjectSearchCriteria().withSpace().withCode().thatEquals("DEFAULT"),
+        new openbis.ProjectSearchCriteria(),
         new openbis.ProjectFetchOptions()
       )
-      this.projects = result.objects
+      return result.objects
     },
 
-    async listProjectsOfSpace(space: { code: string }): Promise<void> {
+    async getProjectsOfSpace(space: { code: string }): Promise<openbis.Project[]> {
       const openBisStore = useOpenBisStore()
       const psc = new openbis.ProjectSearchCriteria()
       psc.withSpace().withCode().thatEquals(space.code)
       const result = await openBisStore.v3!.searchProjects(psc, new openbis.ProjectFetchOptions())
-      this.projects = result.objects
+      return result.objects
     },
 
-    async getProject(projectId: string, options = {}) {
+    async getProject(projectId: string, options = {}): Promise<openbis.Project> {
       const openBisStore = useOpenBisStore()
-      const result = await openBisStore.v3!.getProjects([new openbis.ProjectPermId(projectId)], new openbis.ProjectFetchOptions(options))
+      const result = await openBisStore.v3!.getProjects(
+        [new openbis.ProjectPermId(projectId)],
+        new openbis.ProjectFetchOptions(options)
+      )
       return result.get(projectId)
     },
 

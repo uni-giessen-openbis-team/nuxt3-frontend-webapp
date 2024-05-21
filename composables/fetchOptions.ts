@@ -254,3 +254,74 @@ export function fetchPersonCompletely() {
         return options
       }
       
+      
+
+export function fetchDataSetCompletely() {
+  const options = new openbis.DataSetFetchOptions()
+  options.withRegistrator()
+  options.withExperiment()
+  options.withSample()
+  options.withDataStore()
+  options.withComponents()
+  options.withContainers()
+  options.withHistory()
+  options.withModifier()
+  options.withMaterialProperties()
+  options.withProperties()
+  options.withTags()
+  options.withType()
+  options.withLinkedData()
+  options.withParents()
+  options.withChildren()
+  options.withPhysicalData()
+  return options
+}
+
+
+export function fetchPropertyTypeCompletely() {
+  const options = new openbis.PropertyTypeFetchOptions()
+  options.withRegistrator()
+  options.withVocabulary()
+  options.withSemanticAnnotations()
+  options.withMaterialType()
+  return options
+}
+
+export function fetchPropertyTypeWithVocabularyAndTerms() {
+  const options = new openbis.PropertyTypeFetchOptions()
+  options.withVocabularyUsing(fetchVocabularyCompletely())
+  return options
+}
+
+export function fetchPropertyAssignmentCompletely() {
+  const options = new openbis.PropertyAssignmentFetchOptions()
+  options.withRegistrator()
+  options.withPropertyType()
+  options.withEntityType()
+  options.withPlugin()
+  return options
+}
+
+export function fetchPropertyAssignmentWithPropertyType() {
+  const options = new openbis.PropertyAssignmentFetchOptions()
+  options.withPropertyTypeUsing(fetchPropertyTypeCompletely())
+  return options
+}
+
+export function fetchMaterialCompletely() {
+  const options = new openbis.MaterialFetchOptions()
+  options.withRegistrator()
+  options.withHistory()
+  options.withProperties()
+  options.withMaterialProperties()
+  options.withTags()
+  options.withType()
+  return options
+}
+
+export function fetchMaterialTypeCompletely() {
+  const options = new openbis.MaterialTypeFetchOptions()
+  options.withPropertyAssignments()
+  options.withValidationPlugin()
+  return options
+}
