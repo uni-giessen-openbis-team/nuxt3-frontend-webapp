@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useProjectEntitiesStore } from '@/store/projectEntities';
+import { useProjectEntitiesStore } from '@/composables/wizzardStore';
 
 const  modelValue  = defineModel<{ modelValue: Array<Object> }>()
 
