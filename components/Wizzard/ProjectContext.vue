@@ -1,5 +1,6 @@
 <script setup lang = "ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
+import DropComponent from '@/components/DropComponent.vue';
 const MINDESCLENGTH = 20
 
 // The type for modelValue is inferred as Object. However, it would be better to have a more specific type.
@@ -47,6 +48,7 @@ const people = ref<string[]>([])
       label="Description"
       :rules="[value => !!value || 'Item is required', value => (value && value.length >= MINDESCLENGTH) || 'Item must be at least 20 characters']"
     />
+    <DropComponent />
   </div>
   Iside projectContext.vue
   <pre>{{ modelValue }}</pre>
