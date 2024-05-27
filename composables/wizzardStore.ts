@@ -2,11 +2,11 @@ import { defineStore } from 'pinia';
 import type { ProjectEntity, ProjectContext, TableVariable, combinedVariable } from '@/types/wizzard';
 import openbis from './openbis.esm';
  
-/* 
-Variables are the building blocks of the wizzard. They are used to define the
-conditions that will be used to create the samples. The cross product of the
-variables will be used to create the samples.  
-*/
+/**
+ * Variables are the building blocks of the wizzard. They are used to define the
+ * conditions that will be used to create the samples. The cross product of the
+ * variables will be used to create the samples.
+ */
 
  type Sample = {
   conditions: { [key: string]: string }[];
