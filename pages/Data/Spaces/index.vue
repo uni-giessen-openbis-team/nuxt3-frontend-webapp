@@ -16,6 +16,25 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="submitNewSpace">Create</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Create New Space</span>
+        </v-card-title>
+        <v-card-text>
+          <v-form ref="form">
+            <v-text-field v-model="newSpaceCode" label="Space Code" required></v-text-field>
+            <v-text-field v-model="newSpaceDescription" label="Description"></v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
           <v-btn color="blue darken-1"  @click="dialog = false">Cancel</v-btn>
           <v-btn color="blue darken-1"  @click="submitNewSpace">Create</v-btn>
         </v-card-actions>
@@ -49,6 +68,9 @@ import openbis from '@/composables/openbis.esm';
 const spaces = ref<openbis.Space[]>([])
 const error = ref<Error | null>(null)
 const router = useRouter()
+const dialog = ref(false)
+const newSpaceCode = ref('')
+const newSpaceDescription = ref('')
 const dialog = ref(false)
 const newSpaceCode = ref('')
 const newSpaceDescription = ref('')
