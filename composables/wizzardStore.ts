@@ -74,23 +74,45 @@ export const useWizzardStore = defineStore('wizzardStore', {
   }),
 
   actions: {
+    /**
+     * Adds a new variable to the list of variables.
+     * @param variable - The variable to add.
+     */
     addVariable(variable: ProjectEntity) {
       this.variables.push(variable);
     },
+    /**
+     * Removes a variable from the list of variables by its title.
+     * @param title - The title of the variable to remove.
+     */
     removeVariable(title: string) {
       this.variables = this.variables.filter(variable => variable.title !== title);
     },
+    /**
+     * Updates the entity conditions result by creating table entries for the entity variables.
+     * @returns {boolean} - Returns true if the update is successful.
+     */
     updateEntety() {
       const SAMPLE_TYPE = 'BIOLOGICAL_ENTITY';
       this.entetyConditionsResult = this.createTableEntries(this.entetyVariables, SAMPLE_TYPE);
       return true;
     },
+    /**
+     * Updates the biological sample conditions result by creating table entries for the sample variables.
+     * Combines the entity and sample results.
+     * @returns {boolean} - Returns true if the update is successful.
+     */
     updateBiol() {
       const SAMPLE_TYPE = 'BIOLOGICAL_SAMPLE';
       this.sampleConditionsResult = this.createTableEntries(this.sampleVariables, SAMPLE_TYPE);
       this.entetyAndSampleResult = this.crossProductSamples(this.entetyConditionsResult, this.sampleConditionsResult);
       return true;
     },
+    /**
+     * Updates the technical sample conditions result by creating table entries for the technical variables.
+     * Combines the entity, sample, and technical results.
+     * @returns {boolean} - Returns true if the update is successful.
+     */
     updateTech() {
       const SAMPLE_TYPE = 'TECHNICAL_SAMPLE';
       this.techConditionsResult = this.createTableEntries(this.techVariables, SAMPLE_TYPE);
@@ -98,6 +120,12 @@ export const useWizzardStore = defineStore('wizzardStore', {
       this.tmpResult = JSON.stringify(this.result);
       return true;
     },
+    /**
+     * Creates table entries for the given variables and sample type.
+     * @param Variables - The variables to create table entries for.
+     * @param sampleType - The type of the sample.
+     * @returns {Sample[]} - The created table entries.
+     */
     createTableEntries(Variables: TableVariable[], sampleType: string) {
       let entetyConditionCombinations = this.generateConditionCombinations(Variables);
 
@@ -117,6 +145,11 @@ export const useWizzardStore = defineStore('wizzardStore', {
 
       return entetyConditionCombinations;
     },
+    /**
+     * Generates condition combinations for the given table variables.
+     * @param tableVariables - The table variables to generate condition combinations for.
+     * @returns {Array<{ [key: string]: string }[]>} - The generated condition combinations.
+     */
     generateConditionCombinations(tableVariables: TableVariable[]) {
       const titledConditions: string[][] = [];
       const titles: string[] = [];
@@ -150,6 +183,11 @@ export const useWizzardStore = defineStore('wizzardStore', {
 
       return factorList;
     },
+    /**
+     * Generates the cartesian product of the given array.
+     * @param arr - The array to generate the cartesian product for.
+     * @returns {Array<any>} - The cartesian product.
+     */
     cartesianProduct(arr: Array<any>) {
       return arr.reduce((acc, val) => {
         return acc.map((el) => {
@@ -159,6 +197,12 @@ export const useWizzardStore = defineStore('wizzardStore', {
         }).reduce((acc, val) => acc.concat(val), []);
       }, [[]]);
     },
+    /**
+     * Generates the cross product of the parent and child samples.
+     * @param parents - The parent samples.
+     * @param childs - The child samples.
+     * @returns {Sample[]} - The cross product of the parent and child samples.
+     */
     crossProductSamples(parents: combinedVariable[], childs: combinedVariable[]) {
       const result = [];
 
@@ -175,7 +219,10 @@ export const useWizzardStore = defineStore('wizzardStore', {
       }
       return result;
     },
-    async onComplete() { 
+    /**
+     * Completes the sample creation process by saving entity, sample, and technical conditions.
+     */
+    async onComplete() {
       // Save entity conditions
       await this.createSamples(this.entetyConditionsResult, this.projectContext);
 
@@ -189,12 +236,23 @@ export const useWizzardStore = defineStore('wizzardStore', {
       // this.reset();
     },
  
-    async createSamples(samples: any[] , projectContext: ProjectContext) {
+    /**
+     * Creates samples for the given samples and project context.
+     * @param samples - The samples to create.
+     * @param projectContext - The project context.
+     */
+    async createSamples(samples: any[], projectContext: ProjectContext) {
       for (const sample of samples) {
         this.createSample(sample, projectContext);
       }
     },
 
+    /**
+     * Creates a sample for the given sample and project context.
+     * @param sample - The sample to create.
+     * @param projectContext - The project context.
+     * @returns {openbis.SampleCreation} - The created sample.
+     */
     createSample(sample: Sample, projectContext: ProjectContext) {
       console.log("🚀 ~ createSample ~ sample:", sample)
       const sampleCreation = new openbis.SampleCreation();
@@ -225,6 +283,9 @@ export const useWizzardStore = defineStore('wizzardStore', {
       return sampleCreation;
     },
 
+    /**
+     * Resets the store to its initial state.
+     */
     reset() {
       this.selectedVariables = [];
       this.variables = [
@@ -257,6 +318,11 @@ export const useWizzardStore = defineStore('wizzardStore', {
     },
   },
   getters: {
+    /**
+     * Gets the entity conditions result by generating the cartesian product of the entity variables.
+     * @param state - The state of the store.
+     * @returns {ConditionsResult[]} - The entity conditions result.
+     */
     getEntetyConditionsResult(state): ConditionsResult[] {
       const SAMPLE_TYPE = 'BIOLOGICAL_ENTITY';
       let entetyConditionCombinations = state.entetyVariables.map(entety => ({
