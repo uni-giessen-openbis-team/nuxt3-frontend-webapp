@@ -54,7 +54,11 @@ onMounted(fetchSpaceDetails)
 
 <template>
   <v-container>
-    <v-row>
+    <v-row v-if="space">
+      <v-col cols="12">
+        <h1>{{ space?.getCode() ?? '' }}</h1>
+      </v-col>
+    </v-row>
       <v-col cols="12">
         <v-btn @click="showModal = true" color="primary">Add New Project</v-btn>
       </v-col>
