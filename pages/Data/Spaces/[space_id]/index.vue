@@ -45,7 +45,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="showModal = false">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="addProject">Save</v-btn>
+        <v-btn color="blue darken-1" text @click="saveProject">Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -83,10 +83,11 @@ const goToProject = (projectId: string) => {
   router.push(`/data/spaces/${route.params.space_id}/${projectId}`)
 }
 
-const addProject = () => {
-  // Logic to add the project
-  showModal.value = false
-}
+const saveProject = () => {
+  wizzardStore.projectContext.space = space.value?.code ?? null;
+  wizzardStore.createProject(wizzardStore.projectContext);
+  showModal.value = false;
+};
 
 onMounted(fetchSpaceDetails)
 </script>

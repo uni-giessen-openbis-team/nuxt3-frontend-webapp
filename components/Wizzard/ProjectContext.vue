@@ -5,6 +5,10 @@ const MINDESCLENGTH = 20;
 
 const wizzardStore = useWizzardStore();
 const { projectContext } = storeToRefs(wizzardStore);
+const saveProject = () => {
+  // Logic to save the project
+  wizzardStore.createProject(projectContext.value);
+};
 </script>
 
 
