@@ -202,27 +202,27 @@ export const useWizzardStore = defineStore('wizzardStore', {
       sampleCreation.setSpaceId(new openbis.SpacePermId(projectContext.space));
       sampleCreation.setCreationId(new openbis.CreationId(sample.secondaryName));
 
-      // // Iterate over conditions and set property for each
-      // for (const condition of sample.conditions) {
-      //   for (const [key, value] of Object.entries(condition)) {
-      //     sampleCreation.setProperty(key, value);
-      //   }
-      // }
+      // Iterate over conditions and set property for each
+      for (const condition of sample.conditions) {
+        for (const [key, value] of Object.entries(condition)) {
+          sampleCreation.setProperty(key, value);
+        }
+      }
 
-      // if (sample.parent) {
-      //   const parentSampleCreation = sampleCreationsDict[sample.parent];
-      //   if (parentSampleCreation) {
-      //     sampleCreation.setParentIds([parentSampleCreation.getCreationId()]);
+      if (sample.parent) {
+        const parentSampleCreation = sampleCreationsDict[sample.parent];
+        if (parentSampleCreation) {
+          sampleCreation.setParentIds([parentSampleCreation.getCreationId()]);
 
-      //     const parentChildIds = parentSampleCreation.getChildIds() || [];
-      //     parentChildIds.push(sampleCreation.getCreationId());
-      //     parentSampleCreation.setChildIds(parentChildIds);
-      //   } else {
-      //     console.log('Parent sample not found');
-      //   }
-      // }
+          const parentChildIds = parentSampleCreation.getChildIds() || [];
+          parentChildIds.push(sampleCreation.getCreationId());
+          parentSampleCreation.setChildIds(parentChildIds);
+        } else {
+          console.log('Parent sample not found');
+        }
+      }
 
-      // return sampleCreation;
+      return sampleCreation;
     },
 
     reset() {
