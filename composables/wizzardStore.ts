@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import type { ProjectEntity, ProjectContext, TableVariable, combinedVariable } from '@/types/wizzard';
 import openbis from './openbis.esm';
+import useOpenbis from '~/plugins/useOpenbis';
  
 /**
  * Variables are the building blocks of the wizzard. They are used to define the
@@ -223,7 +224,11 @@ export const useWizzardStore = defineStore('wizzardStore', {
      * Completes the sample creation process by saving entity, sample, and technical conditions.
      */
     async onComplete() {
-      // Save entity conditions
+
+      // create Project
+      await this.createProject(this.projectContext);
+
+      // Save entity conditions 
       await this.createSamples(this.entetyConditionsResult, this.projectContext);
 
       // Save sample conditions
@@ -241,6 +246,18 @@ export const useWizzardStore = defineStore('wizzardStore', {
      * @param samples - The samples to create.
      * @param projectContext - The project context.
      */
+
+    async createProject(projectContext: ProjectContext) {
+      const project = new openbis.ProjectCreation();
+      // set name of the project
+      project.setCode(projectContext.name);
+      // set which space the project belongs to
+      project.setSpaceId(new openbis.SpacePermId(projectContext.space));
+      project.setDescription(projectContext.description);
+      project.setLeaderId(new openbis.PersonPermId(projectContext.manager));
+      useOpenBisStore().v3?.createProjects([project]);
+    },
+
     async createSamples(samples: any[], projectContext: ProjectContext) {
       for (const sample of samples) {
         this.createSample(sample, projectContext);
@@ -259,11 +276,12 @@ export const useWizzardStore = defineStore('wizzardStore', {
       sampleCreation.setTypeId(new openbis.EntityTypePermId(sample.sampleType));
       sampleCreation.setSpaceId(new openbis.SpacePermId(projectContext.space));
       sampleCreation.setCreationId(new openbis.CreationId(sample.secondaryName));
+      
 
       // Iterate over conditions and set property for each
       for (const condition of sample.conditions) {
         for (const [key, value] of Object.entries(condition)) {
-          sampleCreation.setProperty(key, value);
+          sampleCreation.setProperty(key, value); 
         }
       }
 
