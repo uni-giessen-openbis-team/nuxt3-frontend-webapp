@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-
+import openbis from './openbis.esm'
 /*
 The store is used for fetching, creating, updating and deleting persons.
 */
@@ -10,9 +10,9 @@ export const usePersonStore = defineStore('person',{
     
     }),
     actions : {
-      listPersons(criteria , options ) {
+      listPersons(criteria: openbis.PersonSearchCriteria  , options: openbis.PersonFetchOptions ) {
         try {
-          const persons =  useOpenBisStore().v3.searchPersons(criteria   , options)
+          const persons =  useOpenBisStore().v3.searchPersons(criteria, options)
           return persons.objects
         }
         catch (error) {
@@ -30,13 +30,13 @@ export const usePersonStore = defineStore('person',{
         return this.listPersons({ criteria: new PersonSearchCriteria(), options: fetchPersonCompletely() })
       },
 
-      async listPersonsOfSpace(space: Space | null): searchResult {
+      async listPersonsOfSpace(space: openbis.Space): Promise<openbis.RoleAssignment[]> {
         try {
           const criteria = new openbis.RoleAssignmentSearchCriteria()
-          criteria.withSpace().withCode().thatEquals(space.code)
-          const roleAssignments = await useOpenBisStore().v3.searchRoleAssignments(criteria, fetchRoleAssignmentWithSpaceAndUser())
-          const listOfPers = roleAssignments
-          return listOfPers
+          criteria.withSpace().withCode().thatEquals(space.getCode())
+          const listOfPers = await useOpenBisStore().v3?.searchRoleAssignments(criteria, new openbis.RoleAssignmentFetchOptions())
+          console.log("🚀 ~ listPersonsOfSpace ~ listOfPers:", listOfPers)
+          return listOfPers?.getObjects() || []
         }
         catch (error) {
           console.error(`${error.constructor.name}: ${error.message}`)

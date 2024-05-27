@@ -19,6 +19,9 @@ docker-compose -f server/docker-compose.yml up
 
 2. The files in `server/data` need to be copied to the OpenBIS server. These files come from [QBiC](https://portal.qbic.uni-tuebingen.de/portal/software).
 
+
+
+3. Copy some Sample Data from the old test instance 
 ```sh
 # Delete Database
 docker exec -it openbis-db psql -U postgres -c "DROP DATABASE IF EXISTS openbis_prod;"
@@ -50,3 +53,4 @@ bun i
 ```
 
 Make sure the ports 3000 and 54322 are accessible.
+

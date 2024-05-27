@@ -10,7 +10,7 @@ const navItems = [
   { name: 'Workflows', icon: 'mdi-sitemap', path: '/workflows' },
   { name: 'Testing', icon: 'mdi-account-question', path: '/testing' },
   { name: 'Data', icon: 'mdi-folder', path: '/data' },
-  { name: 'Add Project', icon: 'mdi-plus-box', path: '/projects' },
+  { name: 'Add Project', icon: 'mdi-plus-box', path: '/wizzard' },
 ]
 
 const menuItems = [

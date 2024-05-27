@@ -1,41 +1,58 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useProjectEntitiesStore } from '@/composables/wizzardStore';
+/* This is the second step of the Wizzard.
+Here the user can select the 
+These Variables will be later combined with the Samples by the Wizzard to create the project.
+*/
 
-const  modelValue  = defineModel<{ modelValue: Array<Object> }>()
+import { ref } from 'vue'
+
+const { variables, entetyVariables } = storeToRefs(useWizzardStore())
+
 
 const tab = ref('')
-
-const store = useProjectEntitiesStore();
-const variables = store.variables;
 </script>
 
 <template>
+  <div> 
+    What are the differences between the biological enteties. 
+    The enteties can be something like a tree. Select one or 
+    more variables that describe the differences between the enteties.
+
+    If the value is a continous value like hight of the tree, please select continuous and
+    select the unit of the value.
+  </div>
+  <br>
   <v-autocomplete
-    v-model="modelValue"
+    v-model="entetyVariables"
     label="Experimental variables"
     box
     chips
-    :items="variables"
+    :items="variables" 
     multiple
     return-object
   />
   <div>
     <v-card>
       <v-tabs v-model="tab" bg-color="primary">
-        <v-tab v-for="(item, index) in modelValue" :key="index" :value="item.title">
+        <v-tab v-for="(item, index) in entetyVariables" :key="index" :value="item.title">
           {{ item.title }}
         </v-tab>
       </v-tabs>
       <v-card-text>
         <v-window v-model="tab">
-          <v-window-item v-for="(item, index) in modelValue" :key="index" :value="item.title">
+          <v-window-item v-for="(item, index) in entetyVariables" :key="index" :value="item.title">
             <div v-if="item.title === 'species'">
-              <APIComponentsAutocompleteVocabulary
-                v-model="item.conditions"
-                search-term="NCBI_TAXONOMY"
-              />
+              <!-- Todo: Add APIComponentsAutocompleteVocabulary -->
+              <div>
+                <label for="species-selector">Select Species:</label>
+                <v-select
+                  id="species-selector"
+                  v-model="item.conditions[0]"
+                  :items="['Species 1', 'Species 2', 'Species 3']"
+                ></v-select>
+              </div>
             </div>
+            
             <div v-else>
               <WizzardCrudTable v-model="item.conditions" />
 
@@ -54,7 +71,10 @@ const variables = store.variables;
       </v-card-text>
     </v-card>
   </div>
-  <pre>{{ modelValue }}</pre>
+  <pre>
+
+    {{entetyVariables}}
+  </pre>
 </template>
 
 <style lang="scss" scoped>

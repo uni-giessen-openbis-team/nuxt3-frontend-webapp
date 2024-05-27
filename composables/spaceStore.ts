@@ -8,7 +8,7 @@ import openbis from './openbis.esm'
 
 export const useSpaceStore = defineStore('spaces', {
   actions: {
-    async getAllSpaces(): Promise< openbis.SearchResult<openbis.Space> > {
+    async getAllSpaces(): Promise< openbis.Space[] > {
       const criteria = new openbis.SpaceSearchCriteria()
       const fo = new openbis.SpaceFetchOptions()
       const result = await useOpenBisStore().v3?.searchSpaces(criteria, fo)

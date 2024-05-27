@@ -1,14 +1,31 @@
-export interface TableVariable {
-    title: string
-    conditions: (string | number)[]
-    continous: boolean
-    unit: string | null
-  }
-  
-  export interface combinedVariable {
-    secondaryName: string
-    externalDBIDL: string
-    count?: number
-    unit?: string
-    conditions?: Array
-  }
+export type ProjectEntity = {
+  title: string;
+  conditions: Array<any>;
+  continuous: boolean;
+  unit: string | null;
+};
+
+export interface ProjectContext {
+  UUID: string;
+  space: string | null;
+  name: string | null;
+  contactPerson: string | null;
+  manager: string | null;
+  description: string | null;
+}
+
+export type TableVariable = {
+  title: string;
+  conditions: Array<string | number>;
+  continuous: boolean;
+  unit: string | null;
+};
+
+export type combinedVariable = {
+  conditions: Array<{ [key: string]: string }>;
+  externalDBID: string;
+  secondaryName: string;
+  count: string;
+  sampleType: string;
+  child?: string;
+};
