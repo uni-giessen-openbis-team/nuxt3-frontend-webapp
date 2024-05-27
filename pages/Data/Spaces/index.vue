@@ -1,7 +1,26 @@
 <template>
   <h1>Spaces</h1>
   <v-container>
-    <v-btn @click="createNewSpace" color="primary" class="mb-4">Create New Space</v-btn>
+    <v-btn @click="dialog = true" color="primary" class="mb-4">Create New Space</v-btn>
+
+    <v-dialog v-model="dialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Create New Space</span>
+        </v-card-title>
+        <v-card-text>
+          <v-form ref="form">
+            <v-text-field v-model="newSpaceCode" label="Space Code" required></v-text-field>
+            <v-text-field v-model="newSpaceDescription" label="Description"></v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="submitNewSpace">Create</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-row>
       <v-col
         v-for="space in spaces"
@@ -30,6 +49,9 @@ import openbis from '@/composables/openbis.esm';
 const spaces = ref<openbis.Space[]>([])
 const error = ref<Error | null>(null)
 const router = useRouter()
+const dialog = ref(false)
+const newSpaceCode = ref('')
+const newSpaceDescription = ref('')
 const spaceStore = useSpaceStore()
 
 
@@ -45,9 +67,20 @@ const goToSpace = (permId: string) => {
   router.push(`/data/spaces/${permId}`)
 }
 
-const createNewSpace = () => {
-  // Logic to create a new space
-  console.log("Create New Space button clicked");
+const submitNewSpace = async () => {
+  if (!newSpaceCode.value) {
+    alert("Space Code is required")
+    return
+  }
+  try {
+    await spaceStore.createSpace(newSpaceCode.value, newSpaceDescription.value)
+    fetchSpaces()
+    dialog.value = false
+    newSpaceCode.value = ''
+    newSpaceDescription.value = ''
+  } catch (err) {
+    error.value = err as Error
+  }
 }
 
 onMounted(fetchSpaces)

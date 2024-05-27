@@ -26,7 +26,7 @@ export const useSpaceStore = defineStore('spaces', {
       return undefined
     },
 
-    async createSpace(spaceCode: string, description: string | null = null): Promise<Space | undefined> {
+    async createSpace(spaceCode: string, description: string | null = null): Promise<openbis.Space | undefined> {
       const creation = new openbis.SpaceCreation()
       creation.setCode(spaceCode)
       if (description)
