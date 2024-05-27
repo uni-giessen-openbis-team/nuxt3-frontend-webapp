@@ -1,6 +1,7 @@
 <template>
   <h1>Spaces</h1>
   <v-container>
+    <v-btn @click="createNewSpace" color="primary" class="mb-4">Create New Space</v-btn>
     <v-row>
       <v-col
         v-for="space in spaces"
@@ -42,6 +43,11 @@ const fetchSpaces = async () => {
 
 const goToSpace = (permId: string) => {
   router.push(`/data/spaces/${permId}`)
+}
+
+const createNewSpace = () => {
+  // Logic to create a new space
+  console.log("Create New Space button clicked");
 }
 
 onMounted(fetchSpaces)
