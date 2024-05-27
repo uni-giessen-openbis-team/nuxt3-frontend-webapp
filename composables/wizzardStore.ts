@@ -247,16 +247,6 @@ export const useWizzardStore = defineStore('wizzardStore', {
      * @param projectContext - The project context.
      */
 
-    async createProject(projectContext: ProjectContext) {
-      const project = new openbis.ProjectCreation();
-      // set name of the project
-      project.setCode(projectContext.name);
-      // set which space the project belongs to
-      project.setSpaceId(new openbis.SpacePermId(projectContext.space));
-      project.setDescription(projectContext.description);
-      project.setLeaderId(new openbis.PersonPermId(projectContext.manager));
-      useOpenBisStore().v3?.createProjects([project]);
-    },
 
     async createSamples(samples: any[], projectContext: ProjectContext) {
       for (const sample of samples) {

@@ -51,3 +51,37 @@ export const useProjectStore = defineStore('project', {
     },
   },
 })
+import { defineStore } from 'pinia';
+import type { ProjectContext } from '@/types/wizzard';
+import openbis from './openbis.esm';
+import useOpenbis from '~/plugins/useOpenbis';
+
+export const useProjectStore = defineStore('projectStore', {
+  state: () => ({
+    projectContext: {
+      UUID: '',
+      space: null,
+      name: null,
+      contactPerson: null,
+      manager: null,
+      description: null,
+    } as ProjectContext,
+  }),
+
+  actions: {
+    /**
+     * Creates a project with the given project context.
+     * @param projectContext - The project context.
+     */
+    async createProject(projectContext: ProjectContext) {
+      const project = new openbis.ProjectCreation();
+      // set name of the project
+      project.setCode(projectContext.name);
+      // set which space the project belongs to
+      project.setSpaceId(new openbis.SpacePermId(projectContext.space));
+      project.setDescription(projectContext.description);
+      project.setLeaderId(new openbis.PersonPermId(projectContext.manager));
+      useOpenBisStore().v3?.createProjects([project]);
+    },
+  },
+});

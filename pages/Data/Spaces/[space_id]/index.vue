@@ -84,8 +84,8 @@ const goToProject = (projectId: string) => {
 }
 
 const saveProject = () => {
-  wizzardStore.projectContext.space = space.value?.code ?? null;
-  wizzardStore.createProject(wizzardStore.projectContext);
+  projectStore.projectContext.space = space.value?.code ?? null;
+  projectStore.createProject(projectStore.projectContext);
   showModal.value = false;
 };
 
