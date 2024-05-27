@@ -57,7 +57,10 @@ import { useRouter, useRoute } from 'vue-router'
 import openbis from '@/composables/openbis.esm'
 import ProjectContext from '@/components/Wizzard/ProjectContext.vue'
 
+import ProjectContext from '@/components/Wizzard/ProjectContext.vue'
+
 const space = ref<openbis.Space | null>(null)
+const showModal = ref(false)
 const showModal = ref(false)
 const projects = ref<openbis.Project[]>([])
 const error = ref<Error | null>(null)
