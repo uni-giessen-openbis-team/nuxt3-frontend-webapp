@@ -1,5 +1,10 @@
 <template>
   <v-container>
+    <v-row>
+      <v-col cols="12">
+        <v-btn @click="showModal = true" color="primary">Add New Project</v-btn>
+      </v-col>
+    </v-row>
     <v-row v-if="space">
       <v-col cols="12">
         <v-card>
@@ -29,13 +34,31 @@
       {{ error?.message ?? '' }}
     </v-alert>
   </v-container>
+  <v-dialog v-model="showModal" max-width="600px">
+    <v-card>
+      <v-card-title>
+        <span class="headline">Add New Project</span>
+      </v-card-title>
+      <v-card-text>
+        <ProjectContext />
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue darken-1" text @click="showModal = false">Cancel</v-btn>
+        <v-btn color="blue darken-1" text @click="addProject">Save</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import openbis from '@/composables/openbis.esm'
+import ProjectContext from '@/components/Wizzard/ProjectContext.vue'
+
 const space = ref<openbis.Space | null>(null)
+const showModal = ref(false)
 const projects = ref<openbis.Project[]>([])
 const error = ref<Error | null>(null)
 const router = useRouter()
@@ -58,6 +81,11 @@ const fetchSpaceDetails = async () => {
 
 const goToProject = (projectId: string) => {
   router.push(`/data/spaces/${route.params.space_id}/${projectId}`)
+}
+
+const addProject = () => {
+  // Logic to add the project
+  showModal.value = false
 }
 
 onMounted(fetchSpaceDetails)
