@@ -22,6 +22,9 @@ const deleteSpace = async () => {
     const ISpaceId = new openbis.SpacePermId(spaceId)
     await spaceStore.deleteSpace(ISpaceId)
     router.push('/data/spaces')
+    if (projects.value.length === 0) {
+      showModal.value = true;
+    }
   } catch (err) {
     error.value = err as Error
   }
@@ -75,22 +78,29 @@ onMounted(fetchSpaceDetails)
         <v-btn @click="showModal = true" color="primary">Add New Project</v-btn>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col cols="12">
-        <h2>Projects</h2>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col v-for="project in projects" :key="project?.getPermId()" cols="12" sm="6" md="4">
-        <v-card @click="goToProject(project?.permId)" class="project-card">
-          <v-card-title>{{ project?.getCode() ?? '' }}</v-card-title>
-          <v-card-subtitle>{{ project?.getDescription() ?? '' }}</v-card-subtitle>
-          <v-card-text>
-            {{project?.permId?.permId}}
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+    <template v-if="projects.length > 0">
+      <v-row>
+        <v-col cols="12">
+          <h2>Projects</h2>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col v-for="project in projects" :key="project?.getPermId()" cols="12" sm="6" md="4">
+          <v-card @click="goToProject(project?.permId)" class="project-card">
+            <v-card-title>{{ project?.getCode() ?? '' }}</v-card-title>
+            <v-card-subtitle>{{ project?.getDescription() ?? '' }}</v-card-subtitle>
+            <v-card-text>
+              {{project?.permId?.permId}}
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </template>
+    <template v-else>
+      <v-alert type="info">
+        No projects available. Please create a new project.
+      </v-alert>
+    </template>
     <v-alert v-if="error" type="error">
       {{ error?.message ?? '' }}
     </v-alert>
