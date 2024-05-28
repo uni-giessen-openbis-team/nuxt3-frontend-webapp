@@ -3,7 +3,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import openbis from '@/composables/openbis.esm'
-import AddProjectModal from '@/components/AddProjectModal.vue'
+import ProjectContext from '@/components/Wizzard/ProjectContext.vue'
 
 const space = ref<openbis.Space | null>(null)
 const showModal = ref(false)
@@ -62,7 +62,6 @@ onMounted(fetchSpaceDetails)
 }
 </style>
 
-
 <template>
   <v-container>
     <v-row>
@@ -75,11 +74,7 @@ onMounted(fetchSpaceDetails)
         
         <v-btn @click="showModal = true" color="primary">Add New Project</v-btn>
       </v-col>
-     
-        
-    
     </v-row>
-    
     <v-row>
       <v-col cols="12">
         <h2>Projects</h2>
@@ -87,11 +82,10 @@ onMounted(fetchSpaceDetails)
     </v-row>
     <v-row>
       <v-col v-for="project in projects" :key="project?.getPermId()" cols="12" sm="6" md="4">
-        <v-card @click="goToProject(project?.getPermId())" class="project-card">
+        <v-card @click="goToProject(project?.permId)" class="project-card">
           <v-card-title>{{ project?.getCode() ?? '' }}</v-card-title>
-          <v-card-subtitle>{{ project?.description ?? '' }}</v-card-subtitle>
+          <v-card-subtitle>{{ project?.getDescription() ?? '' }}</v-card-subtitle>
           <v-card-text>
-
             {{project?.permId?.permId}}
           </v-card-text>
         </v-card>
@@ -101,5 +95,19 @@ onMounted(fetchSpaceDetails)
       {{ error?.message ?? '' }}
     </v-alert>
   </v-container>
-  <AddProjectModal />
+  <v-dialog v-model="showModal" max-width="600px">
+    <v-card>
+      <v-card-title>
+        <span class="headline">Add New Project</span>
+      </v-card-title>
+      <v-card-text>
+        <WizzardProjectContext />
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue darken-1"  @click="showModal = false">Cancel</v-btn>
+        <v-btn color="blue darken-1"  @click="saveProject">Save</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
