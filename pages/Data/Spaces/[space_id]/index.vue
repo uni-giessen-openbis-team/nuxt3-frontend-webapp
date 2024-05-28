@@ -30,7 +30,7 @@ const deleteSpace = async () => {
 const fetchSpaceDetails = async () => {
   try {
     const spaceId = route.params.space_id
-    const ISpaceId = new openbis.SpacePermId(spaceId)    
+    const ISpaceId = new openbis.SpacePermId(spaceId)     
     space.value = await spaceStore.getSpace(ISpaceId) ?? null
     projects.value = await projectStore.getProjectsOfSpace(ISpaceId)
   } catch (err) {
@@ -65,25 +65,21 @@ onMounted(fetchSpaceDetails)
 
 <template>
   <v-container>
-    <v-row v-if="space">
-      <v-col cols="12">
-        <h1>{{ space?.getCode() ?? '' }}</h1>
-        <v-btn @click="deleteSpace" color="red">Delete Space</v-btn>
-      </v-col>
+    <v-row>
+      {{route.params.space_id}}
     </v-row>
     <v-row>
       <v-col cols="12">
+        <h1>{{ space?.getCode() ?? '' }}</h1>
+        <v-btn @click="deleteSpace" color="red">Delete Space</v-btn>
+        
         <v-btn @click="showModal = true" color="primary">Add New Project</v-btn>
       </v-col>
+     
+        
+    
     </v-row>
-    <v-row v-if="space">
-      <v-col cols="12">
-        <v-card>
-          <v-card-title>{{ space?.getCode ?? '' }}</v-card-title>
-          <v-card-subtitle>{{ space?.getDescription ?? '' }}</v-card-subtitle>
-        </v-card>
-      </v-col>
-    </v-row>
+    
     <v-row>
       <v-col cols="12">
         <h2>Projects</h2>
