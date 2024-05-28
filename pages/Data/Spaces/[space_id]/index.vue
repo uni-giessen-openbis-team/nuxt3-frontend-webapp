@@ -3,7 +3,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import openbis from '@/composables/openbis.esm'
-import ProjectContext from '@/components/Wizzard/ProjectContext.vue'
+import AddProjectModal from '@/components/AddProjectModal.vue'
 
 const space = ref<openbis.Space | null>(null)
 const showModal = ref(false)
@@ -101,19 +101,5 @@ onMounted(fetchSpaceDetails)
       {{ error?.message ?? '' }}
     </v-alert>
   </v-container>
-  <v-dialog v-model="showModal" max-width="600px">
-    <v-card>
-      <v-card-title>
-        <span class="headline">Add New Project</span>
-      </v-card-title>
-      <v-card-text>
-        <ProjectContext />
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="showModal = false">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="saveProject">Save</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+  <AddProjectModal />
 </template>
