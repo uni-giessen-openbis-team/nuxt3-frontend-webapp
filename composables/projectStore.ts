@@ -2,6 +2,10 @@ import { defineStore } from 'pinia'
 import openbis from '@/composables/openbis.esm'
 
 export const useProjectStore = defineStore('project', {
+  state: () => ({
+    projects: [] as openbis.Project[],
+  }),
+
   actions: {
     async getProjects(criteria = {}, options = {}): Promise<openbis.Project[]> {
       const openBisStore = useOpenBisStore()
@@ -12,12 +16,11 @@ export const useProjectStore = defineStore('project', {
       return result.objects
     },
 
-    async getProjectsOfSpace(space: { code: string }): Promise<openbis.Project[]> {
-      const openBisStore = useOpenBisStore()
+    async getProjectsOfSpace(space: openbis.Space): Promise<openbis.Project[]> {
       const psc = new openbis.ProjectSearchCriteria()
-      psc.withSpace().withCode().thatEquals(space.code)
-      const result = await openBisStore.v3!.searchProjects(psc, new openbis.ProjectFetchOptions())
-      return result.objects
+      psc.withSpace().withCode().thatEquals(space.getPermId())
+      const result = await useOpenBisStore().v3!.searchProjects(psc, new openbis.ProjectFetchOptions())
+      return result.getObjects()
     },
 
     async getProject(projectId: string, options = {}): Promise<openbis.Project> {
@@ -51,37 +54,3 @@ export const useProjectStore = defineStore('project', {
     },
   },
 })
-import { defineStore } from 'pinia';
-import type { ProjectContext } from '@/types/wizzard';
-import openbis from './openbis.esm';
-import useOpenbis from '~/plugins/useOpenbis';
-
-export const useProjectStore = defineStore('projectStore', {
-  state: () => ({
-    projectContext: {
-      UUID: '',
-      space: null,
-      name: null,
-      contactPerson: null,
-      manager: null,
-      description: null,
-    } as ProjectContext,
-  }),
-
-  actions: {
-    /**
-     * Creates a project with the given project context.
-     * @param projectContext - The project context.
-     */
-    async createProject(projectContext: ProjectContext) {
-      const project = new openbis.ProjectCreation();
-      // set name of the project
-      project.setCode(projectContext.name);
-      // set which space the project belongs to
-      project.setSpaceId(new openbis.SpacePermId(projectContext.space));
-      project.setDescription(projectContext.description);
-      project.setLeaderId(new openbis.PersonPermId(projectContext.manager));
-      useOpenBisStore().v3?.createProjects([project]);
-    },
-  },
-});

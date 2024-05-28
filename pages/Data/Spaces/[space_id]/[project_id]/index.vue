@@ -7,31 +7,22 @@ const projectStore = useProjectStore()
 const projects = ref(projectStore.projects)
 const router = useRouter()
 
+
 const fetchProjects = async () => {
   await projectStore.getProjects()
-  if (projects.value.length === 0) {
-    showModal.value = true;
-  }
 
+}
 const goToProject = (permId: string) => {
   router.push(`/projects/${permId}`)
 }
 
 onMounted(fetchProjects)
+
 </script>
 
-<style scoped>
-.project-card {
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-.project-card:hover {
-  transform: scale(1.05);
-}
-</style>
 
 <template>
-  <v-container>
+  <!-- <v-container>
     <template v-if="projects.length > 0">
       <v-row>
         <v-col
@@ -53,5 +44,15 @@ onMounted(fetchProjects)
         No projects available. Please create a new project.
       </v-alert>
     </template>
-  </v-container>
+  </v-container> -->
 </template>
+
+<style scoped>
+.project-card {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.project-card:hover {
+  transform: scale(1.05);
+}
+</style>
