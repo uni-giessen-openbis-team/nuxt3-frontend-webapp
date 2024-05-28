@@ -19,9 +19,9 @@ const projectStore = useProjectStore()
 const fetchSpaceDetails = async () => {
   try {
     const spaceId = route.params.space_id
-    space.value = await spaceStore.getSpace(spaceId)
-    console.log("🚀 ~ fetchSpaceDetails ~ space.value :", space.value )
-    projects.value = await projectStore.getProjectsOfSpace(spaceId)
+    const ISpaceId = new openbis.SpacePermId(spaceId)    
+    space.value = await spaceStore.getSpace(ISpaceId) ?? null
+    projects.value = await projectStore.getProjectsOfSpace(ISpaceId)
   } catch (err) {
     error.value = err as Error
   }
@@ -59,6 +59,7 @@ onMounted(fetchSpaceDetails)
         <h1>{{ space?.getCode() ?? '' }}</h1>
       </v-col>
     </v-row>
+    <v-row>
       <v-col cols="12">
         <v-btn @click="showModal = true" color="primary">Add New Project</v-btn>
       </v-col>
