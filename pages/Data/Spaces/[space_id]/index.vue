@@ -16,6 +16,17 @@ const projectStore = useProjectStore()
 
 
 
+const deleteSpace = async () => {
+  try {
+    const spaceId = route.params.space_id
+    const ISpaceId = new openbis.SpacePermId(spaceId)
+    await spaceStore.deleteSpace(ISpaceId)
+    router.push('/data/spaces')
+  } catch (err) {
+    error.value = err as Error
+  }
+}
+
 const fetchSpaceDetails = async () => {
   try {
     const spaceId = route.params.space_id
@@ -57,6 +68,7 @@ onMounted(fetchSpaceDetails)
     <v-row v-if="space">
       <v-col cols="12">
         <h1>{{ space?.getCode() ?? '' }}</h1>
+        <v-btn @click="deleteSpace" color="red">Delete Space</v-btn>
       </v-col>
     </v-row>
     <v-row>
