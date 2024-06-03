@@ -74,16 +74,26 @@ export const useCollectionStore = defineStore('experiment', {
       return creation
     },
 
-    async createCollection(experiment: openbis.ExperimentCreation): Promise<openbis.ExperimentPermId | null> {
+    async createCollection(experimentCode: string, typeId: string, projectId: string, properties: Record<string, string> | null = null): Promise<openbis.ExperimentPermId | null> {
       try {
         const openBisStore = useOpenBisStore()
-        const result = await openBisStore.v3?.createExperiments(experiment)
+        const experiment = this.prepareCollectionCreation(experimentCode, typeId, projectId, properties)
+        const result = await openBisStore.v3?.createExperiments([experiment])
         return result[0]
       } catch (error) {
         console.error(`${error.name}: ${error.message}`)
         console.warn(`createCollection failed with experiment ${JSON.stringify(experiment)}, returned null.`)
         return null
       }
+    },
+
+    prepareCollectionCreation(experimentCode: string, typeId: string, projectId: string, properties: Record<string, string> | null = null): openbis.ExperimentCreation {
+      const creation = new openbis.ExperimentCreation()
+      creation.setCode(experimentCode)
+      creation.setTypeId(new openbis.EntityTypePermId(typeId))
+      creation.setProjectId(new openbis.ProjectPermId(projectId))
+      if (properties) creation.setProperties(properties)
+      return creation
     },
 
     async updateCollection(experiment: openbis.Experiment): Promise<boolean> {
