@@ -1,11 +1,8 @@
-/* 
-Experiments are called collections in qportal 
-
-This store is fetching experiment data. 
-In this context, an experiment is a sort of collection.
-The real experiments are stored in an other store. 
-*/import openbis from '@/composables/openbis.esm'
+import openbis from '@/composables/openbis.esm'
 import { defineStore } from 'pinia'
+/*
+Collection is eq to Experiment in openBIS because of QBiC naming conventions
+*/
 
 
 export const useCollectionStore = defineStore('experiment', {
@@ -14,10 +11,10 @@ export const useCollectionStore = defineStore('experiment', {
       try {
         const openBisStore = useOpenBisStore()
         const result = await openBisStore.v3.searchExperiments(criteria, options)
-        return result.getObjects()
+        return result.objects
       } catch (error) {
         console.error(`${error.name}: ${error.message}`)
-        console.warn(`listExperiments failed with criteria ${criteria} and options ${options}, returned an empty list.`)
+        console.warn(`listCollections failed with criteria ${JSON.stringify(criteria)} and options ${JSON.stringify(options)}, returned an empty list.`)
         return []
       }
     },
@@ -26,9 +23,9 @@ export const useCollectionStore = defineStore('experiment', {
       return this.listCollections()
     },
 
-    async listCollectionsOfType(typeId: string): Promise<openbis.Experiment[]> {
+    async listCollectionsOfType( typeId: string): Promise<openbis.Experiment[]> {
       const criteria = new openbis.ExperimentSearchCriteria()
-      criteria.withType().withId().thatEquals(typeId)
+      criteria.withType().withCode().thatEquals(typeId)
       return this.listCollections(criteria)
     },
 
@@ -40,18 +37,18 @@ export const useCollectionStore = defineStore('experiment', {
 
     async listCollectionsOfProject(project: { permId: string }): Promise<openbis.Experiment[]> {
       const criteria = new openbis.ExperimentSearchCriteria()
-      criteria.withProject().withId().thatEquals(project.permId)
+      criteria.withProject().withPermId().thatEquals(project.permId)
       return this.listCollections(criteria)
     },
 
     async getCollection(experimentId: string, options = fetchExperimentCompletely()): Promise<openbis.Experiment | null> {
       try {
         const openBisStore = useOpenBisStore()
-        const result = await openBisStore.v3.getExperiments([new openbis.ExperimentPermId(experimentId)], options)
-        return result.get(experimentId) || null
+        const result = await openBisStore.v3?.getExperiments([new openbis.ExperimentPermId(experimentId)], options)
+        return result[experimentId] || null
       } catch (error) {
         console.error(`${error.name}: ${error.message}`)
-        console.warn(`getExperiment failed with experimentId ${experimentId} and options ${options}, returned null.`)
+        console.warn(`getCollection failed with experimentId ${experimentId} and options ${JSON.stringify(options)}, returned null.`)
         return null
       }
     },
@@ -60,10 +57,10 @@ export const useCollectionStore = defineStore('experiment', {
       try {
         const openBisStore = useOpenBisStore()
         const result = await openBisStore.v3.getExperiments(experimentIds.map(id => new openbis.ExperimentPermId(id)), fetchExperimentCompletely())
-        return result
+        return result.objects
       } catch (error) {
         console.error(`${error.name}: ${error.message}`)
-        console.warn(`getExperiments failed with experimentIds ${experimentIds}, returned an empty list.`)
+        console.warn(`getCollections failed with experimentIds ${experimentIds}, returned an empty list.`)
         return []
       }
     },
@@ -72,7 +69,7 @@ export const useCollectionStore = defineStore('experiment', {
       const creation = new openbis.ExperimentCreation()
       creation.setCode(experimentCode)
       creation.setTypeId(new openbis.EntityTypePermId(typeId))
-      creation.setProjectId(new openbis.ProjectIdentifier(projectId))
+      creation.setProjectId(new openbis.ProjectPermId(projectId))
       if (properties) creation.setProperties(properties)
       return creation
     },
@@ -80,11 +77,11 @@ export const useCollectionStore = defineStore('experiment', {
     async createCollection(experiment: openbis.ExperimentCreation): Promise<openbis.ExperimentPermId | null> {
       try {
         const openBisStore = useOpenBisStore()
-        const result = await openBisStore.v3.createExperiments([experiment])
+        const result = await openBisStore.v3?.createExperiments(experiment)
         return result[0]
       } catch (error) {
         console.error(`${error.name}: ${error.message}`)
-        console.warn(`createExperiment failed with experiment ${experiment}, returned null.`)
+        console.warn(`createCollection failed with experiment ${JSON.stringify(experiment)}, returned null.`)
         return null
       }
     },
@@ -100,7 +97,7 @@ export const useCollectionStore = defineStore('experiment', {
         return true
       } catch (error) {
         console.error(`${error.name}: ${error.message}`)
-        console.warn(`updateExperiment failed with experiment ${experiment}, returned false.`)
+        console.warn(`updateCollection failed with experiment ${JSON.stringify(experiment)}, returned false.`)
         return false
       }
     },
@@ -114,7 +111,7 @@ export const useCollectionStore = defineStore('experiment', {
         return true
       } catch (error) {
         console.error(`${error.name}: ${error.message}`)
-        console.warn(`deleteExperiment failed with experimentId ${experimentId} and reason ${reason}, returned false.`)
+        console.warn(`deleteCollection failed with experimentId ${experimentId} and reason ${reason}, returned false.`)
         return false
       }
     },
@@ -129,14 +126,14 @@ export const useCollectionStore = defineStore('experiment', {
         return true
       } catch (error) {
         console.error(`${error.name}: ${error.message}`)
-        console.warn(`deleteExperiments failed with experiments ${experiments} and reason ${reason}, returned false.`)
+        console.warn(`deleteCollections failed with experiments ${JSON.stringify(experiments)} and reason ${reason}, returned false.`)
         return false
       }
     },
 
     async deleteCollectionPermanently(experimentId: string, reason: string): Promise<boolean> {
       try {
-        const deletionId = await this.deleteExperiment(experimentId, reason)
+        const deletionId = await this.deleteCollection(experimentId, reason)
         if (deletionId) {
           const openBisStore = useOpenBisStore()
           await openBisStore.v3.confirmDeletions([deletionId])
@@ -145,7 +142,7 @@ export const useCollectionStore = defineStore('experiment', {
         return false
       } catch (error) {
         console.error(`${error.name}: ${error.message}`)
-        console.warn(`deleteExperimentPermanently failed with experimentId ${experimentId} and reason ${reason}, returned false.`)
+        console.warn(`deleteCollectionPermanently failed with experimentId ${experimentId} and reason ${reason}, returned false.`)
         return false
       }
     }

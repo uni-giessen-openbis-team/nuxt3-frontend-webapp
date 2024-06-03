@@ -1,8 +1,9 @@
 <script setup lang="ts">
-/* This is the second step of the Wizzard.
-Here the user can select the 
-These Variables will be later combined with the Samples by the Wizzard to create the project.
-*/
+/**
+ * This is the second step of the Wizzard.
+ * Here the user can select the variables that describe the differences between the biological entities.
+ * These variables will be later combined with the samples by the Wizzard to create the project.
+ */
 
 import { ref } from 'vue'
 

@@ -16,11 +16,11 @@ export const useProjectStore = defineStore('project', {
       return result.objects
     },
 
-    async getProjectsOfSpace(spaceId: openbis.ISpaceId): Promise<openbis.Project[]> {
+    async getProjectsOfSpace(spaceId: string): Promise<openbis.Project[]> {
       const psc = new openbis.ProjectSearchCriteria()
-      psc.withSpace().withPermId().thatEquals(spaceId)
+      psc.withSpace().withCode().thatEquals(spaceId)
       const result = await useOpenBisStore().v3!.searchProjects(psc, new openbis.ProjectFetchOptions())
-      return result?.getObjects() || []
+      return result.getObjects()
     },
 
     async getProject(projectId: string, options = {}): Promise<openbis.Project> {

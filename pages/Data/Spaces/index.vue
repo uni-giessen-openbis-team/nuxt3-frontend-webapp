@@ -20,7 +20,7 @@ const fetchSpaces = async () => {
   }
 }
 
-const goToSpace = (permId: string) => {
+const goToSpace = (permId: openbis.SpacePermId) => {
   router.push(`/data/spaces/${permId}`)
 }
 
@@ -55,9 +55,9 @@ onMounted(fetchSpaces)
 
 
 <template>
-  <h1>Spaces</h1>
+ 
   <v-container>
-    <v-btn @click="dialog = true" color="primary" class="mb-4">Create New Space</v-btn>
+    <h1>Spaces</h1>
 
     <v-dialog v-model="dialog" max-width="500px">
       <v-card>
@@ -96,22 +96,28 @@ onMounted(fetchSpaces)
         </v-card-actions>
       </v-card>
     </v-dialog>
+
     <v-row>
       <v-col
         v-for="space in spaces"
-        :key="space.permId.permId"
+        :key="space.permId"
         cols="12"
         sm="6"
         md="4"
       >
-        <v-card @click="goToSpace(space.id)" class="space-card">
-          <v-card-title>{{ space.code }}</v-card-title>
-          <v-card-subtitle>{{ space.description }}</v-card-subtitle>
+        <v-card @click="goToSpace(space.getPermId())" class="space-card">
+          <v-card-title>{{ space.getCode() }}</v-card-title>
+          <v-card-subtitle>{{ space.getDescription() }}</v-card-subtitle>
+          
         </v-card>
       </v-col>
     </v-row>
     <v-alert v-if="error" type="error">
       {{ error.message }}
     </v-alert>
+    <br>
+    <v-btn @click="dialog = true" color="primary" class="mb-4">Create New Space</v-btn>
+
   </v-container>
+
 </template>

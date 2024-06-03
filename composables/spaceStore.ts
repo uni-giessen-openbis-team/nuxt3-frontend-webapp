@@ -16,12 +16,17 @@ export const useSpaceStore = defineStore('spaces', {
     }, 
 
     async getSpace(spaceId: openbis.ISpaceId): Promise<openbis.Space | undefined> {
+      try {
       const sfo = new openbis.SpaceFetchOptions()
       const result = await useOpenBisStore().v3?.getSpaces(
         [spaceId], // Pass spaceId as an array
         sfo
       )
-      return result?.getObjects()[0]
+      return result[0] 
+      } catch (error) {
+      console.error('Error fetching space:', error)
+      return undefined
+      }
     },
 
     async createSpace(spaceCode: string, description: string | null = null): Promise<openbis.Space | undefined> {

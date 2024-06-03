@@ -1,0 +1,6 @@
+: 1716885598:0;bun run dev
+: 1716890273:0;conda activate aider; aider
+: 1716896927:0;bun run dev
+: 1716899568:0;conda activate aider; aider
+: 1717140933:1763;bun run dev
+: 1717399137:0;conda activate aider; aider

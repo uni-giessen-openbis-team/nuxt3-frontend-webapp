@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-
 const MINDESCLENGTH = 20;
 
 const projectStore = useProjectStore();

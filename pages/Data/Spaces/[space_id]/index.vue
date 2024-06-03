@@ -3,7 +3,6 @@
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import openbis from '@/composables/openbis.esm'
-import ProjectContext from '@/components/Wizzard/ProjectContext.vue'
 
 const space = ref<openbis.Space | null>(null)
 const showModal = ref(false)
@@ -33,9 +32,7 @@ const deleteSpace = async () => {
 const fetchSpaceDetails = async () => {
   try {
     const spaceId = route.params.space_id
-    const ISpaceId = new openbis.SpacePermId(spaceId)     
-    space.value = await spaceStore.getSpace(ISpaceId) ?? null
-    projects.value = await projectStore.getProjectsOfSpace(ISpaceId)
+    projects.value = await projectStore.getProjectsOfSpace(spaceId)
   } catch (err) {
     error.value = err as Error
   }
@@ -44,7 +41,7 @@ const fetchSpaceDetails = async () => {
 const goToProject = (projectId: string) => {
   router.push(`/data/spaces/${route.params.space_id}/${projectId}`)
 }
-
+ 
 const saveProject = () => {
   projectStore.projectContext.space = space.value?.code ?? null;
   projectStore.createProject(projectStore.projectContext);
@@ -63,6 +60,7 @@ onMounted(fetchSpaceDetails)
 .project-card:hover {
   transform: scale(1.05);
 }
+
 </style>
 
 <template>
@@ -74,10 +72,9 @@ onMounted(fetchSpaceDetails)
       <v-col cols="12">
         <h1>{{ space?.getCode() ?? '' }}</h1>
         <v-btn @click="deleteSpace" color="red">Delete Space</v-btn>
-        
-        <v-btn @click="showModal = true" color="primary">Add New Project</v-btn>
       </v-col>
     </v-row>
+    <br>
     <template v-if="projects.length > 0">
       <v-row>
         <v-col cols="12">
@@ -85,7 +82,7 @@ onMounted(fetchSpaceDetails)
         </v-col>
       </v-row>
       <v-row>
-        <v-col v-for="project in projects" :key="project?.getPermId()" cols="12" sm="6" md="4">
+        <v-col v-for="project in projects" :key="project?.permId" cols="12" sm="6" md="4">
           <v-card @click="goToProject(project?.permId)" class="project-card">
             <v-card-title>{{ project?.getCode() ?? '' }}</v-card-title>
             <v-card-subtitle>{{ project?.getDescription() ?? '' }}</v-card-subtitle>
@@ -104,6 +101,8 @@ onMounted(fetchSpaceDetails)
     <v-alert v-if="error" type="error">
       {{ error?.message ?? '' }}
     </v-alert>
+    <br>
+    <v-btn @click="showModal = true" color="primary">Add New Project</v-btn>
   </v-container>
   <v-dialog v-model="showModal" max-width="600px">
     <v-card>
@@ -120,4 +119,6 @@ onMounted(fetchSpaceDetails)
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+ 
 </template>

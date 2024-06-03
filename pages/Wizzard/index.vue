@@ -66,4 +66,4 @@ const  {entetyConditionsResult, entetyAndSampleResult, result} = storeToRefs(use
       </v-window-item>
     </v-window>
   </v-container>
-</template>
+</template> 
