@@ -25,27 +25,39 @@ export const usePersonStore = defineStore('person',{
         return this.listPersons({ criteria, options: fetchPersonCompletely() })
       },
 
-      listPersonsWithToken() {
-        const { PersonSearchCriteria } = v3
-        return this.listPersons({ criteria: new PersonSearchCriteria(), options: fetchPersonCompletely() })
-      },
+    
 
-      async listPersonsOfSpace(space: openbis.Space): Promise<openbis.RoleAssignment[]> {
-        try {
-          const criteria = new openbis.RoleAssignmentSearchCriteria()
-          criteria.withSpace().withCode().thatEquals(space.getCode())
-          const listOfPers = await useOpenBisStore().v3?.searchRoleAssignments(criteria, new openbis.RoleAssignmentFetchOptions())
-          console.log("🚀 ~ listPersonsOfSpace ~ listOfPers:", listOfPers)
-          return listOfPers?.getObjects() || []
-        }
-        catch (error) {
-          console.error(`${error.constructor.name}: ${error.message}`)
-          console.warn(`listPersonsOfSpace(${space}) failed and returned an empty list.`)
-          return []
-        }
-      },
+        
+    async  listPersonsOfSpace(space: openbis.Space): Promise<openbis.Person[]> {
+      try {
+          const criteria = new openbis.RoleAssignmentSearchCriteria();
+          criteria.withSpace().withCode().thatEquals(space.getCode());
 
-      async listPersonsOfProject({ project }) {
+          const fetchOptions = new openbis.RoleAssignmentFetchOptions();
+          fetchOptions.withUser();
+          fetchOptions.withSpace();
+
+          const store = useOpenBisStore();
+          if (!store || !store.v3) {
+              throw new Error("OpenBisStore or v3 is not defined.");
+          }
+
+          const listOfPers: openbis.SearchResult<openbis.RoleAssignment> | undefined = await store.v3.searchRoleAssignments(criteria, fetchOptions);
+
+          if (!listOfPers) {
+              console.warn(`listPersonsOfSpace(${space}) returned an undefined result.`);
+              return [];
+          }
+
+          return listOfPers.getObjects().map(roleAssignment => roleAssignment.getUser());
+      } catch (error) {
+          console.error(`${error.constructor.name}: ${error.message}`);
+          console.warn(`listPersonsOfSpace(${space.getCode()}) failed and returned an empty list.`);
+          return [];
+      }
+    },
+
+      async listPersonsOfProject( project ): Promise<openbis.Person[]>{
         const criteria = new openbis.RoleAssignmentSearchCriteria().withOrOperator()
         criteria.withProject().withId().thatEquals(project.getIdentifier())
         criteria.withSpace().withId().thatEquals(project.getSpace().getPermId())
@@ -67,8 +79,8 @@ export const usePersonStore = defineStore('person',{
         return Array.from(projectMembers)
       },
 
-      async listPersonsOfProjectById({ projectId }) {
-        const project = await this.getProject(projectId)
+      async listPersonsOfProjectById( projectId : string ): openbis.Person[] {
+        const project = await useProjectStore().getProject(projectId)
         return this.listPersonsOfProject(project)
       },
 

@@ -5,7 +5,6 @@ import { useRouter, useRoute } from 'vue-router'
 import openbis from '@/composables/openbis.esm'
 
 const space = ref<openbis.Space | null>(null)
-const showModal = ref(false)
 const projects = ref<openbis.Project[]>([])
 const error = ref<Error | null>(null)
 const router = useRouter()
@@ -18,8 +17,8 @@ const projectStore = useProjectStore()
 const deleteSpace = async () => {
   try {
     const spaceId = route.params.space_id
-    const ISpaceId = new openbis.SpacePermId(spaceId)
-    await spaceStore.deleteSpace(ISpaceId)
+    const ISpaceId = new openbis.SpacePermId(Array.isArray(spaceId) ? spaceId[0] : spaceId)
+    await spaceStore.deleteSpace(ISpaceId.getPermId(), "Because I want to")
     router.push('/data/spaces')
     if (projects.value.length === 0) {
       showModal.value = true;
@@ -32,7 +31,7 @@ const deleteSpace = async () => {
 const fetchSpaceDetails = async () => {
   try {
     const spaceId = route.params.space_id
-    projects.value = await projectStore.getProjectsOfSpace(spaceId)
+    projects.value = await projectStore.getProjectsOfSpace(String(spaceId))
   } catch (err) {
     error.value = err as Error
   }
@@ -102,23 +101,9 @@ onMounted(fetchSpaceDetails)
       {{ error?.message ?? '' }}
     </v-alert>
     <br>
-    <v-btn @click="showModal = true" color="primary">Add New Project</v-btn>
+      <ButtonCreateProject></ButtonCreateProject>
   </v-container>
-  <v-dialog v-model="showModal" max-width="600px">
-    <v-card>
-      <v-card-title>
-        <span class="headline">Add New Project</span>
-      </v-card-title>
-      <v-card-text>
-        <WizzardProjectContext />
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="blue darken-1"  @click="showModal = false">Cancel</v-btn>
-        <v-btn color="blue darken-1"  @click="saveProject">Save</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+
 
  
 </template>

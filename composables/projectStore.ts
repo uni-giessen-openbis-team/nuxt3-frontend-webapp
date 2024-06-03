@@ -4,6 +4,7 @@ import openbis from '@/composables/openbis.esm'
 export const useProjectStore = defineStore('project', {
   state: () => ({
     projects: [] as openbis.Project[],
+    projectContext: {} ,
   }),
 
   actions: {
@@ -32,10 +33,6 @@ export const useProjectStore = defineStore('project', {
       return result.get(projectId)
     },
 
-    async createProjects(projects: openbis.Project[]): Promise<void> {
-      const openBisStore = useOpenBisStore()
-      await openBisStore.v3!.createProjects(projects)
-    },
 
     async updateProject(project: openbis.Project): Promise<void> {
       const openBisStore = useOpenBisStore()

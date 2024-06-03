@@ -3,7 +3,7 @@ import { ref, watch, defineProps, defineEmits } from 'vue';
 import openbis from '~/composables/openbis.esm';
 const props = defineProps({
   space: {
-    type: openbis.Space,
+    type: openbis.Space ,
     required: true
   },
   modelValue: {
@@ -26,11 +26,9 @@ const personStore = usePersonStore();
 
 watch(() => props.space, async (newSpace) => {
   if (newSpace) {
-      console.log("🚀 ~ watch ~ newSpace:", newSpace)
       // Load the persons from the API based on the passed space prop
       persons.value  = await personStore.listPersonsOfSpace(newSpace);
-      console.log("🚀 ~ watch ~ persons.value:", persons.value[0])
-      
+      console.log("🚀 ~ watch ~ persons.value:", persons.value[0].getUser()) 
   }
 }, { immediate: true });
 
