@@ -10,8 +10,8 @@ export const useCollectionStore = defineStore('experiment', {
     async listCollections(criteria = new openbis.ExperimentSearchCriteria(), options = fetchExperimentCompletely()): Promise<openbis.Experiment[]> {
       try {
         const openBisStore = useOpenBisStore()
-        const result = await openBisStore.v3.searchExperiments(criteria, options)
-        return result.objects
+        const result = await openBisStore.v3?.searchExperiments(criteria, options)
+        return result?.getObjects() || []
       } catch (error) {
         console.error(`${error.name}: ${error.message}`)
         console.warn(`listCollections failed with criteria ${JSON.stringify(criteria)} and options ${JSON.stringify(options)}, returned an empty list.`)
