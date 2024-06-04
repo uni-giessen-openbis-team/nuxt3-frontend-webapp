@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import openbis from '~/composables/openbis.esm';
-import useOpenbis from '~/plugins/useOpenbis';
 
 const showModal = ref(false)
 
@@ -20,7 +19,6 @@ const projectContext = ref<ProjectContext>({
 
 const saveProject = () => {
   console.log("🚀 ~ saveProject ~ projectContext.value:", projectContext.value.code)
-
   createProject(projectContext.value)
 };
 
@@ -81,7 +79,4 @@ async function createProject(project:ProjectContext): Promise<void> {
       </v-card-actions>
     </v-card>
   </v-dialog>
-
-
-
 </template>

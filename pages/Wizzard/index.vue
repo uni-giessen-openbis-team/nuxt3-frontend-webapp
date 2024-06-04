@@ -27,14 +27,11 @@ const  {entetyConditionsResult, entetyAndSampleResult, result} = storeToRefs(use
       <v-window-item :key="1" value="Create">
         <v-form>
           <FormWizard @on-complete="() => {store.onComplete()}">
-            <TabContent title="Project Context">
-              <WizzardProjectContext v-model="store.projectContext" />
-            </TabContent>
             <TabContent title="Project Enteties" :before-change="store.updateEntety">
               <WizzardProjectEnteties/>
             </TabContent>
             <TabContent title="Entety Preview">
-              <WizzardPreviewTable v-model="entetyConditionsResult" />
+              <WizzardPreviewTable v-model="entetyConditionsResult" /> 
             </TabContent>
             <TabContent title="Biological Samples" :before-change="store.updateBiol">
               <WizzardSampleExtracts v-model="store.sampleVariables" />

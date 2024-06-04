@@ -10,9 +10,13 @@ export const useDatasetStore = defineStore('dataset', {
         console.log('Fetching datasets with criteria:', criteria, 'and options:', options)
         const result = await openBisStore.v3?.searchDataSets(criteria, options)
         console.log('Result from searchDataSets:', result)
-        return result?.objects ?? []
+        return result?.getObjects() ?? []
       } catch (error) {
-        console.error(`${error.name}: ${error.message}`)
+        if (error instanceof Error) {
+          console.error(`${error.name}: ${error.message}`)
+        } else {
+          console.error('An unknown error occurred')
+        }
         console.warn(`listDataSets failed with criteria ${criteria} and options ${options}, returned an empty list.`)
         return []
       }
@@ -62,12 +66,12 @@ export const useDatasetStore = defineStore('dataset', {
         const openBisStore = useOpenBisStore()
         console.log('Fetching dataset with ID:', datasetId)
         const result = await openBisStore.v3?.getDataSets([new openbis.DataSetPermId(datasetId)], options)
-        console.log('Result from getDataSets:', result)
-        return result?.get(datasetId) || null
-      } catch (error) {
-        console.error(`${error.name}: ${error.message}`)
-        console.warn(`getDataSet failed with datasetId ${datasetId} and options ${options}, returned null.`)
-        return null
+        console.log('Result from getDataSets:', result);
+        return result ? result[0] : null;
+      } catch (error: any) {
+        console.error(`${error.name}: ${error.message}`);
+        console.warn(`getDataSet failed with datasetId ${datasetId} and options ${options}, returned null.`);
+        return null;
       }
     },
 
@@ -78,7 +82,7 @@ export const useDatasetStore = defineStore('dataset', {
         const result = await openBisStore.v3?.getDataSets(datasetIds.map(id => new openbis.DataSetPermId(id)), fetchDataSetCompletely())
         console.log('Result from getDataSets:', result)
         return result?.objects ?? []
-      } catch (error) {
+      } catch (error: any) {
         console.error(`${error.name}: ${error.message}`)
         console.warn(`getDataSets failed with datasetIds ${datasetIds}, returned an empty list.`)
         return []
@@ -91,7 +95,7 @@ export const useDatasetStore = defineStore('dataset', {
         console.log('Updating dataset with update:', datasetUpdate)
         await openBisStore.v3?.updateDataSets([datasetUpdate])
         return true
-      } catch (error) {
+      } catch (error: any) {
         console.error(`${error.name}: ${error.message}`)
         console.warn(`updateDataSet failed with datasetUpdate ${datasetUpdate}, returned false.`)
         return false
@@ -106,7 +110,7 @@ export const useDatasetStore = defineStore('dataset', {
         console.log('Deleting dataset with ID:', datasetId, 'and reason:', reason)
         await openBisStore.v3?.deleteDataSets([new openbis.DataSetPermId(datasetId)], options)
         return true
-      } catch (error) {
+      } catch (error: any) {
         console.error(`${error.name}: ${error.message}`)
         console.warn(`deleteDataSet failed with datasetId ${datasetId} and reason ${reason}, returned false.`)
         return false
@@ -121,7 +125,7 @@ export const useDatasetStore = defineStore('dataset', {
         console.log('Deleting datasets with IDs:', datasetIds, 'and reason:', reason)
         await openBisStore.v3?.deleteDataSets(datasetIds.map(id => new openbis.DataSetPermId(id)), options)
         return true
-      } catch (error) {
+      } catch (error: any) {
         console.error(`${error.name}: ${error.message}`)
         console.warn(`deleteDataSets failed with datasetIds ${datasetIds} and reason ${reason}, returned false.`)
         return false
@@ -138,7 +142,7 @@ export const useDatasetStore = defineStore('dataset', {
           return true
         }
         return false
-      } catch (error) {
+      } catch (error: any) {
         console.error(`${error.name}: ${error.message}`)
         console.warn(`deleteDataSetPermanently failed with datasetId ${datasetId} and reason ${reason}, returned false.`)
         return false
@@ -153,7 +157,7 @@ export const useDatasetStore = defineStore('dataset', {
         options.setRecursive(true)
         console.log('Fetching data stream for dataset with ID:', datasetId)
         return await openBisStore.dss3?.downloadFiles([fileId], options) || null
-      } catch (error) {
+      } catch (error: any) {
         console.error(`${error.name}: ${error.message}`)
         console.warn(`getDataSetStream failed with datasetId ${datasetId}, returned null.`)
         return null
