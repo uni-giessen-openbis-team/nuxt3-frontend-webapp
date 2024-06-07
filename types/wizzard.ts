@@ -8,7 +8,7 @@ export type ProjectEntity = {
 export interface ProjectContext {
   UUID: string;
   space: string | null;
-  name: string | null;
+  code: string | null;
   contactPerson: string | null;
   manager: string | null;
   description: string | null;

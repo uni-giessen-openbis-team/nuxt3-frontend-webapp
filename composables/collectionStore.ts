@@ -1,7 +1,8 @@
 import openbis from '@/composables/openbis.esm'
 import { defineStore } from 'pinia'
 /*
-Collection is eq to Experiment in openBIS because of QBiC naming conventions
+There are 3 Types of collections can be Either Biological Entities, Biological Samples or Technical Samples. 
+On the creation of a Experiment these 3 sould be instantiated. 
 */
 
 
@@ -35,9 +36,9 @@ export const useCollectionStore = defineStore('experiment', {
       return this.listCollections(criteria)
     },
 
-    async listCollectionsOfProject(project: { permId: string }): Promise<openbis.Experiment[]> {
+    async listCollectionsOfProject(project: openbis.ProjectPermId ): Promise<openbis.Experiment[]> {
       const criteria = new openbis.ExperimentSearchCriteria()
-      criteria.withProject().withPermId().thatEquals(project.permId)
+      criteria.withProject().withPermId().thatEquals(project.getPermId())
       return this.listCollections(criteria)
     },
 
@@ -85,6 +86,10 @@ export const useCollectionStore = defineStore('experiment', {
 
     async createCollection(experimentCode: string, typeId: string, projectId: string, properties: Record<string, string> | null = null): Promise<openbis.ExperimentPermId | null> {
       try {
+        console.log("🚀 ~ createCollection ~ experimentCode:", experimentCode);
+        console.log("🚀 ~ createCollection ~ typeId:", typeId);
+        console.log("🚀 ~ createCollection ~ projectId:", projectId);
+        console.log("🚀 ~ createCollection ~ properties:", properties);
         const openBisStore = useOpenBisStore()
         const experiment = this.prepareCollectionCreation(experimentCode, typeId, projectId, properties)
         const result = await openBisStore.v3?.createExperiments([experiment])

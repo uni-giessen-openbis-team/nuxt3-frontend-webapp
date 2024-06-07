@@ -100,7 +100,7 @@ onMounted(fetchSpaces)
     <v-row>
       <v-col
         v-for="space in spaces"
-        :key="space.permId"
+        :key="space.getPermId().toString()"
         cols="12"
         sm="6"
         md="4"

@@ -1,77 +1,52 @@
 <script setup lang="ts">
-import openbis from '~/composables/openbis.esm';
+import { ref } from 'vue';
 
-const showModal = ref(false)
+const showModal = ref(false);
 
 const MINDESCLENGTH = 20;
 
-interface ProjectContext {
-  space: openbis.Space | null;
-  code: string;
-  description: string;
-}
+const { spaceId } = defineProps<{ 
+  spaceId: string
+}>()
 
-const projectContext = ref<ProjectContext>({ 
-  space: null,
-  code: '',
-  description: '',
-});
+const code = ref('');
+const description = ref('');
 
-const saveProject = () => {
-  console.log("🚀 ~ saveProject ~ projectContext.value:", projectContext.value.code)
-  createProject(projectContext.value)
+const saveProject = async () => {
+  if (!code.value) {
+    console.error("Project code cannot be empty.");
+    return;
+  }
+  console.log("🚀 ~ saveProject ~ code:", code.value);
+  await createProject();
 };
 
-async function createProject(project:ProjectContext): Promise<void> {
-      // frist create a new empty project
-      const newProject = new openbis.ProjectCreation() 
-      // fill the project with the necessary info
-      newProject.setCode(project.code)
-      newProject.setDescription(project.description)
-      if (project.space) newProject.setSpaceId(project.space.getPermId())
-      useOpenBisStore().v3?.createProjects([newProject])
-    }
+async function createProject(): Promise<void> {
+  useProjectStore().createProjectWithCollections(code.value , spaceId , description.value )
+}
 </script>
 
-
 <template>
-    <v-btn @click="showModal = true" color="primary">Add New Project</v-btn>
-    <v-dialog v-model="showModal" max-width="600px">
+  <v-btn @click="showModal = true" color="primary">Add New Project</v-btn>
+  <v-dialog v-model="showModal" max-width="600px">
     <v-card>
       <v-card-title>
         <span class="headline">Add New Project</span>
       </v-card-title>
       <v-card-text>
-          <ModalCreateProject />
-      
-      <APIComponentsAutocompleteSpaces
-        v-model="projectContext.space"
-      /> 
-      <v-text-field
-        v-model="projectContext.code"
-        label="New Project Name"
-        :rules="[value => !!value || 'Item is required']"
-      />
-
-      <!-- <APIComponentsAutocompletePersons
-        v-model="projectContext.contactPerson"
-        :space="projectContext.space"
-        label="Contact Person"
-      />
-
-      <APIComponentsAutocompletePersons
-        v-model="projectContext.manager"
-        :space="projectContext.space"
-        label="Project Manager"
-      />  -->
-
-    <v-textarea
-      v-model="projectContext.description"
-      :counter="2000"
-      label="Description"
-      :rules="[value => !!value || 'Item is required', value => (value && value.length >= MINDESCLENGTH) || 'Item must be at least 20 characters']"
-    />
-  </v-card-text>
+        <ModalCreateProject />
+        <v-text-field
+          v-model="code"
+          label="New Project Name"
+          :rules="[value => !!value || 'Item is required']"
+        />
+        <v-textarea
+          v-model="description"
+          :counter="2000"
+          label="Description"
+          :rules="[value => !!value || 'Item is required', value => (value && value.length >= MINDESCLENGTH) || 'Item must be at least 20 characters']"
+        />
+      </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn @click="showModal = false">Cancel</v-btn>

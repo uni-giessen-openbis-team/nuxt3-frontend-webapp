@@ -22,7 +22,7 @@ export const useSpaceStore = defineStore('spaces', {
         [spaceId], // Pass spaceId as an array
         sfo
       )
-      return result[0] 
+      return result ? result[0] : undefined
       } catch (error) {
       console.error('Error fetching space:', error)
       return undefined
@@ -35,11 +35,18 @@ export const useSpaceStore = defineStore('spaces', {
       if (description)
         creation.setDescription(description)
       const response = await useOpenBisStore().v3?.createSpaces([creation])
+      if (!response) {
+        throw new Error('Failed to create space')
+      }
       return response[0] // Assuming the method returns an array of created spaces
     },
 
-    async updateSpace(space: Space): Promise<void> {
-      await useOpenBisStore().v3.updateSpaces([space])
+    async updateSpace(space: openbis.Space): Promise<void> {
+      const store = useOpenBisStore().v3
+      if (!store) {
+        throw new Error('OpenBis store is not available')
+      }
+      await store.updateSpaces([space])
     },
 
     async deleteSpace(spaceId: string, reason: string): Promise<void> { // Assuming spaceId is a string

@@ -7,3 +7,5 @@
 : 1717407075:0;bun run dev
 : 1717490492:0;conda activate aider; aider
 : 1717492415:0;bun run dev
+: 1717752513:0;conda activate aider; aider
+: 1717758846:0;bun run dev

@@ -20,9 +20,6 @@ const deleteSpace = async () => {
     const ISpaceId = new openbis.SpacePermId(Array.isArray(spaceId) ? spaceId[0] : spaceId)
     await spaceStore.deleteSpace(ISpaceId.getPermId(), "Because I want to")
     router.push('/data/spaces')
-    if (projects.value.length === 0) {
-      showModal.value = true;
-    }
   } catch (err) {
     error.value = err as Error
   }
@@ -37,15 +34,10 @@ const fetchSpaceDetails = async () => {
   }
 }
 
-const goToProject = (projectId: string) => {
-  router.push(`/data/spaces/${route.params.space_id}/${projectId}`)
+const goToProject = (projectPermId: openbis.ProjectPermId) => {
+  router.push(`/data/spaces/${route.params.space_id}/${projectPermId}`)
 }
  
-const saveProject = () => {
-  projectStore.projectContext.space = space.value?.code ?? null;
-  projectStore.createProject(projectStore.projectContext);
-  showModal.value = false;
-};
 
 onMounted(fetchSpaceDetails)
 </script>
@@ -63,13 +55,15 @@ onMounted(fetchSpaceDetails)
 </style>
 
 <template>
+  
   <v-container>
+    <h1>Space {{route.params.space_id}}</h1>
+ 
     <v-row>
-      {{route.params.space_id}}
     </v-row>
     <v-row>
       <v-col cols="12">
-        <h1>{{ space?.getCode() ?? '' }}</h1>
+        <h2>{{ space?.getCode() ?? '' }}</h2>
         <v-btn @click="deleteSpace" color="red">Delete Space</v-btn>
       </v-col>
     </v-row>
@@ -81,12 +75,12 @@ onMounted(fetchSpaceDetails)
         </v-col>
       </v-row>
       <v-row>
-        <v-col v-for="project in projects" :key="project?.permId" cols="12" sm="6" md="4">
-          <v-card @click="goToProject(project?.permId)" class="project-card">
+        <v-col v-for="project in projects" :key="project?.getPermId().toString()" cols="12" sm="6" md="4">
+          <v-card @click="goToProject(project?.getPermId())" class="project-card">
             <v-card-title>{{ project?.getCode() ?? '' }}</v-card-title>
             <v-card-subtitle>{{ project?.getDescription() ?? '' }}</v-card-subtitle>
             <v-card-text>
-              {{project?.permId?.permId}}
+              {{project?.getPermId()}}
             </v-card-text>
           </v-card>
         </v-col>
@@ -101,7 +95,7 @@ onMounted(fetchSpaceDetails)
       {{ error?.message ?? '' }}
     </v-alert>
     <br>
-      <ButtonCreateProject></ButtonCreateProject>
+      <ButtonCreateProject :spaceId="route.params.space_id as string"></ButtonCreateProject>
   </v-container>
 
 

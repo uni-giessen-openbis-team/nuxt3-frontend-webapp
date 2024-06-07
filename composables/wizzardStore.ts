@@ -35,9 +35,9 @@ export const useWizzardStore = defineStore('wizzardStore', {
       },
     ] as ProjectEntity[],
     projectContext: {
-      UUID: '',
+      UUID: '', 
+      code: '',
       space: null,
-      name: null,
       contactPerson: null,
       manager: null,
       description: null,
@@ -190,26 +190,27 @@ export const useWizzardStore = defineStore('wizzardStore', {
      * @returns {Array<any>} - The cartesian product.
      */
     cartesianProduct(arr: Array<any>) {
-      return arr.reduce((acc, val) => {
-        return acc.map((el) => {
-          return val.map((element) => {
+      return arr.reduce((acc: any[], val: any[]) => {
+        return acc.map((el: any[]) => {
+          return val.map((element: any) => {
             return el.concat([element]);
           });
-        }).reduce((acc, val) => acc.concat(val), []);
+        }).reduce((acc: any[], val: any[]) => acc.concat(val), []);
       }, [[]]);
     },
+
     /**
      * Generates the cross product of the parent and child samples.
      * @param parents - The parent samples.
      * @param childs - The child samples.
      * @returns {Sample[]} - The cross product of the parent and child samples.
      */
-    crossProductSamples(parents: combinedVariable[], childs: combinedVariable[]) {
+    crossProductSamples(parents: combinedVariable[], children: combinedVariable[]) {
       const result = [];
 
       for (const parent of parents) {
         if (Number(parent.count) >= 1) {
-          for (const child of childs) {
+          for (const child of children) {
             const newEntry = JSON.parse(JSON.stringify(child));
             newEntry.child = parent.secondaryName;
             newEntry.conditions.push(...parent.conditions);
@@ -225,9 +226,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
      */
     async onComplete() {
 
-      // create Project
-      await this.createProject(this.projectContext);
-
+      
       // Save entity conditions 
       await this.createSamples(this.entetyConditionsResult, this.projectContext);
 
