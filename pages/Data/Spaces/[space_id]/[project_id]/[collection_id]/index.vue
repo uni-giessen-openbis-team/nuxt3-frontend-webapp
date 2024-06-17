@@ -65,8 +65,6 @@ import Samples from '@/components/Table/Samples.vue'
       Experiment:
       {{  collection?.getCode() }}
  
-
-   
     </h1>
     <pre>
 
