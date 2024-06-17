@@ -42,6 +42,7 @@ onMounted(async () => {
 const deleteCollection = async (permId: string) => {
     await collectionStore.deleteCollection(permId ,"because");
 }
+import Samples from '@/components/Table/Samples.vue'
 </script>
 
 <style scoped>
@@ -76,20 +77,5 @@ const deleteCollection = async (permId: string) => {
     </v-btn>
   </v-container>
 
-  <v-container v-if="samples">
-    <v-row>
-      <v-col
-        v-for="sample in samples"
-        :key="sample.getPermId().toString()"
-        cols="12"
-        sm="6"
-        md="4"
-      >
-        <v-card class="sample-card">
-          <v-card-title>{{ sample.getCode() }}</v-card-title>
-          <v-card-subtitle>{{ sample.getProperties().description }}</v-card-subtitle>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+  <Samples :samples="samples" />
 </template>
