@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import openbis from '@/composables/openbis.esm'
+import Collections from '~/pages/Data/collections.vue';
 
 // Initialize the route
 const route = useRoute()
@@ -11,7 +12,6 @@ const collectionId = route.params.collection_id as string
 const collection = ref<openbis.Experiment | null>(null)
 
 // Initialize the sample store
-const sampleStore = useSampleStore()
 const collectionStore = useCollectionStore()
 
 // Reactive references to store samples
@@ -19,9 +19,9 @@ const samples = ref<openbis.Sample[]>([])
 
 // Function to fetch samples for a specific collection
 const fetchSamples = async (collectionPermId: string) => {
-  const collection = await collectionStore.getCollection(collectionPermId)
+  const collection = await useSampleStore().listSamplesOfCollection(collectionPermId)
   if (collection) {
-    samples.value = await collection.getSamples()
+    samples.value = await collection
   } else {
     console.error(`Collection with id ${collectionPermId} not found.`)
   }
@@ -54,11 +54,23 @@ const deleteCollection = async (permId: string) => {
 }
 
 
+
 </style>
 
 
 <template>
   <v-container>
+    <h1>
+      Experiment:
+      {{  collection?.getCode() }}
+ 
+
+   
+    </h1>
+    <pre>
+
+      {{ samples }}
+    </pre>
     <v-btn :to="`/data/spaces/${spaceId}/${projectId}/${collectionId}/wizzard`" >   
       Create Samples for this Collection
     </v-btn>
