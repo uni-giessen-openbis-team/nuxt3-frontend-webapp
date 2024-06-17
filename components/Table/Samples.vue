@@ -10,7 +10,7 @@
       <tbody>
         <tr v-for="sample in samples" :key="sample.permId.permId">
           <td>{{ sample.code }}</td>
-          <td>{{ sample.properties.description || 'No description available' }}</td>
+          <td>{{ sample.properties.description ? sample.properties.description : 'No description available' }}</td>
         </tr>
       </tbody>
     </v-simple-table>
