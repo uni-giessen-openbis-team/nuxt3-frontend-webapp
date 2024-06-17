@@ -8,7 +8,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="sample in samples" :key="sample.getPermId().toString()">
+        <tr v-for="sample in props.samples" :key="sample.getPermId().toString()">
           <td>{{ sample.getCode() }}</td>
           <td>{{ sample.getProperties().description }}</td>
         </tr>
