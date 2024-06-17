@@ -8,9 +8,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="sample in props.samples" :key="sample.getPermId().toString()">
-          <td>{{ sample.getCode() }}</td>
-          <td>{{ sample.getProperties().description }}</td>
+        <tr v-for="sample in samples" :key="sample.permId.permId">
+          <td>{{ sample.code }}</td>
+          <td>{{ sample.properties.description || 'No description available' }}</td>
         </tr>
       </tbody>
     </v-simple-table>
