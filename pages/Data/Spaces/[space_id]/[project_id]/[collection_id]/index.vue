@@ -66,15 +66,11 @@ import Samples from '@/components/Table/Samples.vue'
       {{  collection?.getCode() }}
  
     </h1>
-    <pre>
 
-      {{ samples }}
-    </pre>
     <v-btn :to="`/data/spaces/${spaceId}/${projectId}/${collectionId}/wizzard`" >   
       Create Samples for this Collection
     </v-btn>
     <Samples :samples="samples" />
   </v-container>
 
-  <Samples :samples="samples" />
 </template>
