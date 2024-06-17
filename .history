@@ -9,3 +9,24 @@
 : 1717492415:0;bun run dev
 : 1717752513:0;conda activate aider; aider
 : 1717758846:0;bun run dev
+: 1718017120:0;sudo netstat -tulnp | grep :3000
+: 1718017136:0;sudo kill 97379
+: 1718017141:0;bun run dev
+: 1718268404:0;sudo reboot
+: 1718268768:0;bun run dev
+: 1718348246:0;conda activate aider; aider
+: 1718348260:0;/drop components/Button/CreateCollection.vue
+: 1718348260:0;/drop components/Wizzard/ProjectEnteties.vue
+: 1718348261:0;/drop pages/Data/Spaces/[space_id]/index.vue
+: 1718348261:0;/drop pages/Data/Spaces/[space_id]/[project_id]/[collection_id]/wizzard.vue
+: 1718348261:0;/drop pages/Data/Spaces/[space_id]/[project_id]/index.vue
+: 1718348261:0;/drop components/Wizzard/ExperimentSetup.vue
+: 1718348266:0;/drop pages/Data/Spaces/index.vue
+: 1718348267:0;/add pages/Data/Spaces/index.vue
+: 1718348283:0;conda activate aider; aider
+: 1718348347:0;/add pages/Data/Spaces/index.vue
+: 1718348672:0;/add node_modules/vuetify/lib/index.d.mts
+: 1718348672:0;/drop node_modules/vuetify/lib/index.d.mts
+: 1718357402:0;bun run dev
+: 1718361589:0;echo /usr/bin/zsh
+: 1718367065:0;bun run dev

@@ -6,11 +6,34 @@ import 'vue3-form-wizard/dist/style.css';
 const tab = ref('');
 const store = useWizzardStore();
 
-const  {entetyConditionsResult, entetyAndSampleResult, result} = storeToRefs(useWizzardStore())
+const route = useRoute()
+
+const spaceId = route.params.space_id as string
+const projectId = route.params.project_id as string
+const collectionId = route.params.collection_id as string
+
+
+const  {entetyConditionsResult, entetyAndSampleResult, result} = storeToRefs(useWizzardStore())  
+
+// set the store spaceId and projectId
+
+onMounted(() => {
+  // set collection context code
+  useWizzardStore().collectionContext.code = collectionId as string
+  useWizzardStore().projectContext.code = projectId as string
+  useWizzardStore().spaceContext.code = spaceId as string
+})
 </script>
  
+
+
 <template>
+
+
   <v-container>
+  <h2>
+    Create a new samples for collection {{collectionId}}
+  </h2>
     <v-tabs
       v-model="tab"
       color="deep-purple-accent-4"
@@ -29,7 +52,7 @@ const  {entetyConditionsResult, entetyAndSampleResult, result} = storeToRefs(use
           <FormWizard @on-complete="() => {store.onComplete()}">
             <TabContent title="Project Enteties" :before-change="store.updateEntety">
               <WizzardProjectEnteties/>
-            </TabContent>
+            </TabContent> 
             <TabContent title="Entety Preview">
               <WizzardPreviewTable v-model="entetyConditionsResult" /> 
             </TabContent>
@@ -63,4 +86,5 @@ const  {entetyConditionsResult, entetyAndSampleResult, result} = storeToRefs(use
       </v-window-item>
     </v-window>
   </v-container>
+
 </template> 

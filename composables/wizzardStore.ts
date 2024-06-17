@@ -2,14 +2,14 @@ import { defineStore } from 'pinia';
 import type { ProjectEntity, ProjectContext, TableVariable, combinedVariable } from '@/types/wizzard';
 import openbis from './openbis.esm';
 import useOpenbis from '~/plugins/useOpenbis';
- 
+
 /**
  * Variables are the building blocks of the wizzard. They are used to define the
  * conditions that will be used to create the samples. The cross product of the
  * variables will be used to create the samples.
  */
 
- type Sample = {
+type Sample = {
   conditions: { [key: string]: string }[];
   externalDBID: string;
   secondaryName: string;
@@ -19,9 +19,29 @@ import useOpenbis from '~/plugins/useOpenbis';
 
 export const useWizzardStore = defineStore('wizzardStore', {
   state: () => ({
-    selectedVariables: [] as ProjectEntity[],
-    variables: [
-      { 
+    spaceContext: {
+      code: '',
+    },
+
+    collectionContext: {
+      code: '',
+      typeId: '',
+      description: '',
+    },
+
+
+    projectContext: {
+      UUID: '',
+      code: '',
+      contactPerson: null,
+      manager: null,
+      description: null,
+    } as ProjectContext,
+
+    selectedBiologicalEntityVariables: [] as ProjectEntity[],
+
+    biologicalSampleVariables: [
+      {
         title: 'genotype',
         conditions: [],
         continuous: false,
@@ -34,16 +54,10 @@ export const useWizzardStore = defineStore('wizzardStore', {
         unit: null,
       },
     ] as ProjectEntity[],
-    projectContext: {
-      UUID: '', 
-      code: '',
-      space: null,
-      contactPerson: null,
-      manager: null,
-      description: null,
-    } as ProjectContext,
+
+
     entetyVariables: [
-      { 
+      {
         title: 'species',
         conditions: [""],
         continuous: false,
@@ -52,7 +66,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
     ] as ProjectEntity[],
     entetyConditionsResult: [] as Sample[],
     sampleVariables: [
-      { 
+      {
         title: 'tissue',
         conditions: [],
         continuous: false,
@@ -62,7 +76,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
     sampleConditionsResult: [] as Sample[],
     entetyAndSampleResult: [] as Sample[],
     techVariables: [
-      { 
+      {
         title: 'methods',
         conditions: [],
         continuous: false,
@@ -72,6 +86,8 @@ export const useWizzardStore = defineStore('wizzardStore', {
     techConditionsResult: [] as Sample[],
     result: [] as Sample[],
     tmpResult: [] as string[],
+    spaceId: null,
+    projectId: null,
   }),
 
   actions: {
@@ -80,14 +96,14 @@ export const useWizzardStore = defineStore('wizzardStore', {
      * @param variable - The variable to add.
      */
     addVariable(variable: ProjectEntity) {
-      this.variables.push(variable);
+      this.biologicalSampleVariables.push(variable);
     },
     /**
      * Removes a variable from the list of variables by its title.
      * @param title - The title of the variable to remove.
      */
     removeVariable(title: string) {
-      this.variables = this.variables.filter(variable => variable.title !== title);
+      this.biologicalSampleVariables = this.biologicalSampleVariables.filter(variable => variable.title !== title);
     },
     /**
      * Updates the entity conditions result by creating table entries for the entity variables.
@@ -115,7 +131,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
      * @returns {boolean} - Returns true if the update is successful.
      */
     updateTech() {
-      const SAMPLE_TYPE = 'TECHNICAL_SAMPLE';
+      const SAMPLE_TYPE = 'DNA';
       this.techConditionsResult = this.createTableEntries(this.techVariables, SAMPLE_TYPE);
       this.result = this.crossProductSamples(this.entetyAndSampleResult, this.techConditionsResult);
       this.tmpResult = JSON.stringify(this.result);
@@ -129,12 +145,9 @@ export const useWizzardStore = defineStore('wizzardStore', {
      */
     createTableEntries(Variables: TableVariable[], sampleType: string) {
       let entetyConditionCombinations = this.generateConditionCombinations(Variables);
-
-      if (!entetyConditionCombinations.length) return null;
-
+      if (!entetyConditionCombinations.length) return []; // Changed from return null to return []
       entetyConditionCombinations = entetyConditionCombinations.map((combination) => {
         const concatName = combination.map(condition => Object.values(condition)[0]).join(' ; ');
-
         return {
           conditions: combination,
           externalDBID: '',
@@ -225,68 +238,64 @@ export const useWizzardStore = defineStore('wizzardStore', {
      * Completes the sample creation process by saving entity, sample, and technical conditions.
      */
     async onComplete() {
+      // The biological samples need to be saved in the user defined materials/Samples
+      // as an object or sample
+      console.log("🚀 ~ onComplete is running", this.sampleConditionsResult)
+      await this.createSamples(this.sampleConditionsResult);
 
-      
-      // Save entity conditions 
-      await this.createSamples(this.entetyConditionsResult, this.projectContext);
-
-      // Save sample conditions
-      await this.createSamples(this.sampleConditionsResult, this.projectContext);
-
-      // Save technical conditions
-      await this.createSamples(this.entetyAndSampleResult, this.projectContext);
+      // The Technical Samples are children of the Biological Samples.  
+      await this.createTechnicalSamples(this.techConditionsResult, this.projectContext);
 
       // Reset all variables
       // this.reset();
     },
- 
-    /**
-     * Creates samples for the given samples and project context.
-     * @param samples - The samples to create.
-     * @param projectContext - The project context.
-     */
 
-
-    async createSamples(samples: any[], projectContext: ProjectContext) {
+    async createSamples(samples: Sample[]) {
+      
+      const sampleCreations:openbis.SampleCreation[] = [];
       for (const sample of samples) {
-        this.createSample(sample, projectContext);
+        if (sample.sampleType === 'BIOLOGICAL') {
+          const entityCreation = await this.prepareSample(sample, this.projectContext);
+          sampleCreations.push(entityCreation);
+        }
+        else if(sample.sampleType== 'DNA') 
+        {
+          const technicalCreation = await this.prepareTechnicalSample(sample, this.projectContext);
+          sampleCreations.push(technicalCreation);
+        }
       }
+      useOpenBisStore().v3?.createSamples(sampleCreations);
     },
 
-    /**
-     * Creates a sample for the given sample and project context.
-     * @param sample - The sample to create.
-     * @param projectContext - The project context.
-     * @returns {openbis.SampleCreation} - The created sample.
-     */
-    createSample(sample: Sample, projectContext: ProjectContext) {
-      console.log("🚀 ~ createSample ~ sample:", sample)
+    async prepareSample(entity: Sample, projectContext: ProjectContext):Promise<openbis.SampleCreation> {
       const sampleCreation = new openbis.SampleCreation();
-      sampleCreation.setTypeId(new openbis.EntityTypePermId(sample.sampleType));
-      sampleCreation.setSpaceId(new openbis.SpacePermId(projectContext.space));
-      sampleCreation.setCreationId(new openbis.CreationId(sample.secondaryName));
-      
+      // The enteties are saved in the Space Materials/Samples Info
+      sampleCreation.setCode(entity.secondaryName);
+      sampleCreation.setSpaceId(new openbis.SpacePermId("MATERIALS"))
+      sampleCreation.setTypeId(new openbis.EntityTypePermId("BIOLOGICAL"));
+      sampleCreation.setExperimentId(new openbis.ExperimentIdentifier("/MATERIALS/SAMPLES/GENERAL_SAMPLES"));
 
-      // Iterate over conditions and set property for each
-      for (const condition of sample.conditions) {
-        for (const [key, value] of Object.entries(condition)) {
-          sampleCreation.setProperty(key, value); 
-        }
+      return sampleCreation;
+    },
+
+
+    async createTechnicalSamples(samples: Sample[], projectContext: ProjectContext) {
+      console.log("🚀 ~ createTechnicalSamples ~ samples:", samples)
+      const sampleCreations:openbis.SampleCreation[] = [];
+      for (const sample of samples) {
+        const entityCreation = await this.prepareTechnicalSample(sample, this.projectContext);
+        sampleCreations.push(entityCreation);
       }
+      useOpenBisStore().v3?.createSamples(sampleCreations);
+    },
 
-      if (sample.parent) {
-        const parentSampleCreation = sampleCreationsDict[sample.parent];
-        if (parentSampleCreation) {
-          sampleCreation.setParentIds([parentSampleCreation.getCreationId()]);
-
-          const parentChildIds = parentSampleCreation.getChildIds() || [];
-          parentChildIds.push(sampleCreation.getCreationId());
-          parentSampleCreation.setChildIds(parentChildIds);
-        } else {
-          console.log('Parent sample not found');
-        }
-      }
-
+    async prepareTechnicalSample(entity: Sample, projectContext: ProjectContext):Promise<openbis.SampleCreation> {
+      const sampleCreation = new openbis.SampleCreation();
+      // The enteties are saved in the Space Materials/Samples Info
+      sampleCreation.setCode(entity.secondaryName);
+      sampleCreation.setSpaceId(new openbis.SpacePermId(this.spaceContext.code as string))
+      sampleCreation.setTypeId(new openbis.EntityTypePermId("DNA"));
+      sampleCreation.setExperimentId(new openbis.ExperimentPermId(this.collectionContext.code));
       return sampleCreation;
     },
 
@@ -294,15 +303,15 @@ export const useWizzardStore = defineStore('wizzardStore', {
      * Resets the store to its initial state.
      */
     reset() {
-      this.selectedVariables = [];
-      this.variables = [
+      this.selectedBiologicalEntityVariables = [];
+      this.biologicalSampleVariables = [
         { title: 'genotype', conditions: [], continuous: false, unit: null },
         { title: 'color', conditions: [], continuous: false, unit: null },
       ];
       this.projectContext = {
         UUID: '',
         space: null,
-        name: null,
+        code: null,
         contactPerson: null,
         manager: null,
         description: null,

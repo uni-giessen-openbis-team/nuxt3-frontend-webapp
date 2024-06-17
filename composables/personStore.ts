@@ -24,7 +24,7 @@ export const usePersonStore = defineStore('person',{
       listPersonsWithCriteria({ criteria }) {
         return this.listPersons({ criteria, options: fetchPersonCompletely() })
       },
-
+      
     
 
         

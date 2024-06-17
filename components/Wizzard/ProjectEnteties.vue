@@ -7,7 +7,7 @@
 
 import { ref } from 'vue'
 
-const { variables, entetyVariables } = storeToRefs(useWizzardStore())
+const { biologicalSampleVariables: variables, entetyVariables } = storeToRefs(useWizzardStore())
 
 
 const tab = ref('')

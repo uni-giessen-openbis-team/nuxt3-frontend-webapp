@@ -1,3 +1,50 @@
+
+<script setup lang="ts">
+
+const showModal = ref(false);
+
+const MINDESCLENGTH = 20;
+
+interface CollectionContext {
+  code: string;
+  description: string;
+}
+
+const collectionContext = ref<CollectionContext>({
+  code: '',
+  description: '',
+  
+});
+
+// Reset new collection data
+const resetNewCollection = () => {
+  collectionContext.value = {
+    code: '',
+    description: ''
+  };
+};
+
+// Function to create a new collection
+// For each Experiment, There need to be at least 3 collections. 
+// 1. Biological_Entities
+// 2. Biological_Samples
+// 3. Technical_Sample
+const createCollection = async () => {
+  try {
+    const typeId = 'DEFAULT_EXPERIMENT'
+    await useCollectionStore().createCollection(collectionContext.value.code, typeId, useWizzardStore().projectContext.code as string );
+    resetNewCollection();
+  } catch (error: any) {
+    error.value = 'Failed to create collection. Please try again.';
+  }
+};
+
+const saveCollection = async () => {
+  console.log("🚀 ~ saveCollection ~ collectionContext.value:", collectionContext.value.code);
+  await createCollection();
+};
+</script>
+
 <template>
   <v-btn @click="showModal = true" color="primary">Add New Collection</v-btn>
   <v-dialog v-model="showModal" max-width="600px">
@@ -28,54 +75,3 @@
   </v-dialog>
 </template>
 
-<script setup lang="ts">
-import openbis from '~/composables/openbis.esm';
-import { ref, defineProps } from 'vue';
-
-const props = defineProps<{
-  spaceId: string;
-  projectId: string;
-  collectionId: string;
-}>();
-
-const showModal = ref(false);
-
-const MINDESCLENGTH = 20;
-
-interface CollectionContext {
-  code: string;
-  description: string;
-}
-
-const collectionContext = ref<CollectionContext>({
-  code: '',
-  description: '',
-});
-
-// Reset new collection data
-const resetNewCollection = () => {
-  collectionContext.value = {
-    code: '',
-    description: ''
-  };
-};
-
-// Function to create a new collection
-const createCollection = async () => {
-  try {
-    await useCollectionStore().createCollection(props.collectionId, props.projectId, props.spaceId);
-    resetNewCollection();
-  } catch (error: any) {
-    error.value = 'Failed to create collection. Please try again.';
-  }
-};
-
-const saveCollection = async () => {
-  console.log("🚀 ~ saveCollection ~ collectionContext.value:", collectionContext.value.code);
-  await createCollection();
-};
-</script>
-
-<style>
-/* Add any specific styles if needed */
-</style>

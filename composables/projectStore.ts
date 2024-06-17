@@ -23,6 +23,13 @@ export const useProjectStore = defineStore('project', {
       const result = await useOpenBisStore().v3!.searchProjects(psc, new openbis.ProjectFetchOptions())
       return result.getObjects()
     },
+    
+    async getProjectsOfSpaceCompletely(spaceId: string): Promise<openbis.Project[]> {
+      const psc = new openbis.ProjectSearchCriteria()
+      psc.withSpace().withCode().thatEquals(spaceId)
+      const result = await useOpenBisStore().v3!.searchProjects(psc, fetchProjectCompletely())
+      return result.getObjects()
+    },
 
     async getProject(projectId: string, options = {}): Promise<openbis.Project> {
       const openBisStore = useOpenBisStore()
@@ -30,8 +37,8 @@ export const useProjectStore = defineStore('project', {
         [new openbis.ProjectPermId(projectId)],
         new openbis.ProjectFetchOptions()
       )
-      return result[0]
-    },
+      return result[projectId]
+    }, 
 
     async getProjectCompletely(projectId: string): Promise<openbis.Project> {
       const openBisStore = useOpenBisStore()
@@ -61,25 +68,32 @@ export const useProjectStore = defineStore('project', {
     },
 
     async createProjectWithCollections(projectCode: string, spaceCode: string, description?: string): Promise<openbis.ProjectPermId> {
-      // Use the existing createProject function
       console.log("🚀 ~ createProjectWithCollections ~ projectCode:", projectCode);
       console.log("🚀 ~ createProjectWithCollections ~ spaceCode:", spaceCode);
       console.log("🚀 ~ createProjectWithCollections ~ description:", description);
-      const projectPermId = await this.createProject(projectCode, spaceCode, description)
 
-      // Create collections
-      const collectionStore = useCollectionStore()
-      const collections = [
-        { name: 'Biological_Entities', typeId: 'Q_BIOLOGICAL_ENTITIES' },
-        { name: 'Biological_Samples', typeId: 'Q_BIOLOGICAL_SAMPLES' },
-        { name: 'Technical_Samples', typeId: 'Q_TECHNICAL_SAMPLES' }
-      ]
+      try {
+        // Create the project first
+        const projectPermId = await this.createProject(projectCode, spaceCode, description);
 
-      for (const collection of collections) {
-        await collectionStore.createCollection(collection.name, collection.typeId, projectPermId.getPermId())
+        // Define the collections to be created with the new project
+        const collections = [
+          { name: 'Biological_Entities', typeId: 'Q_BIOLOGICAL_ENTITIY' },
+          { name: 'Biological_Samples', typeId: 'Q_BIOLOGICAL_SAMPLE' },
+          { name: 'Technical_Samples', typeId: 'Q_TECHNICAL_SAMPLE' }
+        ];
+
+        // Create each collection linked to the newly created project
+        const collectionStore = useCollectionStore();
+        for (const collection of collections) {
+          await collectionStore.createCollection(collection.name, collection.typeId, projectPermId.getPermId());
+        }
+
+        return projectPermId;
+      } catch (error) {
+        console.error("Failed to create project with collections:", error);
+        throw error; // Rethrow or handle as needed
       }
-
-      return projectPermId
     },
 
     async updateProject(project: openbis.ProjectUpdate): Promise<void> {
