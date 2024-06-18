@@ -30,3 +30,10 @@
 : 1718357402:0;bun run dev
 : 1718361589:0;echo /usr/bin/zsh
 : 1718367065:0;bun run dev
+: 1718662356:0;conda activate aider; aider
+: 1718663055:0;/add node_modules/@vue/runtime-dom/dist/runtime-dom.d.ts
+: 1718663055:0;/drop node_modules/@vue/runtime-dom/dist/runtime-dom.d.ts
+: 1718663056:0;/add node_modules/@vue/runtime-dom/dist/runtime-dom.d.ts
+: 1718663056:0;/drop node_modules/@vue/runtime-dom/dist/runtime-dom.d.ts
+: 1718710334:0;/add node_modules/vuetify/lib/components/index.d.mts
+: 1718710334:0;/drop node_modules/vuetify/lib/components/index.d.mts

@@ -20,6 +20,7 @@ export const useSampleStore = defineStore('sample', {
       }
     },
 
+
     createSample(sample, projectContext, sampleCreationsDict) {
       const sampleCreation = new openbis.SampleCreation();
       sampleCreation.setTypeId(new openbis.EntityTypePermId(sample.sampleType));
