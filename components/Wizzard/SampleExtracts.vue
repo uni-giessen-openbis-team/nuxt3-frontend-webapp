@@ -11,13 +11,15 @@ const variables: Ref<TableVariable[]> = ref([
   {
     title: 'Growth Medium',
     conditions: ref([]),
-    continous: false,
+    continuous: false,
     unit: null,
+    vocabularyCode: null,
   }, {
     title: 'Treatment',
     conditions: ref([]),
-    continous: false,
+    continuous: false, 
     unit: null,
+    vocabularyCode: null,
   },
 ])
 

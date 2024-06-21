@@ -13,7 +13,7 @@ export const useSampleStore = defineStore('sample', {
         criteria.withExperiment().withPermId().thatEquals(collectionPermId);
         const options = new openbis.SampleFetchOptions();
         const result = await this.v3?.searchSamples(criteria, options);
-        return result.getObjects();
+        return result?.getObjects() || [];
       } catch (error) {
         console.error(`Failed to list samples of collection ${collectionPermId}: ${error}`);
         return [];

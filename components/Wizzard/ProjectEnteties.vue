@@ -1,16 +1,24 @@
 <script setup lang="ts">
+
 /**
  * This is the second step of the Wizzard.
  * Here the user can select the variables that describe the differences between the biological entities.
  * These variables will be later combined with the samples by the Wizzard to create the project.
  */
 
-import { ref } from 'vue'
+import openbis from '@/composables/openbis.esm'
 
 const { biologicalSampleVariables: variables, entetyVariables } = storeToRefs(useWizzardStore())
 
+const allVocabularies = ref<openbis.Vocabulary[]>([])
 
 const tab = ref('')
+
+onMounted(async () => {
+  allVocabularies.value = await useVocabularyStore().listAllVocabularies()
+})
+
+
 </script>
 
 <template>
@@ -23,7 +31,7 @@ const tab = ref('')
     select the unit of the value.
   </div>
   <br>
-  <v-autocomplete
+  <v-combobox
     v-model="entetyVariables"
     label="Experimental variables"
     box
@@ -31,6 +39,7 @@ const tab = ref('')
     :items="variables" 
     multiple
     return-object
+    
   />
   <div>
     <v-card>
@@ -42,15 +51,11 @@ const tab = ref('')
       <v-card-text>
         <v-window v-model="tab">
           <v-window-item v-for="(item, index) in entetyVariables" :key="index" :value="item.title">
-            <div v-if="item.title === 'species'">
+            <div v-if="item.vocabularyCode !== ''">
               <!-- Todo: Add APIComponentsAutocompleteVocabulary -->
               <div>
                 <label for="species-selector">Select Species:</label>
-                <v-select
-                  id="species-selector"
-                  v-model="item.conditions[0]"
-                  :items="['Species 1', 'Species 2', 'Species 3']"
-                ></v-select>
+                <AutocompleteVocabulary :searchTerm="item.vocabularyCode" v-model="item.conditions[0]" />
               </div>
             </div>
             

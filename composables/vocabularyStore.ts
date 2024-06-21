@@ -6,25 +6,25 @@ export const useVocabularyStore = defineStore('vocabulary', {
 
   }),
   actions: {
-    // works
-    async listVocabularies(criteria: openbis.VocabularySearchCriteria, options: openbis.VocabularyFetchOptions): Promise<openbis.SearchResult<openbis.Vocabulary> > {
+
+    async listVocabularies(criteria: openbis.VocabularySearchCriteria, options: openbis.VocabularyFetchOptions): Promise<openbis.Vocabulary[] | undefined> {
       const result = await useOpenBisStore().v3?.searchVocabularies(criteria, options)
-      return result
+      return result?.getObjects() || []
     },
 
-    // works
-    listAllVocabularies(): openbis.Vocabulary[] {
-      return this.listVocabularies(new openbis.VocabularySearchCriteria(), fetchVocabularyCompletely())
+    async listAllVocabularies(): Promise<openbis.Vocabulary[]> {
+      const searchRestuls = await this.listVocabularies(new openbis.VocabularySearchCriteria(), fetchVocabularyCompletely())
+      return searchRestuls || []
     },
 
-    async getVocabulary(vocabularyId: openbis.IVocabularyId, options: openbis.VocabularyFetchOptions): Promise<openbis.Vocabulary > {
+    async getVocabulary(vocabularyId: openbis.IVocabularyId, options: openbis.VocabularyFetchOptions): Promise< openbis.Vocabulary | undefined  > {
       const result = await useOpenBisStore().v3?.getVocabularies([vocabularyId], options)
-      return result
+      return result ? result[0] : undefined
     },
 
-    getVocabularyById(vocabularyId: IVocabularyId): Vocabulary {
+    async getVocabularyById(vocabularyId: openbis.IVocabularyId): Promise<openbis.Vocabulary | undefined> {
       return this.getVocabulary(vocabularyId, fetchVocabularyCompletely())
-    },
+    }, 
 
     // getVocabularyByCode(vocabularyCode: string): openbis.Vocabulary {
     //   return this.getVocabulary(new VocabularyPermId(vocabularyCode), fetchVocabularyCompletely())
@@ -44,17 +44,19 @@ export const useVocabularyStore = defineStore('vocabulary', {
       return result?.getObjects() || []
     },
 
-    listAllVocabularyTerms(): VocabularyTerm[] {
+    listAllVocabularyTerms(): Promise<openbis.VocabularyTerm[]> {
       return this.listVocabularyTerms(new openbis.VocabularyTermSearchCriteria(), fetchVocabularyTermCompletely())
     },
 
-    listVocabularyTermsByVocabularyId(vocabularyId) {
-      const criteria = new openbis.VocabularyTermSearchCriteria().withVocabulary().withId().thatEquals(vocabularyId)
-      return this.listVocabularyTerms(criteria)
+    listVocabularyTermsByVocabularyId(vocabularyId: string) {
+      const criteria = new openbis.VocabularyTermSearchCriteria()
+      criteria.withVocabulary().withId().thatEquals(vocabularyId)
+      return this.listVocabularyTerms(criteria, fetchVocabularyTermCompletely())
     },
 
-    listVocabularyTermsByVocabularyCode(vocabularyCode: string) {
-      const criteria : openbis.VocabularyTermSearchCriteria = new openbis.VocabularyTermSearchCriteria().withVocabulary().withCode().thatEquals(vocabularyCode)
+    listVocabularyTermsByVocabularyCode(vocabularyCode: string): Promise<openbis.VocabularyTerm[]> {
+      const criteria: openbis.VocabularyTermSearchCriteria = new openbis.VocabularyTermSearchCriteria()
+      criteria.withVocabulary().withCode().thatEquals(vocabularyCode)
       return this.listVocabularyTerms(criteria, fetchVocabularyTermCompletely())
     },
 

@@ -43,6 +43,7 @@ const deleteCollection = async (permId: string) => {
     await collectionStore.deleteCollection(permId ,"because");
 }
 import Samples from '@/components/Table/Samples.vue'
+import ExperimentSetup from '~/components/Wizzard/ExperimentSetup.vue';
 </script>
 
 <style scoped>

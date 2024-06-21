@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { FormWizard, TabContent } from 'vue3-form-wizard';
 import 'vue3-form-wizard/dist/style.css';
 
+
 const tab = ref('');
 const store = useWizzardStore();
 
@@ -15,9 +16,7 @@ const collectionId = route.params.collection_id as string
 
 const  {entetyConditionsResult, entetyAndSampleResult, result} = storeToRefs(useWizzardStore())  
 
-// set the store spaceId and projectId
-
-onMounted(() => {
+onMounted(async () => {
   // set collection context code
   useWizzardStore().collectionContext.code = collectionId as string
   useWizzardStore().projectContext.code = projectId as string
@@ -31,6 +30,7 @@ onMounted(() => {
 
 
   <v-container>
+
   <h2>
     Create a new samples for collection {{collectionId}}
   </h2>

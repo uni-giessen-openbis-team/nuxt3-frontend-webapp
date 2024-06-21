@@ -6,7 +6,7 @@ Spaces are used to group projects and experiments.
 import { defineStore } from 'pinia'
 import openbis from './openbis.esm'
 
-export const useSpaceStore = defineStore('spaces', {
+export const useSpaceStore = defineStore('spaces', { 
   actions: {
     async getAllSpaces(): Promise< openbis.Space[] > {
       const criteria = new openbis.SpaceSearchCriteria()

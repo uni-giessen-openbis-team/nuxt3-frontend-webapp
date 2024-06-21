@@ -1,21 +1,27 @@
 <script setup lang="ts">
 import openbis from '@/composables/openbis.esm'
+
 const { searchTerm } = defineProps<{
   searchTerm: string
 }>()
 
 const  modelValue = defineModel<{ modelValue: string[] }>()
+const vocabularyTerms = ref<openbis.VocabularyTerm[]>([])
 
-const vocabularyTermList = ref([])
 onMounted(async () => {
-  const vocabularyTerms = await useVocabularyStore().listVocabularyTermsByVocabularyCode(searchTerm)
-})
+   vocabularyTerms.value = await useVocabularyStore().listVocabularyTermsByVocabularyCode(searchTerm)
+}) 
+
 </script>
 
 <template>
+  <div v-if="vocabularyTerms.length > 0">
   <v-autocomplete
     v-model="modelValue"
-    :items="vocabularyTermList"
-    multiple
+    :items="vocabularyTerms"
+    item-title="label"
   />
+  Code {{ modelValue}}
+</div>
+
 </template>

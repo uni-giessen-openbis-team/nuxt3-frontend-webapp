@@ -3,6 +3,7 @@ export type ProjectEntity = {
   conditions: Array<any>;
   continuous: boolean;
   unit: string | null;
+  vocabularyCode: string | null;
 };
 
 export interface ProjectContext {

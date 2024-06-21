@@ -4,6 +4,16 @@ import openbis from '@/composables/openbis.esm'
 
 export const useDatasetStore = defineStore('dataset', {
   actions: {
+
+
+    // create a Dataset and return the Ids of the created Datasets
+    async createDataSetForSample(sample: openbis.Sample): Promise<openbis.DataSetPermId[]> {
+      const datasetCreation = new openbis.DataSetCreation();
+      datasetCreation.setSampleId(sample.getPermId());
+      return await useOpenBisStore().v3?.createDataSets([datasetCreation]) || [];
+    },
+
+
     async listDataSets(criteria = new openbis.DataSetSearchCriteria(), options = fetchDataSetCompletely()): Promise<openbis.DataSet[]> {
       try {
         const openBisStore = useOpenBisStore()

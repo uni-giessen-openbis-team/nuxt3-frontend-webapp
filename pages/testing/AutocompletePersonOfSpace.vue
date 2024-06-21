@@ -1,5 +1,5 @@
 <script setup>
-import AutocompletePersonsOfSpace from '@/components/APIComponents/AutocompletePersonsOfSpace.vue'
+import AutocompletePersonsOfSpace from '~/components/APIComponents/Autocomplete/PersonsOfSpace.vue'
 const spaceName = 'DEFAULT'
 const person = [{ test: 'test' }]
 </script>
