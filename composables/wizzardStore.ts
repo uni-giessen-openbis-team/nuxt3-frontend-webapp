@@ -135,7 +135,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
      * @returns {boolean} - Returns true if the update is successful.
      */
     updateTech() {
-      const SAMPLE_TYPE = 'DNA';
+      const SAMPLE_TYPE = 'TECHNICAL';
       this.techConditionsResult = this.createTableEntries(this.techVariables, SAMPLE_TYPE);
       this.result = this.crossProductSamples(this.entetyAndSampleResult, this.techConditionsResult);
       this.tmpResult = JSON.stringify(this.result);
@@ -265,7 +265,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
           const entityCreation = await this.prepareSample(sample, this.projectContext);
           sampleCreations.push(entityCreation);
         }
-        else if(sample.sampleType== 'DNA') 
+        else if(sample.sampleType== 'TECHNICAL') 
         {
           const technicalCreation = await this.prepareTechnicalSample(sample, this.projectContext);
           sampleCreations.push(technicalCreation);
@@ -302,9 +302,11 @@ export const useWizzardStore = defineStore('wizzardStore', {
     },
 
     async prepareDataSet(sample: Sample, projectContext: ProjectContext):Promise<openbis.DataSetCreation> {
+
       const dataSetCreation = new openbis.DataSetCreation();
+      dataSetCreation.setCode(sample.secondaryName);
       dataSetCreation.setSampleId(new openbis.SamplePermId(sample.secondaryName));
-      dataSetCreation.setTypeId(new openbis.EntityTypePermId(sample.sampleType));
+      dataSetCreation.setTypeId(new openbis.EntityTypePermId("ANALYZED_DATA"));
       return dataSetCreation;
     },
 
