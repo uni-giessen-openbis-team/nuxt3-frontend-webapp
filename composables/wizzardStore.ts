@@ -23,6 +23,15 @@ export const useWizzardStore = defineStore('wizzardStore', {
       code: '',
     },
 
+    projectContext: {
+      UUID: '',
+      space: null,
+      code: '',
+      contactPerson: null,
+      manager: null,
+      description: null,
+    } as ProjectContext,
+
     collectionContext: {
       code: '',
       typeId: '',
