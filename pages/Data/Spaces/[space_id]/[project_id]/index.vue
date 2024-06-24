@@ -76,7 +76,6 @@ onMounted(() => {
   <v-container> 
     
    <div v-if="project">
-    {{ project.getDescription() }}
       <h2>{{ project.getCode() }}</h2>
       <p>{{ project.getDescription() }}</p>
       <v-btn color="red" @click.stop="deleteProject">Delete Project</v-btn>

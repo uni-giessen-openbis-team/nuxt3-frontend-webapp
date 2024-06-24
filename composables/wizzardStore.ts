@@ -124,7 +124,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
      * @returns {boolean} - Returns true if the update is successful.
      */
     updateBiol() {
-      const SAMPLE_TYPE = 'BIOLOGICAL_SAMPLE';
+      const SAMPLE_TYPE = 'BIOLOGICAL';
       this.sampleConditionsResult = this.createTableEntries(this.sampleVariables, SAMPLE_TYPE);
       this.entetyAndSampleResult = this.crossProductSamples(this.entetyConditionsResult, this.sampleConditionsResult);
       return true;
@@ -249,13 +249,11 @@ export const useWizzardStore = defineStore('wizzardStore', {
       // The biological samples need to be saved in the user defined materials/Samples
       // as an object or sample
       console.log("🚀 ~ onComplete is running", this.sampleConditionsResult)
-      await this.createSamples(this.sampleConditionsResult);
+      await this.createSamples(this.entetyAndSampleResult );
 
       // The Technical Samples are children of the Biological Samples. 
     
-      await this.createTechnicalSamples(this.result, this.projectContext);
-
-
+      await this.createTechnicalSamples(this.result);
     },
 
     async createSamples(samples: Sample[]) {
@@ -286,10 +284,9 @@ export const useWizzardStore = defineStore('wizzardStore', {
       return sampleCreation;
     },
 
-    async createTechnicalSamples(samples: Sample[], projectContext: ProjectContext) {
+    async createTechnicalSamples(samples: Sample[]) {
       console.log("🚀 ~ createTechnicalSamples ~ samples:", samples)
       const sampleCreations:openbis.SampleCreation[] = [];
-      const dataSetCreations:openbis.DataSetCreation[] = [];
       for (const sample of samples) {
         const entityCreation = await this.prepareTechnicalSample(sample, this.projectContext);
         // const dataSetCreation = await this.prepareDataSet(sample, this.projectContext);
@@ -301,13 +298,6 @@ export const useWizzardStore = defineStore('wizzardStore', {
       // useOpenBisStore().v3?.createDataSets(dataSetCreations);
     },
 
-    // async prepareDataSet(sample: Sample, projectContext: ProjectContext):Promise<openbis.DataSetCreation> {
-    //   const dataSetCreation = new openbis.DataSetCreation();
-    //   dataSetCreation.setCode(sample.secondaryName);
-    //   dataSetCreation.setSampleId(new openbis.SamplePermId(sample.secondaryName));
-    //   dataSetCreation.setTypeId(new openbis.EntityTypePermId("ANALYZED_DATA"));
-    //   return dataSetCreation;
-    // },
 
     async prepareTechnicalSample(sample: Sample, projectContext: ProjectContext):Promise<openbis.SampleCreation> {
       const sampleCreation = new openbis.SampleCreation();

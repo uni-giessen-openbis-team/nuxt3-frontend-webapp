@@ -108,25 +108,6 @@ onMounted(fetchSpaces)
     </v-dialog>
 
     <v-container>
-      <h1>Spaces</h1>
-
-      <section style="background-color: #f0f0f0; " class="p-4"> <!-- Light grey background -->
-        <h2>
-          <v-icon color="blue">mdi-archive</v-icon> <!-- Icon for Inventory -->
-          Inventory
-        </h2>
-        <v-row>
-          <v-col v-for="space in inventorySpaces" :key="space.getPermId().toString()" cols="12" sm="6" md="4">
-            <v-card @click="() => router.push(`/data/spaces/${space.getPermId()}`)" class="space-card">
-              <v-card-title>{{ space.getCode() }}</v-card-title>
-              <v-card-subtitle>{{ space.getDescription() }}</v-card-subtitle>
-        
-            </v-card>
-          </v-col>
-        </v-row>
-      </section>
-      <br>
-      <!-- Lab Notebook Section -->
       <section style="background-color: #e3f2fd;" class="p-4 "> <!-- Light blue background -->
         <h2>
           <v-icon color="green">mdi-book-open-page-variant</v-icon> <!-- Icon for Lab Notebook -->

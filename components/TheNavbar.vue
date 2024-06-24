@@ -6,13 +6,11 @@ const store = useOpenBisStore()
 const { mdAndUp } = useDisplay()
 
 const navItems = [
-  { name: 'Home', icon: 'mdi-home', path: '/' },
   { name: 'Workflows', icon: 'mdi-sitemap', path: '/workflows' },
-  { name: 'Testing', icon: 'mdi-account-question', path: '/testing' },
-  { name: 'Data', icon: 'mdi-folder', path: '/data/spaces' },
-  { name: 'Add Project', icon: 'mdi-plus-box', path: '/wizzard' },
-]
+  { name: 'Samples', icon: 'mdi-test-tube', path: '/data/spaces/MATERIALS/20240617092410825-595/20240617102725716-600' },
+  { name: 'Notebooks', icon: 'mdi-book', path: '/data/spaces' },
 
+]
 const menuItems = [
   { name: 'Settings', icon: 'mdi-account-cog', path: '/settings' },
   { name: 'Information', icon: 'mdi-information', path: '/Information' },
