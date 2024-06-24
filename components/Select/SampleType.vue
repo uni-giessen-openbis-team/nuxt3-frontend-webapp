@@ -15,6 +15,6 @@ onMounted(async () => {
 <template> 
 
   <div>
-    <v-autocomplete :items="sampleTypes" item-title="code" item-value="code" v-model="modelValue"></v-autocomplete >
+    <v-select :items="sampleTypes" item-title="code" item-value="code" v-model="modelValue"></v-select >
   </div>
 </template>

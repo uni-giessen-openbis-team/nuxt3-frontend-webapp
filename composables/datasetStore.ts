@@ -5,14 +5,18 @@ import openbis from '@/composables/openbis.esm'
 export const useDatasetStore = defineStore('dataset', {
   actions: {
 
-
-    // create a Dataset and return the Ids of the created Datasets
-    async createDataSetForSample(sample: openbis.Sample): Promise<openbis.DataSetPermId[]> {
-      const datasetCreation = new openbis.DataSetCreation();
-      datasetCreation.setSampleId(sample.getPermId());
-      return await useOpenBisStore().v3?.createDataSets([datasetCreation]) || [];
+    async prepareDatasetCreation(sample: openbis.Sample, projectContext: ProjectContext): Promise<openbis.DataSetCreation> {
+      const dataSetCreation = new openbis.DataSetCreation();
+      dataSetCreation.setCode("newCode");
+      dataSetCreation.setSampleId(new openbis.SamplePermId(sample.secondaryName));
+      dataSetCreation.setTypeId(new openbis.EntityTypePermId("ANALYZED_DATA"));
+      return dataSetCreation;
     },
 
+    async createDataset(datasetCreation: openbis.DataSetCreation): Promise<openbis.DataSetPermId[]> {
+      const openBisStore = useOpenBisStore()
+      return await openBisStore.v3?.createDataSets([datasetCreation]) || [];
+    },
 
     async listDataSets(criteria = new openbis.DataSetSearchCriteria(), options = fetchDataSetCompletely()): Promise<openbis.DataSet[]> {
       try {
@@ -21,7 +25,7 @@ export const useDatasetStore = defineStore('dataset', {
         const result = await openBisStore.v3?.searchDataSets(criteria, options)
         console.log('Result from searchDataSets:', result)
         return result?.getObjects() ?? []
-      } catch (error) {
+      } catch (error ) {
         if (error instanceof Error) {
           console.error(`${error.name}: ${error.message}`)
         } else {
@@ -59,15 +63,15 @@ export const useDatasetStore = defineStore('dataset', {
       return this.listDataSets(criteria)
     },
 
-    async listDataSetsOfCollection(collectionId: string): Promise<openbis.DataSet[]> {
+    async listDataSetsOfCollection(collectionId: number): Promise<openbis.DataSet[]> {
       const criteria = new openbis.DataSetSearchCriteria()
       criteria.withExperiment().withId().thatEquals(collectionId)
       return this.listDataSets(criteria)
     },
 
-    async listDataSetsOfObject(objectId: string): Promise<openbis.DataSet[]> {
+    async listDataSetsOfObject(objectPermId: string): Promise<openbis.DataSet[]> {
       const criteria = new openbis.DataSetSearchCriteria()
-      criteria.withSample().withId().thatEquals(objectId)
+      criteria.withSample().withPermId().thatEquals(objectPermId)
       return this.listDataSets(criteria)
     },
 

@@ -7,6 +7,8 @@ export const useSampleStore = defineStore('sample', {
     v3: useOpenBisStore().v3
   }),
   actions: {
+  
+
     async listSamplesOfCollection(collectionPermId: string): Promise<openbis.Sample[]> {
       try {
         const criteria = new openbis.SampleSearchCriteria();

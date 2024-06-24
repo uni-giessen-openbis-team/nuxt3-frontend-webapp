@@ -23,15 +23,6 @@ export const useWizzardStore = defineStore('wizzardStore', {
       code: '',
     },
 
-    projectContext: {
-      UUID: '',
-      space: null,
-      code: '',
-      contactPerson: null,
-      manager: null,
-      description: null,
-    } as ProjectContext,
-
     collectionContext: {
       code: '',
       typeId: '',
@@ -301,23 +292,22 @@ export const useWizzardStore = defineStore('wizzardStore', {
       const dataSetCreations:openbis.DataSetCreation[] = [];
       for (const sample of samples) {
         const entityCreation = await this.prepareTechnicalSample(sample, this.projectContext);
-        const dataSetCreation = await this.prepareDataSet(sample, this.projectContext);
+        // const dataSetCreation = await this.prepareDataSet(sample, this.projectContext);
         sampleCreations.push(entityCreation);
-        dataSetCreations.push(dataSetCreation);
+        // dataSetCreations.push(dataSetCreation);
       }
       // create Datasets for the TechnicalSamples
       useOpenBisStore().v3?.createSamples(sampleCreations);
-      useOpenBisStore().v3?.createDataSets(dataSetCreations);
+      // useOpenBisStore().v3?.createDataSets(dataSetCreations);
     },
 
-    async prepareDataSet(sample: Sample, projectContext: ProjectContext):Promise<openbis.DataSetCreation> {
-
-      const dataSetCreation = new openbis.DataSetCreation();
-      dataSetCreation.setCode(sample.secondaryName);
-      dataSetCreation.setSampleId(new openbis.SamplePermId(sample.secondaryName));
-      dataSetCreation.setTypeId(new openbis.EntityTypePermId("ANALYZED_DATA"));
-      return dataSetCreation;
-    },
+    // async prepareDataSet(sample: Sample, projectContext: ProjectContext):Promise<openbis.DataSetCreation> {
+    //   const dataSetCreation = new openbis.DataSetCreation();
+    //   dataSetCreation.setCode(sample.secondaryName);
+    //   dataSetCreation.setSampleId(new openbis.SamplePermId(sample.secondaryName));
+    //   dataSetCreation.setTypeId(new openbis.EntityTypePermId("ANALYZED_DATA"));
+    //   return dataSetCreation;
+    // },
 
     async prepareTechnicalSample(sample: Sample, projectContext: ProjectContext):Promise<openbis.SampleCreation> {
       const sampleCreation = new openbis.SampleCreation();

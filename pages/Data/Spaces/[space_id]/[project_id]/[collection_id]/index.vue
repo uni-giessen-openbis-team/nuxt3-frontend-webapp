@@ -27,6 +27,12 @@ const fetchSamples = async (collectionPermId: string) => {
   }
 }
 
+// Function to navigate to sample details
+const navigateToSample = (sampleId: string) => {
+  const router = useRouter()
+  router.push(`/data/spaces/${spaceId}/${projectId}/${collectionId}/${sampleId}`)
+}
+
 onMounted(async () => {
   //get collection
   collection.value = await collectionStore.getCollection(collectionId)
@@ -42,8 +48,20 @@ onMounted(async () => {
 const deleteCollection = async (permId: string) => {
     await collectionStore.deleteCollection(permId ,"because");
 }
-import Samples from '@/components/Table/Samples.vue'
-import ExperimentSetup from '~/components/Wizzard/ExperimentSetup.vue';
+
+const props = defineProps<{
+  samples: openbis.Sample[]
+}>()
+
+const headers = [
+  { title: 'Sample Code', value: 'code' },
+  { title: 'Registration Date', value: 'registrationDate' },
+  { title: 'Modification Date', value: 'modificationDate' },
+  { title: 'Properties', value: 'properties' },
+]
+
+const itemKey = 'id'
+
 </script>
 
 <style scoped>
@@ -54,9 +72,6 @@ import ExperimentSetup from '~/components/Wizzard/ExperimentSetup.vue';
 .sample-card:hover {
   transform: scale(1.05);
 }
-
-
-
 </style>
 
 
@@ -67,11 +82,26 @@ import ExperimentSetup from '~/components/Wizzard/ExperimentSetup.vue';
       {{  collection?.getCode() }}
  
     </h1>
-
     <v-btn :to="`/data/spaces/${spaceId}/${projectId}/${collectionId}/wizzard`" >   
       Create Samples for this Collection
     </v-btn>
-    <Samples :samples="samples" />
+
+    <v-data-table
+    class="mt-10 mb-10"
+    :headers="headers"
+    :items="samples"
+    :item-key="itemKey"
+    items-per-page="30"
+  >
+    <template #item.code="{ item }">
+      <v-btn variant="text" :to="`/data/spaces/${spaceId}/${projectId}/${collectionId}/${item.getPermId()}`">
+        {{ item.getCode() }}
+      </v-btn>
+    </template>
+  </v-data-table>
+  <pre>
+    {{ samples }}
+  </pre>
   </v-container>
 
 </template>
