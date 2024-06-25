@@ -14,7 +14,7 @@ const projectId = route.params.project_id as string
 const collectionId = route.params.collection_id as string
 
 
-const  {entetyConditionsResult, entetyAndSampleResult, result} = storeToRefs(useWizzardStore())  
+const  {entityConditionsResult: entetyConditionsResult, entetyAndSampleResult, result} = storeToRefs(useWizzardStore())  
 
 onMounted(async () => {
   // set collection context code
@@ -50,20 +50,20 @@ onMounted(async () => {
       <v-window-item :key="1" value="Create">
         <v-form>
           <FormWizard @on-complete="() => {store.onComplete()}">
-            <TabContent title="Project Enteties" :before-change="store.updateEntety">
+            <TabContent title="Project Enteties" :before-change="store.updateEntityVariables">
               <WizzardProjectEnteties/>
             </TabContent> 
             <TabContent title="Entety Preview">
               <WizzardPreviewTable v-model="entetyConditionsResult" /> 
             </TabContent>
-            <TabContent title="Biological Samples" :before-change="store.updateBiol">
+            <TabContent title="Biological Samples" :before-change="store.updateBiologicalVariables">
               <WizzardSampleExtracts v-model="store.sampleVariables" />
             </TabContent>
             <TabContent title="Biological Samples Preview">
               <WizzardPreviewTable v-model="entetyAndSampleResult" />
             </TabContent>
-            <TabContent title="Technical Samples" :before-change="store.updateTech">
-              <WizzardTechnical v-model="store.techVariables" />
+            <TabContent title="Technical Samples" :before-change="store.updateTechnicalVariables">
+              <WizzardTechnical v-model="store.technicalVariables" />
             </TabContent>
             <TabContent title="Technical Samples Preview">
               <WizzardPreviewTable v-model="result" />

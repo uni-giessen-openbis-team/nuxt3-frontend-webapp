@@ -8,7 +8,7 @@
 
 import openbis from '@/composables/openbis.esm'
 
-const { biologicalSampleVariables: variables, entetyVariables } = storeToRefs(useWizzardStore())
+const { biologicalSampleVariables: variables, entityVariables: entetyVariables } = storeToRefs(useWizzardStore())
 
 const allVocabularies = ref<openbis.Vocabulary[]>([])
 

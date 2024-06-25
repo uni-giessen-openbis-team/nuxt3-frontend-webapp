@@ -3,10 +3,10 @@ import openbis from '@/composables/openbis.esm';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
-const files = ref([]);
+const files = ref<File[]>([]);
 const datasets = ref<openbis.DataSet[]>([]);
 const route = useRoute();
-const sampleId = ref(route.params.sample_id); // Ensure sample_id is correctly set
+const sampleId = route.params.sample_id; // Ensure sample_id is correctly set
 const datasetStore = useDatasetStore();
 
 const spaceId = route.params.space_id as string;
@@ -28,40 +28,20 @@ async function uploadFiles() {
     console.error("No files selected for upload.");
     return;
   }
+  const dataStoreFacade = useOpenBisStore().v3.getDataStoreFacade();
   try {
-    const dataStoreFacade = useOpenBisStore().v3.getDataStoreFacade();
-    const uploadId = await dataStoreFacade.createDataSetUpload("ANALYZED_DATA"); // Create upload ID
-
-    // Create a FormData object to hold the files and additional parameters
-    const formData = new FormData();
-    files.value.forEach(file => formData.append('file', file));
-    formData.append('sessionID', sessionToken);
-    formData.append('uploadID', uploadId);
-    formData.append('dataSetType', 'ANALYZED_DATA');
-
-    // Upload files via the servlet
-    const response = await fetch('/datastore_server/store_share_file_upload', {
-      method: 'POST',
-      body: formData
-    });
-
-    if (!response.ok) {
-      throw new Error('File upload failed');
-    }
-
-    // Create dataset metadata and register the uploaded files
-    const creation = new openbis.UploadedDataSetCreation();
+    const uploadId = await dataStoreFacade.uploadFilesWorkspaceDSS(files.value); 
+    console.log(uploadId);
+    var creation = new openbis.UploadedDataSetCreation();
     creation.setUploadId(uploadId);
     creation.setExperimentId(new openbis.ExperimentIdentifier(`${spaceId}/${projectId}/${collectionId}`));
     creation.setTypeId(new openbis.EntityTypePermId("ANALYZED_DATA", openbis.EntityKind.DATA_SET));
+    creation.setSampleId(new openbis.SampleIdentifier(sampleId as string)); 
 
     const dataSetPermId = await dataStoreFacade.createUploadedDataSet(creation);
     console.log("DataSet created with PermId:", dataSetPermId);
   } catch (error) {
-    console.error("Error during file upload or dataset creation:", error);
-    if (error.message.includes('ERR_NAME_NOT_RESOLVED')) {
-      console.error("Please check your network connection and the server URL.");
-    }
+    console.error("Request failed:", error);
   }
 }
 
@@ -74,20 +54,14 @@ function handleUpload() {
 <template>
   {{ sampleId }}
   <v-container>
-    <SelectDataSetType :sample="sample" />
+    <!-- <SelectDataSetType :sample="sample" /> -->
     <v-row>
       <v-col cols="12">
         <v-card>
           <v-card-title>Upload Data for Sample</v-card-title>
           <v-card-text>
-            <v-file-input
-              v-model="files"
-              show-size
-              class="ma-2"
-              multiple
-              @change="handleUpload"
-              :label="files.length > 0 ? 'Add more files' : 'Choose files'"
-            ></v-file-input>
+            <v-file-input v-model="files" show-size class="ma-2" multiple @change=" "
+              :label="files.length > 0 ? 'Add more files' : 'Choose files'"></v-file-input>
             <v-btn @click="uploadFiles" :disabled="files.length === 0">Upload</v-btn>
           </v-card-text>
         </v-card>

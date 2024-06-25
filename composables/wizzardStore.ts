@@ -15,6 +15,8 @@ type Sample = {
   secondaryName: string;
   count: string;
   sampleType: string;
+  child?: string;
+  
 };
 
 export const useWizzardStore = defineStore('wizzardStore', {
@@ -57,7 +59,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
     ] as ProjectEntity[],
 
 
-    entetyVariables: [
+    entityVariables: [
       {
         title: 'species',
         conditions: [""],
@@ -66,7 +68,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
         vocabularyCode: "Q_NCBI_TAXONOMY",
       },
     ] as ProjectEntity[],
-    entetyConditionsResult: [] as Sample[],
+    entityConditionsResult: [] as Sample[],
     sampleVariables: [
       {
         title: 'tissue',
@@ -78,7 +80,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
     ] as unknown as ProjectEntity[],
     sampleConditionsResult: [] as Sample[],
     entetyAndSampleResult: [] as Sample[],
-    techVariables: [
+    technicalVariables: [
       {
         title: 'Method',
         conditions: [],
@@ -113,9 +115,9 @@ export const useWizzardStore = defineStore('wizzardStore', {
      * Updates the entity conditions result by creating table entries for the entity variables.
      * @returns {boolean} - Returns true if the update is successful.
      */
-    updateEntety() {
+    updateEntityVariables() {
       const SAMPLE_TYPE = 'BIOLOGICAL_ENTITY';
-      this.entetyConditionsResult = this.createTableEntries(this.entetyVariables, SAMPLE_TYPE);
+      this.entityConditionsResult = this.createTableEntries(this.entityVariables, SAMPLE_TYPE);
       return true;
     },
     /**
@@ -123,10 +125,10 @@ export const useWizzardStore = defineStore('wizzardStore', {
      * Combines the entity and sample results.
      * @returns {boolean} - Returns true if the update is successful.
      */
-    updateBiol() {
+    updateBiologicalVariables() {
       const SAMPLE_TYPE = 'BIOLOGICAL';
       this.sampleConditionsResult = this.createTableEntries(this.sampleVariables, SAMPLE_TYPE);
-      this.entetyAndSampleResult = this.crossProductSamples(this.entetyConditionsResult, this.sampleConditionsResult);
+      this.entetyAndSampleResult = this.crossProductSamples(this.entityConditionsResult, this.sampleConditionsResult);
       return true;
     },
     /**
@@ -134,9 +136,9 @@ export const useWizzardStore = defineStore('wizzardStore', {
      * Combines the entity, sample, and technical results.
      * @returns {boolean} - Returns true if the update is successful.
      */
-    updateTech() {
+    updateTechnicalVariables() {
       const SAMPLE_TYPE = 'TECHNICAL';
-      this.techConditionsResult = this.createTableEntries(this.techVariables, SAMPLE_TYPE);
+      this.techConditionsResult = this.createTableEntries(this.technicalVariables, SAMPLE_TYPE);
       this.result = this.crossProductSamples(this.entetyAndSampleResult, this.techConditionsResult);
       this.tmpResult = JSON.stringify(this.result);
       return true;
@@ -153,7 +155,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
 
     createTableEntries(Variables: TableVariable[], sampleType: string) {
       let entetyConditionCombinations = this.generateConditionCombinations(Variables);
-      if (!entetyConditionCombinations.length) return []; // Changed from return null to return []
+      if (!entetyConditionCombinations.length) return []; 
       entetyConditionCombinations = entetyConditionCombinations.map((combination) => {
         const concatName = combination.map(condition => this.sanitizeName(Object.values(condition)[0])).join('_');
         return {
@@ -162,7 +164,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
           secondaryName: concatName,
           count: '1',
           sampleType,
-        };
+        } as Sample;
       });
 
       return entetyConditionCombinations;
@@ -184,7 +186,6 @@ export const useWizzardStore = defineStore('wizzardStore', {
           if (item.continuous) conditions.push(`${condition} ${item.unit}`);
           else conditions.push(`${condition}`);
         }
-
         titledConditions.push(conditions);
       }
 
@@ -220,15 +221,8 @@ export const useWizzardStore = defineStore('wizzardStore', {
       }, [[]]);
     },
 
-    /**
-     * Generates the cross product of the parent and child samples.
-     * @param parents - The parent samples.
-     * @param childs - The child samples.
-     * @returns {Sample[]} - The cross product of the parent and child samples.
-     */
-    crossProductSamples(parents: combinedVariable[], children: combinedVariable[]) {
+    crossProductSamples(parents: combinedVariable[], children: combinedVariable[]):  Sample[] {
       const result = [];
-
       for (const parent of parents) {
         if (Number(parent.count) >= 1) {
           for (const child of children) {
@@ -242,18 +236,9 @@ export const useWizzardStore = defineStore('wizzardStore', {
       }
       return result;
     },
-    /**
-     * Completes the sample creation process by saving entity, sample, and technical conditions.
-     */
-    async onComplete() {
-      // The biological samples need to be saved in the user defined materials/Samples
-      // as an object or sample
-      console.log("🚀 ~ onComplete is running", this.sampleConditionsResult)
-      await this.createSamples(this.entetyAndSampleResult );
 
-      // The Technical Samples are children of the Biological Samples. 
-    
-      await this.createTechnicalSamples(this.result);
+    async onComplete() {
+      await this.createSamples(this.entetyAndSampleResult );
     },
 
     async createSamples(samples: Sample[]) {
@@ -265,40 +250,41 @@ export const useWizzardStore = defineStore('wizzardStore', {
         }
         else if(sample.sampleType== 'TECHNICAL') 
         {
+          // The Technical Samples are children of the Biological Samples. 
           const technicalCreation = await this.prepareTechnicalSample(sample, this.projectContext);
           sampleCreations.push(technicalCreation);
-
         }
       }
+      // this.setParentsAndChilds(sampleCreations, samples);
+        
+      
       useOpenBisStore().v3?.createSamples(sampleCreations);
     },
 
-    async prepareSample(entity: Sample, projectContext: ProjectContext):Promise<openbis.SampleCreation> {
+    // setP arentsAndChilds (sampleCreations: openbis.SampleCreation[], samples: Sample[]) {
+    //   for (const sample of samples) {
+    //     if (sample.child) {
+    //       const parent = samples.find(s => s.secondaryName === sample.child);
+    //       if (parent) {
+    //         sampleCreations.push(parent);
+    //       }
+    //     }
+    //   }
+    // },
+
+    async prepareSample(sample: Sample, projectContext: ProjectContext):Promise<openbis.SampleCreation> {
       const sampleCreation = new openbis.SampleCreation();
-      console.log("🚀 ~ prepareSample ~ entity:", entity)
       // The enteties are saved in the Space Materials/Samples Info
-      sampleCreation.setCode(entity.secondaryName);
+      sampleCreation.setCode(sample.secondaryName);
       sampleCreation.setSpaceId(new openbis.SpacePermId("MATERIALS"))
       sampleCreation.setTypeId(new openbis.EntityTypePermId("BIOLOGICAL"));
+      sampleCreation.setCreationId(new openbis.CreationId(sample.secondaryName));
       sampleCreation.setExperimentId(new openbis.ExperimentIdentifier("/MATERIALS/SAMPLES/GENERAL_SAMPLES"));
+   
       return sampleCreation;
     },
 
-    async createTechnicalSamples(samples: Sample[]) {
-      console.log("🚀 ~ createTechnicalSamples ~ samples:", samples)
-      const sampleCreations:openbis.SampleCreation[] = [];
-      for (const sample of samples) {
-        const entityCreation = await this.prepareTechnicalSample(sample, this.projectContext);
-        // const dataSetCreation = await this.prepareDataSet(sample, this.projectContext);
-        sampleCreations.push(entityCreation);
-        // dataSetCreations.push(dataSetCreation);
-      }
-      // create Datasets for the TechnicalSamples
-      useOpenBisStore().v3?.createSamples(sampleCreations);
-      // useOpenBisStore().v3?.createDataSets(dataSetCreations);
-    },
-
-
+ 
     async prepareTechnicalSample(sample: Sample, projectContext: ProjectContext):Promise<openbis.SampleCreation> {
       const sampleCreation = new openbis.SampleCreation();
       // The enteties are saved in the Space Materials/Samples Info
@@ -306,6 +292,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
       sampleCreation.setSpaceId(new openbis.SpacePermId(this.spaceContext.code as string))
       sampleCreation.setTypeId(new openbis.EntityTypePermId(sample.sampleType));
       sampleCreation.setExperimentId(new openbis.ExperimentPermId(this.collectionContext.code));
+      sampleCreation.setCreationId(new openbis.CreationId(sample.secondaryName));
       return sampleCreation;
     },
 
@@ -326,16 +313,16 @@ export const useWizzardStore = defineStore('wizzardStore', {
         manager: null,
         description: null,
       };
-      this.entetyVariables = [
+      this.entityVariables = [
         { title: 'species', conditions: [""], continuous: false, unit: null, vocabularyCode: null },
       ];
-      this.entetyConditionsResult = [];
+      this.entityConditionsResult = [];
       this.sampleVariables = [
         { title: 'tissue', conditions: [], continuous: false, unit: null, vocabularyCode: null },
       ];
       this.sampleConditionsResult = [];
       this.entetyAndSampleResult = [];
-      this.techVariables = [
+      this.technicalVariables = [
         { title: 'methods', conditions: [], continuous: false, unit: null, vocabularyCode: null },
       ];
       this.techConditionsResult = [];
@@ -351,7 +338,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
      */
     getEntetyConditionsResult(state): ConditionsResult[] {
       const SAMPLE_TYPE = 'BIOLOGICAL_ENTITY';
-      let entetyConditionCombinations = state.entetyVariables.map(entety => ({
+      let entetyConditionCombinations = state.entityVariables.map(entety => ({
         title: entety.title,
         conditions: entety.conditions.map(condition => ({
           [entety.title]: entety.continuous ? `${condition} ${entety.unit}` : `${condition}`

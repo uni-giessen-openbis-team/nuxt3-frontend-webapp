@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import openbis from '@/composables/openbis.esm'
 import Collections from '~/pages/Data/collections.vue';
 
@@ -33,6 +33,20 @@ const navigateToSample = (sampleId: string) => {
   router.push(`/data/spaces/${spaceId}/${projectId}/${collectionId}/${sampleId}`)
 }
 
+// Function to delete a sample
+const deleteSample = async (sampleId: string) => {
+  try {
+    const sampleIdentifier = new openbis.SampleIdentifier(sampleId)
+    const deletionOptions = new openbis.SampleDeletionOptions()
+    deletionOptions.setReason("User requested deletion")
+    const deletionId = await useOpenBisStore().v3?.deleteSamples([sampleIdentifier], deletionOptions)
+    await useOpenBisStore().v3?.confirmDeletions([deletionId])
+    fetchSamples(collectionId) // Refresh the samples list after deletion
+  } catch (error) {
+    console.error(`Failed to delete sample with id ${sampleId}:`, error)
+  }
+}
+
 onMounted(async () => {
   //get collection
   collection.value = await collectionStore.getCollection(collectionId)
@@ -58,6 +72,7 @@ const headers = [
   { title: 'Registration Date', value: 'registrationDate' },
   { title: 'Modification Date', value: 'modificationDate' },
   { title: 'Properties', value: 'properties' },
+  { title: 'Actions', value: 'actions' } // New column for actions
 ]
 
 const itemKey = 'id'
@@ -83,7 +98,8 @@ const itemKey = 'id'
  
     </h1>
     <v-btn :to="`/data/spaces/${spaceId}/${projectId}/${collectionId}/wizzard`" >   
-      Create Samples for this Collection
+      <v-icon left>mdi-plus</v-icon> <!-- Added icon for data creation -->
+      Create Samples
     </v-btn>
 
     <v-data-table
@@ -98,10 +114,12 @@ const itemKey = 'id'
         {{ item.getCode() }}
       </v-btn>
     </template>
+    <template #item.actions="{ item }">
+      <v-btn color="red" icon @click="deleteSample(item.getIdentifier().toString())">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </template>
   </v-data-table>
-  <pre>
-    {{ samples }}
-  </pre>
   </v-container>
 
 </template>
