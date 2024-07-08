@@ -7,9 +7,6 @@
     "*.css": "postcss"
   },
   "editor.formatOnSave": false,
-  "DockerRun.DisableDockerrc": true,
-  "DockerRun.Containers": [
-    "cd27734cbbf8",
-    "3a64a555e7d7"
-  ]
+  "DockerRun.Containers": [],
+  "editor.defaultFormatter": "Vue.volar"
 }

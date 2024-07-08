@@ -15,7 +15,7 @@ const collectionId = route.params.collection_id as string;
 
 // Function to fetch datasets for a given sample
 async function fetchDatasetsForSample() {
-  datasets.value = await datasetStore.listDataSetsOfObject(sampleId.value as string);
+  datasets.value = await datasetStore.listDataSetsOfObject(sampleId as string);
 }
 
 onMounted(() => {
@@ -29,10 +29,11 @@ async function uploadFiles() {
     return;
   }
   const dataStoreFacade = useOpenBisStore().v3.getDataStoreFacade();
+  // console.log('spaceID', spaceId, 'projectID', projectId, 'collectionID', collectionId, 'sampleID', sampleId);
   try {
     const uploadId = await dataStoreFacade.uploadFilesWorkspaceDSS(files.value); 
     console.log(uploadId);
-    var creation = new openbis.UploadedDataSetCreation();
+    const creation = new openbis.UploadedDataSetCreation();
     creation.setUploadId(uploadId);
     creation.setExperimentId(new openbis.ExperimentIdentifier(`${spaceId}/${projectId}/${collectionId}`));
     creation.setTypeId(new openbis.EntityTypePermId("ANALYZED_DATA", openbis.EntityKind.DATA_SET));
@@ -60,9 +61,10 @@ function handleUpload() {
         <v-card>
           <v-card-title>Upload Data for Sample</v-card-title>
           <v-card-text>
-            <v-file-input v-model="files" show-size class="ma-2" multiple @change=" "
-              :label="files.length > 0 ? 'Add more files' : 'Choose files'"></v-file-input>
-            <v-btn @click="uploadFiles" :disabled="files.length === 0">Upload</v-btn>
+            <v-file-input
+v-model="files" show-size class="ma-2" multiple :label="files.length > 0 ? 'Add more files' : 'Choose files'"
+              @change="handleUpload"/>
+            <v-btn :disabled="files.length === 0" @click="uploadFiles">Upload</v-btn>
           </v-card-text>
         </v-card>
       </v-col>

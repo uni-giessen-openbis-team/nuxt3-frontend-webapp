@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import type { ProjectEntity, ProjectContext, TableVariable, combinedVariable } from '@/types/wizzard';
 import openbis from './openbis.esm';
-import useOpenbis from '~/plugins/useOpenbis';
 
 /**
  * Variables are the building blocks of the wizzard. They are used to define the
@@ -16,7 +15,6 @@ type Sample = {
   count: string;
   sampleType: string;
   child?: string;
-  
 };
 
 export const useWizzardStore = defineStore('wizzardStore', {
@@ -31,7 +29,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
       description: '',
     },
 
-
+ 
     projectContext: {
       UUID: '',
       code: '',
@@ -143,6 +141,10 @@ export const useWizzardStore = defineStore('wizzardStore', {
       this.tmpResult = JSON.stringify(this.result);
       return true;
     },
+
+
+
+
     /**
      * Creates table entries for the given variables and sample type.
      * @param Variables - The variables to create table entries for.
@@ -242,23 +244,49 @@ export const useWizzardStore = defineStore('wizzardStore', {
     },
 
     async createSamples(samples: Sample[]) {
-      const sampleCreations:openbis.SampleCreation[] = [];
+      const technicalSampleCreations:openbis.SampleCreation[] = [];
+      const biologicalSampleCreations:openbis.SampleCreation[] = [];
+
       for (const sample of samples) {
+        if(sample.sampleType== 'TECHNICAL') 
+       {
+         // The Technical Samples are children of the Biological Samples. 
+         const technicalCreation = await this.prepareTechnicalSample(sample, this.projectContext);
+         technicalSampleCreations.push(technicalCreation);
+       }
+     }
+
+    
+    for (const sample of samples) {
         if (sample.sampleType === 'BIOLOGICAL') {
           const entityCreation = await this.prepareSample(sample, this.projectContext);
-          sampleCreations.push(entityCreation);
+          biologicalSampleCreations.push(entityCreation);
         }
-        else if(sample.sampleType== 'TECHNICAL') 
-        {
-          // The Technical Samples are children of the Biological Samples. 
-          const technicalCreation = await this.prepareTechnicalSample(sample, this.projectContext);
-          sampleCreations.push(technicalCreation);
-        }
+
       }
-      // this.setParentsAndChilds(sampleCreations, samples);
-        
+      //iterate over the technical samplesCreation 
+      for (const technicalSample of technicalSampleCreations) {
+        console.log(technicalSample);
+         // iterate over all samples
+         for (const sample of samples) {
+           // of a name is eq, and has a child, set this child
+            if (technicalSample.getCode() === sample.secondaryName && sample.child) {
+              // find the biological sampleCreation with the name 
+              const biologicalSample = biologicalSampleCreations.find(bs => bs.getCode() === sample.child);
+              // set the parent in the technical sample
+                technicalSample.setParentIds([biologicalSample?.getCreationId()]);
+            }
+         }
+      }
+
+
+     
+
+     
+
       
-      useOpenBisStore().v3?.createSamples(sampleCreations);
+      
+      useOpenBisStore().v3?.createSamples(technicalSampleCreations);
     },
 
     // setP arentsAndChilds (sampleCreations: openbis.SampleCreation[], samples: Sample[]) {
@@ -280,7 +308,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
       sampleCreation.setTypeId(new openbis.EntityTypePermId("BIOLOGICAL"));
       sampleCreation.setCreationId(new openbis.CreationId(sample.secondaryName));
       sampleCreation.setExperimentId(new openbis.ExperimentIdentifier("/MATERIALS/SAMPLES/GENERAL_SAMPLES"));
-   
+      
       return sampleCreation;
     },
 
@@ -338,7 +366,7 @@ export const useWizzardStore = defineStore('wizzardStore', {
      */
     getEntetyConditionsResult(state): ConditionsResult[] {
       const SAMPLE_TYPE = 'BIOLOGICAL_ENTITY';
-      let entetyConditionCombinations = state.entityVariables.map(entety => ({
+      const entetyConditionCombinations = state.entityVariables.map(entety => ({
         title: entety.title,
         conditions: entety.conditions.map(condition => ({
           [entety.title]: entety.continuous ? `${condition} ${entety.unit}` : `${condition}`

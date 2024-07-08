@@ -109,9 +109,6 @@ export const useOpenBisStore = defineStore('openBis', {
         this.v3 = await new openbis.openbis()
         console.log('🚀 ~ initialize ~ this.v3:', this.v3)
         // after initialization, look if PAT is available and use it
-        
-
-
       } catch (error) {
         console.error('Error initializing v3 object:', error)
       }
@@ -119,7 +116,7 @@ export const useOpenBisStore = defineStore('openBis', {
 
     async autoLogin() {
       try {
-        await this.login('admin', '123456789')
+        await this.login('admin', 'mysecretpassword')
       } catch (error) {
         console.error('Error auto logging in:', error)
       }

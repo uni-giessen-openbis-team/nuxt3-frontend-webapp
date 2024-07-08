@@ -503,3 +503,39 @@
 : 1719212714:0;/add composables/openbis.esm.d.ts
 : 1719212715:0;/drop composables/openbis.esm.d.ts
 : 1719217201:0;bun run dev
+: 1719318053:0;sudo reboot
+: 1719318608:0;bun run dev
+: 1719387655:0;bunx nuxi@latest module add @nuxt/eslint
+: 1719388021:0;bun run dev
+: 1719404567:0;nslookup openbis.domain
+: 1719561288:0;bun run dev
+: 1719561805:0;ping openbis.domain
+: 1719561821:0;ping localhost
+: 1719561976:0;bun run dev
+: 1719563905:0;docker  compose  up
+: 1719571745:0;sudo reboot 
+: 1719571868:0;docker  compose  up
+: 1719571899:0;sudo lsof -i :80
+: 1719572009:0;docker  compose  down
+: 1719572025:0;docker  compose  up
+: 1719572058:0;docker  compose  down
+: 1719572124:0;git clone git@sissource.ethz.ch:sispub/openbis-continuous-integration.git
+: 1719572681:0;git clone https://sissource.ethz.ch/sispub/openbis-continuous-integration.git
+: 1719572722:0;cd ..
+: 1719573557:0;bun run dev
+: 1719822481:0;cd ~
+: 1719929593:0;ps -ef
+: 1719929659:0;docker ps
+: 1719929805:0;ps -ef | grep openbis
+: 1719929819:0;ps -ef | grep openbis | less
+: 1719929834:0;ps -ef | grep openbis | jetty
+: 1719929839:0;ps -ef | grep jetty
+: 1719930559:0;sudo lsof -i :80
+: 1719930599:0;sudo kill 5480\\
+
+: 1719930623:0;sudo kill $(lsof -t -i :80)
+: 1719930648:0;lsof -t -i :80
+: 1719996953:0;bun run dev
+: 1720007793:0;sudo netstat -tulnp | grep :3000
+: 1720007803:0;sudo kill 1533317
+: 1720007809:0;bun run dev

@@ -1,6 +1,6 @@
-export default defineNuxtPlugin( async nuxtApp => {
+export default defineNuxtPlugin( async () => {
      await useOpenBisStore().initialize().then(async () => {
-      await useOpenBisStore().autoLogin() // auto login can be removed
+      await useOpenBisStore().autoLogin() // Todo: auto login neeed be removed in production
       console.log('OpenBIS initialized');
     }).catch(error => {
       console.error('Failed to initialize OpenBIS:', error);
