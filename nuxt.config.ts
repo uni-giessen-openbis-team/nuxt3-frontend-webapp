@@ -1,8 +1,12 @@
 import { defineNuxtConfig } from 'nuxt/config'
-import { appDescription } from './constants/index'
+import { appDescription } from './app/constants/index'
 
 
 export default defineNuxtConfig({
+  future: {
+    compatibilityVersion: 4,
+  },
+
   modules: [
     '@vueuse/nuxt',
     '@pinia/nuxt',
@@ -10,9 +14,10 @@ export default defineNuxtConfig({
     '@formkit/nuxt',
     'vuetify-nuxt-module',
     '@pinia-plugin-persistedstate/nuxt',
-    "@nuxt/eslint"
+    "@nuxt/eslint",
+    '@nuxt/test-utils/module'
   ],
-  
+
   nitro: {
     devProxy: {
       '/openbis': {
@@ -38,10 +43,13 @@ export default defineNuxtConfig({
       ],
     },
   },
-  ssr: false, // client side rendering only
+
+  // client side rendering only
+  ssr: false,
 
   runtimeConfig: {
     apiBase: process.env.API_BASE_URL,
   },
 
+  compatibilityDate: '2024-07-09',
 })

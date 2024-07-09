@@ -2,8 +2,6 @@
 
 - [ ] Change location of wizzard to be called inside the project for creating a new Dataset
  
-
-
 # New Frontend for Openbis written in Nuxt
 
 This frontend uses the prerelease version of OpenBIS 6.5 because this version brings TypeScript support.

@@ -539,3 +539,25 @@
 : 1720007793:0;sudo netstat -tulnp | grep :3000
 : 1720007803:0;sudo kill 1533317
 : 1720007809:0;bun run dev
+: 1720452761:0;bun add --dev @nuxt/test-utils vitest @vue/test-utils happy-dom playwright-core
+: 1720455676:0;bun test
+: 1720455972:0;npm tes
+: 1720455975:0;npm test
+: 1720455978:0;npm vitest
+: 1720455995:0;bun test 
+: 1720456033:0;bun i 
+: 1720456040:0;bun test 
+: 1720506802:0;bun add --dev @nuxt/test-utils vitest @vue/test-utils happy-dom playwright-core
+: 1720506834:0;bun test 
+: 1720507941:0;bun i 
+: 1720507963:0;bun test
+: 1720508565:0;bunx nuxi upgrade
+: 1720508617:0;bun test
+: 1720508900:0;ls
+: 1720508907:0;rm -r certs
+: 1720508918:0;rm -rf certs
+: 1720508921:0;sudo rm -rf certs
+: 1720508941:0;sudo rm -rf haproxy
+: 1720509203:0;bun test
+: 1720509282:0;bun run degv
+: 1720509284:0;bun run dev

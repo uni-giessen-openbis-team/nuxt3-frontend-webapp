@@ -8,5 +8,8 @@
   },
   "editor.formatOnSave": false,
   "DockerRun.Containers": [],
-  "editor.defaultFormatter": "Vue.volar"
+  "editor.defaultFormatter": "Vue.volar",
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  }
 }
