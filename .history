@@ -561,3 +561,9 @@
 : 1720509203:0;bun test
 : 1720509282:0;bun run degv
 : 1720509284:0;bun run dev
+: 1721029394:0;bun run dev
+: 1721117686:0;echo /usr/bin/zsh
+: 1721118058:0;ls
+: 1721201835:0;echo /usr/bin/zsh
+: 1721202413:0;bun rund ev
+: 1721202420:0;bun run dev

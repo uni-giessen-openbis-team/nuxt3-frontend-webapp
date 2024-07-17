@@ -1,7 +1,3 @@
-# TODO
-
-- [ ] Change location of wizzard to be called inside the project for creating a new Dataset
- 
 # New Frontend for Openbis written in Nuxt
 
 This frontend uses the prerelease version of OpenBIS 6.5 because this version brings TypeScript support.
@@ -16,14 +12,12 @@ Before getting started, make sure you have the following:
 
 ## Backend Setup 
 
-1. First, spin up the container
+1. First, spin up the containers
 ```sh
 docker-compose -f server/docker-compose.yml up
 ```
 
 2. The files in `server/data` need to be copied to the OpenBIS server. These files come from [QBiC](https://portal.qbic.uni-tuebingen.de/portal/software).
-
-
 
 3. Copy some Sample Data from the old test instance 
 ```sh

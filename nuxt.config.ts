@@ -52,4 +52,15 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-07-09',
+
+  vuetify: {
+    moduleOptions: {
+      /* module specific options */
+    },
+    vuetifyOptions: {
+      theme: {
+        defaultTheme: 'dark',
+      },
+    }
+  }
 })
