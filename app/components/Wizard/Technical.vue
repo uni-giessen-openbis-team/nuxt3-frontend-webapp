@@ -2,7 +2,7 @@
 // This comp
 import { ref } from 'vue'
 
-const modelValue = defineModel<{ modelValue: Array<Object> }>()
+const modelValue = defineModel()
 
 const METHODS = ref(['DNA', 'RNA'])
 </script>

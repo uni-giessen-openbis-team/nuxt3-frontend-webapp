@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 // use the store.experiment to display the experiment setup
-const { collectionContext } = storeToRefs(useWizzardStore());
+const { collectionContext } = storeToRefs(useWizardStore());
 
 
 </script>

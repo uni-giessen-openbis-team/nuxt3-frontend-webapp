@@ -1,4 +1,4 @@
-import type { TableVariable, combinedVariable } from '@/types/wizzard'
+import type { TableVariable, combinedVariable } from '@/types/wizard'
 
 export function createTableEntries(Variables: TableVariable[], sampleType: string) {
   let entetyConditionCombinations = generateConditionCombinations(Variables)

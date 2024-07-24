@@ -180,7 +180,7 @@ export const useVocabularyStore = defineStore('vocabulary', {
 
     // // The main function
     // // pass the sampleGroups in the right order. From top to bottom hiracy
-    // async createSamplesFromWizzard(projectContext, sampleGroups) {
+    // async createSamplesFromWizard(projectContext, sampleGroups) {
     //   const createdSamples = []
     //   const sampleCreationsDict = {}
 

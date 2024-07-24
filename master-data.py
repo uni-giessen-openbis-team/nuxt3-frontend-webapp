@@ -298,7 +298,7 @@ vocabulary_term_Q_CELL_LINES_CMLT1.setOrdinal(7)
 vocabulary_Q_CELL_LINES.addTerm(vocabulary_term_Q_CELL_LINES_CMLT1)
 
 vocabulary_term_Q_CELL_LINES_KMH2 = tr.createNewVocabularyTerm('KM-H2')
-vocabulary_term_Q_CELL_LINES_KMH2.setDescription('Hodgkin lymphoma (human)')
+vocabulary_term_Q_CELL_LINES_KMH2.setDescription('Hodgkin lymphoma (human) ')
 vocabulary_term_Q_CELL_LINES_KMH2.setLabel('KM-H2 cell')
 vocabulary_term_Q_CELL_LINES_KMH2.setOrdinal(8)
 vocabulary_Q_CELL_LINES.addTerm(vocabulary_term_Q_CELL_LINES_KMH2)

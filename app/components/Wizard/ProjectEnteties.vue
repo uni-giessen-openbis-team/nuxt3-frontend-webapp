@@ -1,28 +1,45 @@
 <script setup lang="ts">
-
 /**
- * This is the second step of the Wizzard.
+ * This is the second step of the Wizard.
  * Here the user can select the variables that describe the differences between the biological entities.
- * These variables will be later combined with the samples by the Wizzard to create the project.
+ * These variables will be later combined with the samples by the Wizard to create the project.
  */
 
-import type openbis from '~/app/composables/openbis.esm'
+import type openbis from '~/composables/openbis.esm'
 
-const { biologicalSampleVariables: variables, entityVariables: entetyVariables } = storeToRefs(useWizzardStore())
+const { biologicalSampleVariables: variables, entityVariables: entetyVariables } = storeToRefs(useWizardStore())
 
 const allVocabularies = ref<openbis.Vocabulary[]>([])
-
 const tab = ref('')
 
 onMounted(async () => {
   allVocabularies.value = await useVocabularyStore().listAllVocabularies()
 })
 
+const formattedEntityVariables = computed({
+  get() {
+    return entetyVariables.value.map(item => {
+      if (typeof item === 'string') {
+        return {
+          title: item,
+          conditions: [],
+          continuous: false,
+          unit: null,
+          vocabularyCode: ""
+        }
+      }
+      return item
+    })
+  },
+  set(newValue) {
+    entetyVariables.value = newValue
+  }
+})
 
 </script>
 
 <template>
-  <div> 
+  <div>
     What are the differences between the biological enteties. 
     The enteties can be something like a tree. Select one or 
     more variables that describe the differences between the enteties.
@@ -32,25 +49,24 @@ onMounted(async () => {
   </div>
   <br>
   <v-combobox
-    v-model="entetyVariables"
+    v-model="formattedEntityVariables"
     label="Experimental variables"
     box
     chips
-    :items="variables" 
+    :items="variables"
     multiple
     return-object
-    
   />
   <div>
     <v-card>
       <v-tabs v-model="tab" bg-color="primary">
-        <v-tab v-for="(item, index) in entetyVariables" :key="index" :value="item.title">
+        <v-tab v-for="(item, index) in formattedEntityVariables" :key="index" :value="item.title">
           {{ item.title }}
         </v-tab>
       </v-tabs>
       <v-card-text>
         <v-window v-model="tab">
-          <v-window-item v-for="(item, index) in entetyVariables" :key="index" :value="item.title">
+          <v-window-item v-for="(item, index) in formattedEntityVariables" :key="index" :value="item.title">
             <div v-if="item.vocabularyCode !== ''">
               <!-- Todo: Add APIComponentsAutocompleteVocabulary -->
               <div>
@@ -59,16 +75,13 @@ onMounted(async () => {
               </div>
               {{ item }}
             </div>
-     
             <div v-else>
-              <WizzardCrudTable v-model="item.conditions" />
-
+              <WizardCrudTable v-model="item.conditions" />
               <v-checkbox
                 v-model="item.continuous"
-                label="continous"
+                label="continuous"
               />
-
-              <div v-if="item.continuous === true">
+              <div v-if="item.continuous">
                 Unit
                 <v-text-field v-model="item.unit" />
               </div>
@@ -78,12 +91,5 @@ onMounted(async () => {
       </v-card-text>
     </v-card>
   </div>
-  <pre>
-
-    {{entetyVariables}}
-  </pre>
+  <pre>{{ formattedEntityVariables }}</pre>
 </template>
-
-<style lang="scss" scoped>
-
-</style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const  modelValue= defineModel<{ modelValue: Object[] }>()
+const  modelValue= defineModel()
 </script>
 
 <template>

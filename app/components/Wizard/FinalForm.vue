@@ -1,21 +1,21 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { useWizzardStore } from '~/app/composables/wizzardStore';
+import { useWizardStore } from '~/app/composables/wizardStore';
 
-const wizzardStore = useWizzardStore();
+const wizardStore = useWizardStore();
 
 // Use the projectContext from the store
-const {projectContext} = storeToRefs(wizzardStore );
+const {projectContext} = storeToRefs(wizardStore );
 
 // Watch the local projectContext and update the store whenever it changes
 watch(projectContext, (newVal) => {
-  wizzardStore.projectContext = newVal;
+  wizardStore.projectContext = newVal;
 }, { deep: true });
 
 const finalize = async () => {
   try {
-    await wizzardStore.finalizeProject(wizzardStore);
+    await wizardStore.finalizeProject(wizardStore);
     alert('Project finalized successfully!');
   } catch (error) {
     console.error('Error finalizing project:', error);

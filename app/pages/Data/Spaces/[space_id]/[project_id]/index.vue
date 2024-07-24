@@ -66,7 +66,7 @@ const deleteProject = async () => {
 onMounted(() => {
   const projectPermId = new openbis.ProjectPermId(projectId.value as string)
   // set project context code 
-  useWizzardStore().projectContext.code = projectId.value as string
+  useWizardStore().projectContext.code = projectId.value as string
   fetchCollections(projectPermId)
   fetchProjectDetails(projectId.value as string)
 })
@@ -76,9 +76,11 @@ onMounted(() => {
   <v-container> 
     
    <div v-if="project">
-      <h2>{{ project.getCode() }}</h2>
+      <h1>{{ project.getCode() }}</h1>
+      <br>
       <p>{{ project.getDescription() }}</p>
       <v-btn color="red" @click.stop="deleteProject">Delete Project</v-btn>
+      <br>
     </div>
     <h2>Collections/ Experinments</h2>
     <template v-if="collections.length > 0">

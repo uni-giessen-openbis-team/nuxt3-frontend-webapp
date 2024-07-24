@@ -44,8 +44,7 @@ onMounted(fetchSpaceDetails)
 <template>
   
   <v-container>
-    <h1>Space {{route.params.space_id}}</h1>
- 
+    <h1>Space: {{route.params.space_id}}</h1>
     <v-row/>
     <v-row>
       <v-col cols="12">

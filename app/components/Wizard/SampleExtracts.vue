@@ -1,10 +1,9 @@
 <script setup lang="ts">
 // This comp
 import { ref } from 'vue'
-import type { TableVariable } from '@/types/wizzard'
+import type { TableVariable } from '@/types/wizard'
 
-const modelValue  = defineModel<{ modelValue: Object }>()
-const store = useOpenBisStore()
+const modelValue  = defineModel()
 const tab = ref('')
 
 const variables: Ref<TableVariable[]> = ref([
@@ -57,7 +56,7 @@ const tissues = ['tissue1', 'tissue2']
                 />
               </div>
               <div v-else>
-                <WizzardCrudTable v-model="item.conditions" />
+                <WizardCrudTable v-model="item.conditions" />
 
                 <v-checkbox
                   v-model="item.continous"

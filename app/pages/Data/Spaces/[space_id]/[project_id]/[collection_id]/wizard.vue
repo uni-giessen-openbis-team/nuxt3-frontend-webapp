@@ -5,7 +5,7 @@ import 'vue3-form-wizard/dist/style.css';
 
 
 const tab = ref('');
-const store = useWizzardStore();
+const store = useWizardStore();
 
 const route = useRoute()
 
@@ -14,13 +14,13 @@ const projectId = route.params.project_id as string
 const collectionId = route.params.collection_id as string
 
 
-const  {entityConditionsResult: entetyConditionsResult, entetyAndSampleResult, technicalSamples: result} = storeToRefs(useWizzardStore())  
+const  {entityConditionsResult: entetyConditionsResult, entetyAndSampleResult, technicalSamples: result} = storeToRefs(useWizardStore())  
 
 onMounted(async () => {
   // set collection context code
-  useWizzardStore().collectionContext.code = collectionId as string
-  useWizzardStore().projectContext.code = projectId as string
-  useWizzardStore().spaceContext.code = spaceId as string
+  useWizardStore().collectionContext.code = collectionId as string
+  useWizardStore().projectContext.code = projectId as string
+  useWizardStore().spaceContext.code = spaceId as string
 })
 </script>
  
@@ -32,7 +32,7 @@ onMounted(async () => {
   <v-container>
 
   <h2>
-    Create a new samples for collection {{collectionId}}
+    Create new samples for collection {{collectionId}}
   </h2>
     <v-tabs
       v-model="tab"
@@ -51,22 +51,22 @@ onMounted(async () => {
         <v-form>
           <FormWizard @on-complete="() => {store.onComplete()}">
             <TabContent title="Project Enteties" :before-change="store.updateEntityVariables">
-              <WizzardProjectEnteties/>
+              <WizardProjectEnteties v-model="store.entityVariables"/>
             </TabContent> 
             <TabContent title="Entety Preview">
-              <WizzardPreviewTable v-model="entetyConditionsResult" /> 
+              <WizardPreviewTable v-model="entetyConditionsResult" /> 
             </TabContent>
             <TabContent title="Biological Samples" :before-change="store.updateBiologicalVariables">
-              <WizzardSampleExtracts v-model="store.sampleVariables" />
+              <WizardSampleExtracts v-model="store.sampleVariables" />
             </TabContent>
             <TabContent title="Biological Samples Preview">
-              <WizzardPreviewTable v-model="entetyAndSampleResult" />
+              <WizardPreviewTable v-model="entetyAndSampleResult" />
             </TabContent>
             <TabContent title="Technical Samples" :before-change="store.updateTechnicalVariables">
-              <WizzardTechnical v-model="store.technicalVariables" />
+              <WizardTechnical v-model="store.technicalVariables" />
             </TabContent>
             <TabContent title="Technical Samples Preview">
-              <WizzardPreviewTable v-model="result" />
+              <WizardPreviewTable v-model="result" />
             </TabContent>
           </FormWizard>
         </v-form>

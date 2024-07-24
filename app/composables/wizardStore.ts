@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import type { ProjectEntity, ProjectContext, TableVariable, combinedVariable } from '@/types/wizzard';
+import type { ProjectEntity, ProjectContext, TableVariable, combinedVariable } from '@/types/wizard';
 import openbis from './openbis.esm';
 
 /**
- * Variables are the building blocks of the wizzard. They are used to define the
+ * Variables are the building blocks of the wizard. They are used to define the
  * conditions that will be used to create the samples. The cross product of the
  * variables will be used to create the samples.
  */
@@ -17,7 +17,7 @@ type Sample = {
   parent?: string;
 };
 
-export const useWizzardStore = defineStore('wizzardStore', {
+export const useWizardStore = defineStore('wizardStore', {
   state: () => ({
     spaceContext: {
       code: '',

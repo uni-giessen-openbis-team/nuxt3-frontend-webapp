@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type  openbis from '~/app/composables/openbis.esm'
+import type  openbis from '~/composables/openbis.esm'
 
 const { searchTerm } = defineProps<{
   searchTerm: string

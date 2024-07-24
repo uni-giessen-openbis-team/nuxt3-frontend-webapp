@@ -32,7 +32,7 @@ const resetNewCollection = () => {
 const createCollection = async () => {
   try {
     const typeId = 'DEFAULT_EXPERIMENT'
-    await useCollectionStore().createCollection(collectionContext.value.code, typeId, useWizzardStore().projectContext.code as string );
+    await useCollectionStore().createCollection(collectionContext.value.code, typeId, useWizardStore().projectContext.code as string );
     resetNewCollection();
   } catch (error: any) {
     error.value = 'Failed to create collection. Please try again.';

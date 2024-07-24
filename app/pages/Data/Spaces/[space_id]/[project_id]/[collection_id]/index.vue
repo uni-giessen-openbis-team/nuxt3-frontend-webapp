@@ -52,9 +52,9 @@ onMounted(async () => {
 
   fetchSamples(collectionId)
   // set collection context code
-  useWizzardStore().collectionContext.code = collectionId as string
-  useWizzardStore().projectContext.code = projectId as string
-  useWizzardStore().spaceContext.code = spaceId as string
+  useWizardStore().collectionContext.code = collectionId as string
+  useWizardStore().projectContext.code = projectId as string
+  useWizardStore().spaceContext.code = spaceId as string
 })
 
 // Function to delete a collection
@@ -85,7 +85,7 @@ const itemKey = 'id'
       {{  collection?.getCode() }}
  
     </h1>
-    <v-btn :to="`/data/spaces/${spaceId}/${projectId}/${collectionId}/wizzard`" >   
+    <v-btn :to="`/data/spaces/${spaceId}/${projectId}/${collectionId}/wizard`" >   
       <v-icon left>mdi-plus</v-icon> <!-- Added icon for data creation -->
       Create Samples
     </v-btn>

@@ -18,10 +18,6 @@ const spaceStore = useSpaceStore()
 
 const inventoryList = ['entity_information','materials', 'methods', 'publications', 'storage', 'user_key_space', 'settings', 'stock_orders', 'stock_catalog', 'eln_settings']
 
-const inventorySpaces = computed(() => {
-  return spaces.value.filter(space => inventoryList.includes(space.getCode().toLowerCase()))
-})
-
 const labNotebookSpaces = computed(() => {
   return spaces.value.filter(space => !inventoryList.includes(space.getCode().toLowerCase()))
 })
@@ -43,7 +39,7 @@ const submitNewSpace = async () => {
   }
   try {
     await spaceStore.createSpace(newSpaceCode.value, newSpaceDescription.value)
-    fetchSpaces()
+    await fetchSpaces()
     dialog.value = false
     newSpaceCode.value = ''
     newSpaceDescription.value = ''
@@ -56,6 +52,7 @@ onMounted(fetchSpaces)
 </script>
 
 <template>
+  
   <v-container>
     <v-dialog v-model="dialog" max-width="500px">
       <v-card>
@@ -66,17 +63,15 @@ onMounted(fetchSpaces)
           <v-form ref="form">
             <v-text-field v-model="newSpaceCode" label="Space Code" required/>
             <v-text-field v-model="newSpaceDescription" label="Description"/>
-
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="blue darken-1" @click="dialog = false">Cancel</v-btn>
-          <v-btn color="blue darken-1" @click="submitNewSpace">Create</v-btn>
+          <v-btn @click="dialog = false">Cancel</v-btn>
+          <v-btn @click="submitNewSpace">Create</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-
     <v-dialog v-model="dialog" max-width="500px">
       <v-card>
         <v-card-title>
@@ -87,38 +82,39 @@ onMounted(fetchSpaces)
             <v-text-field v-model="newSpaceCode" label="Space Code" required/>
             <v-text-field v-model="newSpaceDescription" label="Description"/>
           </v-form>
+          <v-alert v-if="error" type="error">
+               {{ error.message }}
+          </v-alert>
         </v-card-text>
+     
         <v-card-actions>
           <v-spacer/>
           <v-btn color="blue darken-1" @click="dialog = false">Cancel</v-btn>
           <v-btn color="blue darken-1" @click="submitNewSpace">Create</v-btn>
         </v-card-actions>
+    
       </v-card>
     </v-dialog>
-
-    <v-container>
-      <section style="background-color: #e3f2fd;" class="p-4 "> <!-- Light blue background -->
-        <h2>
-          <v-icon color="green">mdi-book-open-page-variant</v-icon> <!-- Icon for Lab Notebook -->
-          Lab Notebook
-        </h2>
-        <v-row>
-          <v-col v-for="space in labNotebookSpaces" :key="space.getPermId().toString()" cols="12" sm="6" md="4">
+        <h1>
+        <v-icon color="primary">mdi-book-open-page-variant</v-icon> <!-- Icon for Lab Notebook -->
+        Lab Notebooks
+        </h1>
+        <br>
+        <v-row >
+          <v-col v-for="space in labNotebookSpaces" :key="space.getPermId().toString()">
             <v-card class="space-card" @click="() => router.push(`/data/spaces/${space.getPermId()}`)">
               <v-card-title>{{ space.getCode() }}</v-card-title>
               <v-card-subtitle>{{ space.getDescription() }}</v-card-subtitle>
+              <br>
             </v-card>
           </v-col>
         </v-row>
-      </section>
+    
 
-    </v-container>
-    <v-alert v-if="error" type="error">
-      {{ error.message }}
-    </v-alert>
+
     <br>
     <v-btn color="primary" class="mb-4" @click="dialog = true">Create New Space</v-btn>
-
+   
   </v-container>
 
 </template>
