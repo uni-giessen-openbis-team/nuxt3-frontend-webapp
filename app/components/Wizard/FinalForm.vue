@@ -1,7 +1,5 @@
-
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { useWizardStore } from '~/app/composables/wizardStore';
+import { useWizardStore } from '~/composables/wizardStore';
 
 const wizardStore = useWizardStore();
 
@@ -24,31 +22,29 @@ const finalize = async () => {
 };
 </script>
 
-
-
 <template>
   <div>
     <h2>Finalize Project</h2>
     <form @submit.prevent="finalize">
       <div>
         <label for="projectName">Project Name:</label>
-        <input type="text" id="projectName" v-model="projectContext.name" />
+        <input id="projectName" v-model="projectContext.name" type="text" >
       </div>
       <div>
         <label for="projectSpace">Project Space:</label>
-        <input type="text" id="projectSpace" v-model="projectContext.space" />
+        <input id="projectSpace" v-model="projectContext.space" type="text" >
       </div>
       <div>
         <label for="projectDescription">Project Description:</label>
-        <textarea id="projectDescription" v-model="projectContext.description"></textarea>
+        <textarea id="projectDescription" v-model="projectContext.description"/>
       </div>
       <div>
         <label for="contactPerson">Contact Person:</label>
-        <input type="text" id="contactPerson" v-model="projectContext.contactPerson" />
+        <input id="contactPerson" v-model="projectContext.contactPerson" type="text" >
       </div>
       <div>
         <label for="manager">Manager:</label>
-        <input type="text" id="manager" v-model="projectContext.manager" />
+        <input id="manager" v-model="projectContext.manager" type="text" >
       </div>
       <button type="submit">Finalize Project</button>
     </form>
