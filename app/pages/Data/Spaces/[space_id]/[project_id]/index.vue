@@ -2,7 +2,6 @@
 import openbis from '~/composables/openbis.esm'
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useProjectStore } from '~/composables/projectStore'
 
 const router = useRouter()
 const route = useRoute()
@@ -10,9 +9,6 @@ const route = useRoute()
 const spaceId = ref(route.params.space_id)
 const projectId = ref(route.params.project_id)
 
-// Initialize the project store and collection store
-const collectionStore = useCollectionStore()
-const projectStore = useProjectStore()
 
 // Reactive references to store projects and collections
 const collections = ref([] as openbis.Experiment[])
@@ -21,15 +17,15 @@ const project = ref<openbis.Project | null>(null)
 const errorMessage = ref<string | null>(null)
 
 // Function to fetch collections for a specific project
-async function fetchCollections(projectPermId: openbis.ProjectPermId) {
-  collections.value = await collectionStore.listCollectionsOfProject( projectPermId )
+async function handleFetchCollections(projectPermId: openbis.ProjectPermId) {
+  collections.value = await listCollectionsOfProject( projectPermId )
 }
 
 // Function to fetch project details
-async function fetchProjectDetails(projectPermId: string): Promise<void> {
+async function handleFetchProjectDetails(projectPermId: string): Promise<void> {
   try {
     if (projectId.value) {
-      project.value = await projectStore.getProject(projectPermId)
+      project.value = await getProject(projectPermId)
     }
     console.log('project',project.value)
   } catch (error) {
@@ -53,9 +49,9 @@ const newCollection = ref({
 
 
 // Function to delete the project
-const deleteProject = async () => {
+const handleDeleteProject = async () => {
   try {
-    await projectStore.deleteProject(projectId.value as string,"because");
+    await deleteProject(projectId.value as string,"because");
     // Optionally, navigate back to a parent or home page after deletion
     router.push(`/data/spaces/${spaceId.value}/`);
   } catch (error) {
@@ -67,8 +63,8 @@ onMounted(() => {
   const projectPermId = new openbis.ProjectPermId(projectId.value as string)
   // set project context code 
   useWizardStore().projectContext.code = projectId.value as string
-  fetchCollections(projectPermId)
-  fetchProjectDetails(projectId.value as string)
+  handleFetchCollections(projectPermId)
+  handleFetchProjectDetails(projectId.value as string)
 })
 </script>
 
@@ -79,7 +75,7 @@ onMounted(() => {
       <h1>{{ project.getCode() }}</h1>
       <br>
       <p>{{ project.getDescription() }}</p>
-      <v-btn color="red" @click.stop="deleteProject">Delete Project</v-btn>
+      <v-btn color="red" @click.stop="handleDeleteProject">Delete Project</v-btn>
       <br>
     </div>
     <h2>Collections/ Experinments</h2>
@@ -110,7 +106,6 @@ onMounted(() => {
     <ButtonCreateCollection
       :space-id="spaceId as string"
       :project-id="projectId as string"
-
     />
 
   </v-container>

@@ -10,7 +10,6 @@ const router = useRouter()
 const newSpaceCode = ref('')
 const dialog = ref(false)
 const newSpaceDescription = ref('')
-const spaceStore = useSpaceStore()
 
 
 // TODO: add a new category for settings 
@@ -24,7 +23,7 @@ const labNotebookSpaces = computed(() => {
 
 const fetchSpaces = async () => {
   try {
-    spaces.value = await spaceStore.getAllSpaces()
+    spaces.value = await getAllSpaces()
     // log the spaces
     console.log(spaces.value)
   } catch (err) {
@@ -38,7 +37,7 @@ const submitNewSpace = async () => {
     return
   }
   try {
-    await spaceStore.createSpace(newSpaceCode.value, newSpaceDescription.value)
+    await createSpace(newSpaceCode.value, newSpaceDescription.value)
     await fetchSpaces()
     dialog.value = false
     newSpaceCode.value = ''

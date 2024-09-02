@@ -3,14 +3,11 @@ import { ref, onMounted } from 'vue';
 import type openbis from '~/composables/openbis.esm';
 // Define your model
 const space = ref<openbis.Space>({});
-
-const projectSpaces = ref<string[]>([]);
 const spaces = ref<openbis.Space[]>([]);
 
 onMounted(async () => {
-  const store = useSpaceStore();
   // Load the spaces from the API
-  spaces.value = await store.getAllSpaces();
+  spaces.value = await getAllSpaces();
   console.log('🚀 ~ onMounted ~ spaces:', JSON.stringify(spaces.value));
 
 });

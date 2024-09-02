@@ -9,8 +9,6 @@ This ensures that only one instance of the v3 object is
 created and used throughout the application.
 */
 
-// TODO: Perist the V3 Object. https://prazdevs.github.io/pinia-plugin-persistedstate/guide/limitations.html
- 
 export const useOpenBisStore = defineStore('openBis', {
   state: () => ({
     v3: null as openbis.openbis | null,

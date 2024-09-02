@@ -27,11 +27,10 @@ import { useRouter } from 'vue-router'
 const experiments = ref([])
 const error = ref(null)
 const router = useRouter()
-const experimentStore = useCollectionStore()
 
-const fetchCollections = async () => {
+const handleFetchCollections = async () => {
   try {
-    experiments.value = await experimentStore.listAllCollections()
+    experiments.value = await listAllCollections()
   } catch (err) {
     error.value = err
   }
@@ -41,7 +40,7 @@ const goToCollection = (permId: string) => {
   router.push(`/experiments/${permId}`)
 }
 
-onMounted(fetchCollections)
+onMounted(handleFetchCollections)
 </script>
 
 <style scoped>

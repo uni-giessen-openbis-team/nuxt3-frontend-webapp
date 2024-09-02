@@ -11,14 +11,13 @@ const collectionId = route.params.collection_id as string
 const collection = ref<openbis.Experiment | null>(null)
 
 // Initialize the sample store
-const collectionStore = useCollectionStore()
 
 // Reactive references to store samples
 const samples = ref<openbis.Sample[]>([])
 
 // Function to fetch samples for a specific collection
-const fetchSamples = async (collectionPermId: string) => {
-  const collection = await useSampleStore().listSamplesOfCollection(collectionPermId)
+const handleFetchSamples = async (collectionPermId: string) => {
+  const collection = await listSamplesOfCollection(collectionPermId)
   if (collection) {
     samples.value = await collection
   } else {
@@ -40,7 +39,7 @@ const deleteSample = async (sampleId: string) => {
     deletionOptions.setReason("User requested deletion")
     const deletionId = await useOpenBisStore().v3?.deleteSamples([sampleIdentifier], deletionOptions)
     await useOpenBisStore().v3?.confirmDeletions([deletionId])
-    fetchSamples(collectionId) // Refresh the samples list after deletion
+    handleFetchSamples(collectionId) // Refresh the samples list after deletion
   } catch (error) {
     console.error(`Failed to delete sample with id ${sampleId}:`, error)
   }
@@ -48,9 +47,9 @@ const deleteSample = async (sampleId: string) => {
 
 onMounted(async () => {
   //get collection
-  collection.value = await collectionStore.getCollection(collectionId)
+  collection.value = await getCollection(collectionId)
 
-  fetchSamples(collectionId)
+  handleFetchSamples(collectionId)
   // set collection context code
   useWizardStore().collectionContext.code = collectionId as string
   useWizardStore().projectContext.code = projectId as string
@@ -58,8 +57,8 @@ onMounted(async () => {
 })
 
 // Function to delete a collection
-const deleteCollection = async (permId: string) => {
-    await collectionStore.deleteCollection(permId ,"because");
+const handleDeleteCollection = async (permId: string) => {
+    await deleteCollection(permId ,"because");
 }
 
 const props = defineProps<{
