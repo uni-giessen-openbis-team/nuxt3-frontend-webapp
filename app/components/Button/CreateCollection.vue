@@ -29,10 +29,10 @@ const resetNewCollection = () => {
 // 1. Biological_Entities
 // 2. Biological_Samples
 // 3. Technical_Sample
-const createCollection = async () => {
+const handleCreateCollection = async () => {
   try {
     const typeId = 'DEFAULT_EXPERIMENT'
-    await useCollectionStore().createCollection(collectionContext.value.code, typeId, useWizardStore().projectContext.code as string );
+    await createCollection(collectionContext.value.code, typeId, useWizardStore().projectContext.code as string );
     resetNewCollection();
   } catch (error: any) {
     error.value = 'Failed to create collection. Please try again.';
@@ -41,12 +41,12 @@ const createCollection = async () => {
 
 const saveCollection = async () => {
   console.log("🚀 ~ saveCollection ~ collectionContext.value:", collectionContext.value.code);
-  await createCollection();
+  await handleCreateCollection();
 };
 </script>
 
 <template>
-  <v-btn @click="showModal = true" color="primary">Add New Collection</v-btn>
+  <v-btn color="primary" @click="showModal = true">Add New Collection</v-btn>
   <v-dialog v-model="showModal" max-width="600px">
     <v-card>
       <v-card-title>
@@ -67,7 +67,7 @@ const saveCollection = async () => {
         />
       </v-card-text>
       <v-card-actions>
-        <v-spacer></v-spacer>
+        <v-spacer/>
         <v-btn @click="showModal = false">Cancel</v-btn>
         <v-btn @click="saveCollection">Save</v-btn>
       </v-card-actions>

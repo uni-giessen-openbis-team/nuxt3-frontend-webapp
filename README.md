@@ -52,3 +52,6 @@ bun i
 
 Make sure the ports 3000 and 54322 are accessible.
 
+## Naming conventions
+
+To prevent duplication and namespace collisions caused by auto-imports, use the `handle` prefix in `components`, such as `handleCreateCollection`. This approach helps maintain unique and clear function names.

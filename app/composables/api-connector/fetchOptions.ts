@@ -1,9 +1,8 @@
-import openbis from './openbis.esm';
-
 /**
  * Fetch options for openBIS
  * These fetch options specify the depth of the data to be fetched from the server.
  */
+import openbis from '../openbis.esm'
 
 // Person fetch options
 export function fetchPersonCompletely() {
