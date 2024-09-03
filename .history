@@ -569,3 +569,13 @@
 : 1721202420:0;bun run dev
 : 1721381866:0;echo /usr/bin/zsh
 : 1721381880:0;bun run dev
+: 1725270683:0;git pull
+: 1725271043:0;bun rund ev
+: 1725271047:0;bun rund dev
+: 1725271057:0;bun run dev
+: 1725278259:0;fuser -k 300/tcp
+: 1725278276:0;$ sudo fuser -k 300/tcp
+: 1725278279:0;sudo fuser -k 300/tcp
+: 1725278306:0;sudo lsof -t -i:300 | xargs sudo kill -9
+: 1725278314:0;sudo lsof -t -i:3000 | xargs sudo kill -9
+: 1725278318:0;bun run dev

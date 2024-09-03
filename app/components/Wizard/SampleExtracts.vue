@@ -1,7 +1,6 @@
 <script setup lang="ts">
 // This comp
 import { ref } from 'vue'
-import type { TableVariable } from '@/types/wizard'
 
 const modelValue  = defineModel()
 const tab = ref('')

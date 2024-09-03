@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { FormWizard, TabContent } from 'vue3-form-wizard';
 import 'vue3-form-wizard/dist/style.css';
 
 
@@ -22,6 +21,39 @@ onMounted(async () => {
   useWizardStore().projectContext.code = projectId as string
   useWizardStore().spaceContext.code = spaceId as string
 })
+
+
+const    e1 = ref<number>(1)
+
+const next = async () => {
+  console.log(e1.value)
+  switch (e1.value) {
+    case 0:
+      await store.updateEntityVariables()
+      break
+    case 1:
+      // No function for Entity Preview, just move to next step
+      break
+    case 2:
+      await store.updateBiologicalVariables()
+      break
+    case 3:
+      // No function for Biological Samples Preview, just move to next step
+      break
+    case 4:
+      await store.updateTechnicalVariables()
+      break
+    case 5:
+      // Final step, call onComplete
+      await store.onComplete()
+      return // Don't increment e1 after completion
+  }
+  e1.value++
+}
+
+const prev = () => {
+  e1.value--
+}
 </script>
  
 
@@ -31,12 +63,13 @@ onMounted(async () => {
 
   <v-container>
 
+
   <h2>
     Create new samples for collection {{collectionId}}
   </h2>
+  <br>
     <v-tabs
       v-model="tab"
-      color="deep-purple-accent-4"
       fixed-tabs
     >
       <v-tab value="Create">
@@ -48,28 +81,81 @@ onMounted(async () => {
     </v-tabs>
     <v-window v-model="tab">
       <v-window-item :key="1" value="Create">
-        <v-form>
-          <FormWizard @on-complete="() => {store.onComplete()}">
-            <TabContent title="Project Enteties" :before-change="store.updateEntityVariables">
-              <WizardProjectEnteties v-model="store.entityVariables"/>
-            </TabContent> 
-            <TabContent title="Entety Preview">
-              <WizardPreviewTable v-model="entetyConditionsResult" /> 
-            </TabContent>
-            <TabContent title="Biological Samples" :before-change="store.updateBiologicalVariables">
-              <WizardSampleExtracts v-model="store.sampleVariables" />
-            </TabContent>
-            <TabContent title="Biological Samples Preview">
-              <WizardPreviewTable v-model="entetyAndSampleResult" />
-            </TabContent>
-            <TabContent title="Technical Samples" :before-change="store.updateTechnicalVariables">
-              <WizardTechnical v-model="store.technicalVariables" />
-            </TabContent>
-            <TabContent title="Technical Samples Preview">
-              <WizardPreviewTable v-model="result" />
-            </TabContent>
-          </FormWizard>
-        </v-form>
+     
+
+    <!-- Vuetify Stepper -->
+    <v-stepper v-model="e1" alt-labels>
+      <v-stepper-header>
+        <v-stepper-item 
+          value="1"
+          title="Project Enteties"
+        />
+        <v-divider/>
+        <v-stepper-item 
+          value="2"
+          title="Entety Preview"
+        />
+        <v-divider/>
+        <v-stepper-item 
+          value="3"
+          title="Biological Samples"
+        />
+        <v-divider/>
+        <v-stepper-item 
+          value="4"
+          title="Biological Samples Preview"
+        />
+        <v-divider/>
+        <v-stepper-item 
+          value="5"
+          title="Technical Samples"
+        />
+        <v-divider/>
+        <v-stepper-item 
+          value="6"
+          title="Technical Samples Preview"
+        />
+      </v-stepper-header>
+
+      <v-stepper-window>
+        <v-stepper-window-item value="1">
+          <WizardProjectEnteties v-model="store.entityVariables"/>
+        </v-stepper-window-item>
+
+        <v-stepper-window-item value="2">
+          <WizardPreviewTable v-model="entetyConditionsResult" /> 
+        </v-stepper-window-item>
+
+        <v-stepper-window-item value="3">
+          <WizardSampleExtracts v-model="store.sampleVariables" />
+        </v-stepper-window-item>
+
+        <v-stepper-window-item value="4">
+          <WizardPreviewTable v-model="entetyAndSampleResult" />
+        </v-stepper-window-item>
+
+        <v-stepper-window-item value="5">
+          <WizardTechnical v-model="store.technicalVariables" />
+        </v-stepper-window-item>
+
+        <v-stepper-window-item value="6">
+          <WizardPreviewTable v-model="result" />
+        </v-stepper-window-item>
+      </v-stepper-window>
+    
+      <v-stepper-actions
+        @click:next="next"
+        @click:prev="prev"
+      >
+        <template #next>
+          <v-btn v-if="e1 < 5" color="primary" @click="next">Next</v-btn>
+          <v-btn v-else color="success" :disabled="false" @click="store.onComplete()">Finish</v-btn>
+        </template>
+        <template #prev>
+          <v-btn  @click="prev">Prev</v-btn>
+        </template>
+      </v-stepper-actions>
+    </v-stepper>
       </v-window-item>
       <v-window-item :key="2" value="Upload">
         <v-form>
@@ -85,6 +171,6 @@ onMounted(async () => {
         </v-form>
       </v-window-item>
     </v-window>
-  </v-container>
 
-</template> 
+  </v-container>
+</template>

@@ -1,4 +1,4 @@
-
+import  openbis from "../openbis.esm"
 
 async function listVocabularies(criteria: openbis.VocabularySearchCriteria, options: openbis.VocabularyFetchOptions): Promise<openbis.Vocabulary[] | undefined> {
   const result = await useOpenBisStore().v3?.searchVocabularies(criteria, options)
@@ -46,9 +46,9 @@ async function listVocabularyTermsByVocabularyCode(vocabularyCode: string): Prom
   return listVocabularyTerms(criteria, fetchVocabularyTermCompletely())
 }
 
-async function getVocabularyTerm(vocabularyTermId: openbis.IVocabularyTermId, options?: openbis.VocabularyTermFetchOptions): Promise<openbis.VocabularyTerm | undefined> {
+async function getVocabularyTerm(vocabularyTermId: openbis.IVocabularyTermId, options?: openbis.VocabularyTermFetchOptions): Promise<string | undefined> {
   const result = await useOpenBisStore().v3?.getVocabularyTerms([vocabularyTermId], options)
-  return result ? result.get(vocabularyTermId) : undefined
+  return  result?.get(vocabularyTermId) || undefined 
 }
 
 async function getVocabularyTermById(vocabularyTermId: openbis.IVocabularyTermId): Promise<openbis.VocabularyTerm | undefined> {
