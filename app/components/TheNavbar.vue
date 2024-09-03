@@ -2,7 +2,6 @@
 // TODO: fix disapearing navbar
 import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
-const store = useOpenBisStore()
 const { mdAndUp } = useDisplay()
 
 const navItems = [
@@ -19,7 +18,6 @@ const menuItems = [
 ]
 const tempDrawer = ref(true)
 
-const userId = ref(store.sessionInformation?.permId.userId)
 </script>
 
 <template>
