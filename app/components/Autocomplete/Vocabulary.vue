@@ -9,7 +9,7 @@ const  modelValue = defineModel<{ modelValue: string[] }>()
 const vocabularyTerms = ref<openbis.VocabularyTerm[]>([])
 
 onMounted(async () => {
-   vocabularyTerms.value = await useVocabularyStore().listVocabularyTermsByVocabularyCode(searchTerm)
+   vocabularyTerms.value = await listVocabularyTermsByVocabularyCode(searchTerm)
 }) 
 
 </script>

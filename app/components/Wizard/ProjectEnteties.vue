@@ -13,7 +13,7 @@ const allVocabularies = ref<openbis.Vocabulary[]>([])
 const tab = ref('')
 
 onMounted(async () => {
-  allVocabularies.value = await useVocabularyStore().listAllVocabularies()
+  allVocabularies.value = await listAllVocabularies()
 })
 
 const formattedEntityVariables = computed({

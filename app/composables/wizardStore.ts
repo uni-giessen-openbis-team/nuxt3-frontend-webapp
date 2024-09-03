@@ -114,6 +114,7 @@ export const useWizardStore = defineStore('wizardStore', {
      * @returns {boolean} - Returns true if the update is successful.
      */
     updateEntityVariables() {
+      console.log("updateEntityVariables")
       const SAMPLE_TYPE = 'BIOLOGICAL_ENTITY';
       this.entityConditionsResult = this.createTableEntries(this.entityVariables, SAMPLE_TYPE);
       return true;

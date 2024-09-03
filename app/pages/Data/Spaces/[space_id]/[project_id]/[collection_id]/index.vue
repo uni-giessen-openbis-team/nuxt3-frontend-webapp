@@ -102,7 +102,7 @@ const itemKey = 'id'
       </v-btn>
     </template>
     <template #item.actions="{ item }">
-      <v-btn color="red" icon @click="deleteSample(item.getIdentifier().toString())">
+      <v-btn color="red" icon @click="handleDeleteCollection(item.getIdentifier().toString())">
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </template>
