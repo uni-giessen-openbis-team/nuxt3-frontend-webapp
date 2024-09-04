@@ -14,6 +14,7 @@ const menuItems = [
   { name: 'Information', icon: 'mdi-information', path: '/Information' },
 ]
 const tempDrawer = ref(true)
+
 </script>
 
 <template>
