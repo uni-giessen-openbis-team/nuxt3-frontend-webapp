@@ -32,7 +32,7 @@ const openBizDescription = [
       Welcome
     </h1>
 
-    <h2>BCF openBIS+ Instance</h2>
+    <h2>Project Safe</h2>
   </v-container>
 
   <v-divider />
@@ -49,7 +49,7 @@ const openBizDescription = [
       This service is part of the Bioinformatics Core Facility (BCF) which provides a centralized IT-infrastructure for high-throughput data analysis.
     </div>
   </v-container>
-</template>
+</v-img></template>
 
 <style scoped>
 
