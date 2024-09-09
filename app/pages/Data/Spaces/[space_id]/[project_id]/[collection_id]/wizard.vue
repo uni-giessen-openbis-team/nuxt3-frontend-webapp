@@ -89,7 +89,7 @@ const prev = () => {
         <v-stepper-item 
           value="1"
           title="Project Enteties"
-        />
+        /> 
         <v-divider/>
         <v-stepper-item 
           value="2"

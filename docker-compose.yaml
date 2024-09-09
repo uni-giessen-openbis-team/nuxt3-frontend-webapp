@@ -1,0 +1,61 @@
+services:
+  openbis-db:
+    image: postgres:15
+    container_name: openbis-db
+    hostname: openbis-db
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - openbis-db-data:/var/lib/postgresql/data
+    networks:
+      - openbis-network
+
+  openbis-app:
+    image: openbis/openbis-app:20.10.7
+    container_name: openbis-app
+    hostname: openbis-app
+    environment:
+      OPENBIS_ADMIN_PASS: "123456789"
+      OPENBIS_DATA: "/data/openbis"
+      OPENBIS_DB_ADMIN_PASS: "mysecretpassword"
+      OPENBIS_DB_ADMIN_USER: "postgres"
+      OPENBIS_DB_APP_PASS: "mysecretpassword"
+      OPENBIS_DB_APP_USER: "openbis"
+      OPENBIS_DB_HOST: "openbis-db"
+      OPENBIS_ETC: "/etc/openbis"
+      OPENBIS_HOME: "/home/openbis"
+      OPENBIS_LOG: "/var/log/openbis"
+      OPENBIS_FQDN: "localhost"
+    volumes:
+      - openbis-app-data:/data
+      - openbis-app-etc:/etc/openbis
+      - openbis-app-logs:/var/log/openbis
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - openbis-network
+    pid: "host"
+
+  openbis-ingress:
+    image: openbis/openbis-local:latest
+    container_name: openbis-ingress
+    hostname: openbis-ingress
+    environment:
+      OPENBIS_HOST: "openbis-app"
+    ports:
+      - "443:443"
+    networks:
+      - openbis-network
+    pid: "host"
+
+networks:
+  openbis-network:
+    driver: bridge
+
+volumes:
+  openbis-db-data:
+  openbis-app-data:
+  openbis-app-etc:
+  openbis-app-logs:
