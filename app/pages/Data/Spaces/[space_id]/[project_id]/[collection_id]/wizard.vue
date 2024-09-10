@@ -59,8 +59,6 @@ const prev = () => {
 
 
 <template>
-
-
   <v-container>
 
 
