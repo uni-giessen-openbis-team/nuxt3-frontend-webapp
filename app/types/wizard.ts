@@ -1,16 +1,21 @@
 export type ProjectEntity = {
   title: string;
-  conditions: Array<any>;
+  conditions: Array<Condition>;
   continuous: boolean;
   unit: string | null;
   vocabularyCode: string | null;
 };
 
+export type Condition = {
+  code: string;
+  label: string;
+};
+
 export interface ProjectContext {
-  UUID: string;
-  space: string | null;
-  code: string | null;
+  spaceCode: string ;
+  projectCode: string ;
   contactPerson: string | null;
+  experimentCode: string | null;
   manager: string | null;
   description: string | null;
 }

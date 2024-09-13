@@ -314,7 +314,7 @@ export const useWizardStore = defineStore('wizardStore', {
       ];
       this.projectContext = {
         UUID: '',
-        space: null,
+        spaceCode: null,
         code: null,
         contactPerson: null,
         manager: null,

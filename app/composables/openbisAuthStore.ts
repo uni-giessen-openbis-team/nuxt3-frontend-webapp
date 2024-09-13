@@ -114,7 +114,7 @@ export const useOpenBisStore = defineStore('openBis', {
 
     async autoLogin() {
       try {
-        await this.login('admin', 'mysecretpassword')
+        await this.login('admin', '123456789')
       } catch (error) {
         console.error('Error auto logging in:', error)
       }
