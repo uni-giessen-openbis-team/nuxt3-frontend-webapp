@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref, watchEffect } from 'vue'
-
 const emit = defineEmits(['update:modelValue'])
+
 const textInput = ref('')
 onMounted(() => {
   watchEffect(() => {
@@ -9,10 +8,12 @@ onMounted(() => {
     emit('update:modelValue', list)
   })
 })
-</script>
 
+</script>
+ 
 <template>
   <div>
     <v-textarea v-model="textInput" />
   </div>
 </template>
+ 

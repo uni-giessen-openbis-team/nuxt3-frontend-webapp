@@ -1,0 +1,4 @@
+Use Nuxt Compostion API.
+
+Define props like this: const { foo = 'hello' } = defineProps<{ foo?: string }>()
+Define model like this: 

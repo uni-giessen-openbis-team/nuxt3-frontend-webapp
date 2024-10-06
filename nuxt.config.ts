@@ -14,8 +14,8 @@ export default defineNuxtConfig({
     '@formkit/nuxt',
     'vuetify-nuxt-module',
     '@pinia-plugin-persistedstate/nuxt',
-    "@nuxt/eslint",
-    '@nuxt/test-utils/module'
+    '@nuxt/test-utils/module',
+    "@nuxtjs/storybook"
   ],
 
   nitro: {
@@ -62,5 +62,10 @@ export default defineNuxtConfig({
         defaultTheme: 'dark',
       },
     }
-  }
+  },
+  storybook: {
+    // Options
+    url: 'http://localhost:6006',
+    port: 6006,
+  },
 })

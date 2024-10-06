@@ -1,28 +1,33 @@
 <script setup lang="ts">
-const  modelValue= defineModel()
+import type { EntitySampleHandler, BiologicalSampleHandler, TechnicalSampleHandler } from '~/composables/SampleHandlerClass';
+
+const modelValue = defineModel<Ref<EntitySampleHandler | BiologicalSampleHandler | TechnicalSampleHandler>>();
+
+// extract the sampleCreations from the modelValue with toRefs
 </script>
 
 <template>
+  <pre>{{ modelValue }}</pre>
   <v-table>
     <thead>
-      <tr>
-        <th v-for="key in ['externalDBID', 'secondaryName', ...Object.keys(modelValue[0] ?? {}).filter(k => !['externalDBID', 'secondaryName'].includes(k))]" :key="key">
+      <tr> 
+        <th v-for="(key, index) in ['name', ...Object.keys(modelValue.value.sampleCreations[0]?.properties ?? {}).filter(k => !['name'].includes(k))]" :key="index">
           {{ key }}
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(item, index) in modelValue" :key="index">
-        <td v-for="key in ['externalDBID', 'secondaryName', ...Object.keys(item).filter(k => !['externalDBID', 'secondaryName'].includes(k))]" :key="key">
-          <template v-if="['count', 'externalDBID', 'secondaryName'].includes(key)">
-            <v-text-field v-model="item[key]" />
+      <tr v-for="(item, index) in modelValue.value.sampleCreations" :key="index">
+        <td v-for="key in ['name', ...Object.keys(item.properties).filter(k => !['name'].includes(k))]" :key="key">
+          <template v-if="['count', 'name'].includes(key)">
+            <v-text-field v-model="item.properties[key]" />
           </template>
           <template v-else>
-            {{ item[key] }}
+            {{ item.properties[key] }}
           </template>
         </td>
       </tr>
     </tbody>
   </v-table>
-  Set the count to 0 to delte Item
+  Set the count to 0 to delete Item
 </template>

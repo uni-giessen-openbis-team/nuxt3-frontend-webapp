@@ -7,7 +7,6 @@ const files = ref<File[]>([]);
 const datasets = ref<openbis.DataSet[]>([]);
 const route = useRoute();
 const sampleId = route.params.sample_id; // Ensure sample_id is correctly set
-const datasetStore = useDatasetStore();
 
 const spaceId = route.params.space_id as string;
 const projectId = route.params.project_id as string;
@@ -15,7 +14,7 @@ const collectionId = route.params.collection_id as string;
 
 // Function to fetch datasets for a given sample
 async function fetchDatasetsForSample() {
-  datasets.value = await datasetStore.listDataSetsOfObject(sampleId as string);
+  datasets.value = await listDataSetsOfObject(sampleId as string);
 }
 
 onMounted(() => {
