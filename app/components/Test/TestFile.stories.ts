@@ -1,12 +1,16 @@
-import MyNuxtWelcome from './MyWelcome.vue'
+import TestFile from './TestFile.vue'
 
 // More on how to set up stories at: https://storybook.js.org/docs/vue/writing-stories/introduction
-const meta = {
-  title: 'Example/NuxtWelcome',
-  component: MyNuxtWelcome,
-  // This component will have an automatically generated docsPage entry: https://storybook.js.org/docs/vue/writing-docs/autodocs
-  tags: ['autodocs'],
-}
+import type { Meta, StoryObj } from '@storybook/vue3'
+
+const meta ={
+  title: 'test/test',
+  component: TestFile,
+  args: { modelValue: "test"},
+
+} satisfies Meta<typeof TestFile>
+
+
 
 export default meta
 
@@ -17,6 +21,9 @@ export default meta
  * to learn how to use render functions.
  */
 
-export const NuxtWelcomeStory = {
-  args: {},
+
+type Story = StoryObj<typeof meta>
+
+export const TestStory: Story  = {
+
 }

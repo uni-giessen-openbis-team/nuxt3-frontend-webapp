@@ -1,7 +1,4 @@
 {
-  "extends": "./.nuxt/tsconfig.json",
-  "compilerOptions": {
-    "typeRoots": ["app/composables"],
-    // Override or add compiler options here
-  },
+  // https://nuxt.com/docs/guide/concepts/typescript
+  "extends": "./.nuxt/tsconfig.json"
 }

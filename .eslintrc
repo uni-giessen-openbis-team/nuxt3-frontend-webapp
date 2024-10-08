@@ -1,9 +1,0 @@
-{
-  "extends": "@antfu",
-  "rules": 
-  {
-    // Rules for: https://vue-macros.sxzz.moe/features/export-props.html
-    "vue/no-export-in-script-setup" : "off", 
-    "import/no-mutable-exports": "off"
-  }
-}

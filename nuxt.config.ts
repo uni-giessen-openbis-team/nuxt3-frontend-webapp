@@ -10,14 +10,13 @@ export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
     '@pinia/nuxt',
-    '@nuxtjs/color-mode',
     '@formkit/nuxt',
     'vuetify-nuxt-module',
     '@pinia-plugin-persistedstate/nuxt',
     '@nuxt/test-utils/module',
     "@nuxtjs/storybook"
   ],
-
+ 
   nitro: {
     devProxy: {
       '/openbis': {
@@ -44,14 +43,11 @@ export default defineNuxtConfig({
     },
   },
 
-  // client side rendering only
-  ssr: false,
 
   runtimeConfig: {
     apiBase: process.env.API_BASE_URL,
   },
 
-  compatibilityDate: '2024-07-09',
 
   vuetify: {
     moduleOptions: {
@@ -63,9 +59,11 @@ export default defineNuxtConfig({
       },
     }
   },
-  storybook: {
-    // Options
-    url: 'http://localhost:6006',
-    port: 6006,
+
+  vue: {
+    runtimeCompiler: true,
   },
+
+  compatibilityDate: '2024-07-09',
+  ssr:false
 })

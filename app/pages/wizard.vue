@@ -8,7 +8,7 @@ const wizardStore = useWizardStore();
 wizardStore.createSampleHandlers();
 
 const { entitySampleHandler, biologicalSampleHandler, technicalSampleHandler } = storeToRefs(wizardStore);
-const { spaceId, projectId,  collectionId } = storeToRefs(wizardStore);
+const { spaceId, projectId, collectionId } = storeToRefs(wizardStore);
 
 const tab = ref('');
 const e1 = ref<number>(0);
@@ -20,12 +20,12 @@ async function onComplete() {
 }
 
 const steps = [
-  { id: 0, title: "Project Entities", component: WizardSelectEnteties, model: entitySampleHandler },
-  { id: 1, title: "Entity Preview", component: WizardPreviewTable, model: entitySampleHandler},
-  { id: 2, title: "Biological Samples", component: WizardSelectEnteties, model: biologicalSampleHandler },
-  { id: 1, title: "Biological Samples Preview", component: WizardPreviewTable, model: biologicalSampleHandler},
-  { id: 3, title: "Technical Samples", component: WizardSelectEnteties, model: technicalSampleHandler },
-  { id: 4, title: "Technical Samples Preview", component: WizardPreviewTable, model: technicalSampleHandler},
+  { id: 0, title: "Project Entities" },
+  { id: 1, title: "Entity Preview" },
+  { id: 2, title: "Biological Samples" },
+  { id: 3, title: "Biological Samples Preview" },
+  { id: 4, title: "Technical Samples" },
+  { id: 5, title: "Technical Samples Preview" },
 ];
 
 const next = async () => {
@@ -40,8 +40,8 @@ const next = async () => {
       // No function for Entity Preview, just move to next step
       break;
     case 2:
-        await biologicalSampleHandler.value?.createSampleCreations();
-      
+      await biologicalSampleHandler.value?.createSampleCreations();
+
       break;
     // ... other cases ...
     case 5:
@@ -59,8 +59,8 @@ const prev = () => {
 
 <template>
   <v-container>
-    {{useRoute().query}}
-    
+    {{ useRoute().query }}
+
     <h2>
       Create new samples for collection {{ collectionId }}
     </h2>
@@ -85,14 +85,28 @@ const prev = () => {
             </template>
           </v-stepper-header>
 
-          <v-stepper-window>
-            <template v-for="step in steps" :key="step.id">
-              <v-stepper-window-item :value="step.id">
-                <component :is="step.component" v-model="step.model"  />
+          <div v-if="entitySampleHandler">
+            <v-stepper-window>
+              <v-stepper-window-item v-if="e1 === 0" :value="0">
+                <WizardSelectEnteties v-model="entitySampleHandler.properties" :items="entitySampleHandler.items" />
               </v-stepper-window-item>
-            </template>
-          </v-stepper-window>
-
+              <v-stepper-window-item v-if="e1 === 1" :value="1">
+                <WizardPreviewTable :model="entitySampleHandler" />
+              </v-stepper-window-item>
+              <v-stepper-window-item v-if="e1 === 2" :value="2">
+                <WizardSelectEnteties :model="biologicalSampleHandler" />
+              </v-stepper-window-item>
+              <v-stepper-window-item v-if="e1 === 3" :value="3">
+                <WizardPreviewTable :model="biologicalSampleHandler" />
+              </v-stepper-window-item>
+              <v-stepper-window-item v-if="e1 === 4" :value="4">
+                <WizardSelectEnteties :model="technicalSampleHandler" />
+              </v-stepper-window-item>
+              <v-stepper-window-item v-if="e1 === 5" :value="5">
+                <WizardPreviewTable :model="technicalSampleHandler" />
+              </v-stepper-window-item>
+            </v-stepper-window>
+          </div>
           <v-stepper-actions @click:next="next()" @click:prev="prev">
             <template #next>
               <v-btn v-if="e1 < steps.length" color="primary" @click="next()">Next</v-btn>
@@ -111,4 +125,5 @@ const prev = () => {
       </v-window-item>
     </v-window>
   </v-container>
+
 </template>

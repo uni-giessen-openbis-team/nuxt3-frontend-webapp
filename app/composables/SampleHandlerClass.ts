@@ -174,8 +174,15 @@ export class EntitySampleHandler extends SampleHandler {
     ]; 
 
     this.items.push(...properties);
-    // this.addProperty(properties[0]); 
 
+    // Ensure properties are created before returning
+    this.ensurePropertiesCreated();
+  }
+
+  private ensurePropertiesCreated() {
+    if (this.items.length === 0) {
+      throw new Error("Properties are not created yet.");
+    }
   }
 }
 
