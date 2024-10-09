@@ -1,4 +1,4 @@
-f<template>
+<template>
   <v-container>
     <v-row>
       <v-col cols="12">
@@ -26,7 +26,6 @@ const goToSpaces = () => {
   cursor: pointer;
   transition: transform 0.2s;
 }
-
 .data-card:hover {
   transform: scale(1.05);
 }

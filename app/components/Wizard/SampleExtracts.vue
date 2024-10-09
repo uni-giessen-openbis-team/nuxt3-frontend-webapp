@@ -5,6 +5,22 @@ import { ref } from 'vue'
 const modelValue  = defineModel()
 const tab = ref('')
 
+const variables: Ref<TableVariable[]> = ref([
+  {
+    title: 'Growth Medium',
+    conditions: ref([]),
+    continuous: false,
+    unit: null,
+    vocabularyCode: null,
+  }, {
+    title: 'Treatment',
+    conditions: ref([]),
+    continuous: false, 
+    unit: null,
+    vocabularyCode: null,
+  },
+])
+
 // const jsonObject = await store.getVocabularyTerms('TISSUES')
 // const tissues = jsonObject.TISSUES?.terms.map(term => term.label)
 const tissues = ['tissue1', 'tissue2']
@@ -12,8 +28,7 @@ const tissues = ['tissue1', 'tissue2']
 
 <template>
   <div>
-    test
-    <!-- <v-autocomplete
+    <v-autocomplete
       v-model="modelValue"
       label="Experimental variables"
       box
@@ -57,6 +72,10 @@ const tissues = ['tissue1', 'tissue2']
         </v-card-text>
       </v-card>
     </div>
-    <pre>{{ modelValue }}</pre> -->
+    <pre>{{ modelValue }}</pre>
   </div>
 </template>
+
+<style lang="scss" scoped>
+
+</style>

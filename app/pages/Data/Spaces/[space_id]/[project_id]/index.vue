@@ -62,6 +62,7 @@ const handleDeleteProject = async () => {
 onMounted(() => {
   const projectPermId = new openbis.ProjectPermId(projectId.value as string)
   // set project context code 
+  useWizardStore().projectContext.code = projectId.value as string
   handleFetchCollections(projectPermId)
   handleFetchProjectDetails(projectId.value as string)
 })

@@ -1,3 +1,10 @@
+export type ProjectEntity = {
+  title: string;
+  conditions: Array<Condition>;
+  continuous: boolean;
+  unit: string | null;
+  vocabularyCode: string | null;
+};
 
 export type Condition = {
   code: string;
@@ -28,4 +35,3 @@ export type combinedVariable = {
   sampleType: string;
   child?: string;
 };
-

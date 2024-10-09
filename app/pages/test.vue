@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { useProjectStore } from '~/app/composables/projectStore';
 import type openbis from '~/composables/openbis.esm';
 
 const project = ref<openbis.Project | null>(null);
 const error = ref<Error | null>(null);
 const route = useRoute();
+const projectStore = useProjectStore();
 
 const fetchProjectDetails = async () => {
   try {
     const projectId = route.query.projectId as string;
-    project.value = await getProjectCompletely(projectId);
+    project.value = await projectStore.getProjectCompletely(projectId);
   } catch (err) {
     error.value = err as Error;
   }

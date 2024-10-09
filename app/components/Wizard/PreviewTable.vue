@@ -1,33 +1,28 @@
-// @ts-ignore
 <script setup lang="ts">
-import type openbis from '~/composables/openbis.esm';
-
-
-const modelValue = defineModel<openbis.SampleCreation[]>();
-
+const  modelValue= defineModel()
 </script>
 
 <template>
-  <v-table v-if="modelValue">
+  <v-table>
     <thead>
       <tr>
-        <th v-for="(key, index) in Object.keys(modelValue[0]?.properties ?? {})" :key="index">
+        <th v-for="key in ['externalDBID', 'secondaryName', ...Object.keys(modelValue[0] ?? {}).filter(k => !['externalDBID', 'secondaryName'].includes(k))]" :key="key">
           {{ key }}
         </th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="(item, index) in modelValue" :key="index">
-        <td v-for="key in Object.keys(item.properties)" :key="key">
-          <template v-if="['count', 'name'].includes(key)">
-            <v-text-field v-model="item.properties[key]" />
+        <td v-for="key in ['externalDBID', 'secondaryName', ...Object.keys(item).filter(k => !['externalDBID', 'secondaryName'].includes(k))]" :key="key">
+          <template v-if="['count', 'externalDBID', 'secondaryName'].includes(key)">
+            <v-text-field v-model="item[key]" />
           </template>
           <template v-else>
-            {{ item.properties[key] }}
+            {{ item[key] }}
           </template>
         </td>
       </tr>
     </tbody>
   </v-table>
-  Set the count to 0 to delete Item
+  Set the count to 0 to delte Item
 </template>

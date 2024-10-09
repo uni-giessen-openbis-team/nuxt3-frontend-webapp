@@ -7,11 +7,12 @@ import openbis from '~/app/composables/openbis.esm'
 const datasets = ref<openbis.DataSet[]>([])
 const error = ref(null)
 const router = useRouter()
+const datasetStore = useDatasetStore()
 
 const fetchDatasets = async () => {
   try {
     console.log('Fetching all datasets')
-    datasets.value = await listAllDataSets()
+    datasets.value = await datasetStore.listAllDataSets()
     console.log('Fetched datasets:', datasets.value)
   } catch (err) {
     console.error('Error fetching datasets:', err)

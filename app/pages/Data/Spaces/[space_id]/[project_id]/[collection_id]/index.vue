@@ -8,7 +8,6 @@ const route = useRoute()
 const spaceId = route.params.space_id as string
 const projectId = route.params.project_id as string
 const collectionId = route.params.collection_id as string
-
 const collection = ref<openbis.Experiment | null>(null)
 
 // Initialize the sample store
@@ -51,13 +50,20 @@ onMounted(async () => {
   collection.value = await getCollection(collectionId)
 
   handleFetchSamples(collectionId)
-
+  // set collection context code
+  useWizardStore().collectionContext.code = collectionId as string
+  useWizardStore().projectContext.code = projectId as string
+  useWizardStore().spaceContext.code = spaceId as string
 })
 
 // Function to delete a collection
 const handleDeleteCollection = async (permId: string) => {
     await deleteCollection(permId ,"because");
 }
+
+const props = defineProps<{
+  samples: openbis.Sample[]
+}>()
 
 const headers = [
   { title: 'Sample Code', value: 'code' },
@@ -78,18 +84,11 @@ const itemKey = 'id'
       {{  collection?.getCode() }}
  
     </h1>
-   
-    <NuxtLink 
-      :to="{ 
-        name: 'wizard',
-        query: { space_id: spaceId, project_id: projectId, collection_id: collectionId }
-      }"
-    >
-    <v-btn  >   
+    <v-btn :to="`/data/spaces/${spaceId}/${projectId}/${collectionId}/wizard`" >   
       <v-icon left>mdi-plus</v-icon> <!-- Added icon for data creation -->
       Create Samples
     </v-btn>
-  </NuxtLink>
+
     <v-data-table
     class="mt-10 mb-10"
     :headers="headers"
