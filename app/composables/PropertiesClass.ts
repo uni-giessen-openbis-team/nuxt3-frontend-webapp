@@ -27,7 +27,7 @@ abstract class BaseProperty {
 
     constructor(
       title: string,
-      code: string,
+      code: string, 
       label: string,
       public vocabularyCode: string | null
     ) {

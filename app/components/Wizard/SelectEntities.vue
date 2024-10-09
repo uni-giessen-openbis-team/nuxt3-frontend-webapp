@@ -47,7 +47,7 @@ function isPropertyWithVocabularyCode(item: unknown): item is PropertyWithVocabu
             </v-alert>
           </div>
           <div v-else>
-            <WizardCrudTable v-model="item.conditions" />
+            <InputTextToList v-model="item.conditions" />
             <v-checkbox v-model="item.continuous" label="continuous" />
 
             <div v-if="item.continuous === true">

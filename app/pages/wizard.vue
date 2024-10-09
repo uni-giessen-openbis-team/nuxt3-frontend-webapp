@@ -5,10 +5,15 @@ import { useWizardStore } from '~/composables/wizardStore';
 
 const wizardStore = useWizardStore();
 
+// Ensure that createSampleHandlers is called only once, possibly in a setup or lifecycle hook
 wizardStore.createSampleHandlers();
 
-const { entitySampleHandler, biologicalSampleHandler, technicalSampleHandler } = storeToRefs(wizardStore);
 const { spaceId, projectId, collectionId } = storeToRefs(wizardStore);
+
+const entitySampleHandler = ref(new EntitySampleHandler(spaceId.value, projectId.value, "1"));
+const biologicalSampleHandler = ref(new BiologicalSampleHandler(spaceId.value, projectId.value, "1", entitySampleHandler.value));
+const technicalSampleHandler = ref(new TechnicalSampleHandler(spaceId.value, projectId.value, "1", biologicalSampleHandler.value));
+
 
 const tab = ref('');
 const e1 = ref<number>(0);
@@ -41,9 +46,13 @@ const next = async () => {
       break;
     case 2:
       await biologicalSampleHandler.value?.createSampleCreations();
-
       break;
-    // ... other cases ...
+    case 3:
+      // No function for Biological Preview, just move to next step
+      break;
+    case 4:
+      await technicalSampleHandler.value?.createSampleCreations();
+      break;
     case 5:
       // Final step, call onComplete
       await onComplete();
@@ -85,25 +94,27 @@ const prev = () => {
             </template>
           </v-stepper-header>
 
-          <div v-if="entitySampleHandler">
+          <div v-if="entitySampleHandler && biologicalSampleHandler && technicalSampleHandler">
             <v-stepper-window>
               <v-stepper-window-item v-if="e1 === 0" :value="0">
                 <WizardSelectEnteties v-model="entitySampleHandler.properties" :items="entitySampleHandler.items" />
               </v-stepper-window-item>
               <v-stepper-window-item v-if="e1 === 1" :value="1">
-                <WizardPreviewTable :model="entitySampleHandler" />
+                <WizardPreviewTable v-model="entitySampleHandler.sampleCreations" />
               </v-stepper-window-item>
               <v-stepper-window-item v-if="e1 === 2" :value="2">
-                <WizardSelectEnteties :model="biologicalSampleHandler" />
+                <WizardSelectEnteties v-model="biologicalSampleHandler.properties"
+                  :items="biologicalSampleHandler.items" />
               </v-stepper-window-item>
               <v-stepper-window-item v-if="e1 === 3" :value="3">
-                <WizardPreviewTable :model="biologicalSampleHandler" />
+                <WizardPreviewTable v-model="biologicalSampleHandler.sampleCreations" />
               </v-stepper-window-item>
               <v-stepper-window-item v-if="e1 === 4" :value="4">
-                <WizardSelectEnteties :model="technicalSampleHandler" />
+                <WizardSelectEnteties v-model="technicalSampleHandler.properties"
+                  :items="technicalSampleHandler.items" />
               </v-stepper-window-item>
               <v-stepper-window-item v-if="e1 === 5" :value="5">
-                <WizardPreviewTable :model="technicalSampleHandler" />
+                <WizardPreviewTable v-model="technicalSampleHandler.sampleCreations" />
               </v-stepper-window-item>
             </v-stepper-window>
           </div>

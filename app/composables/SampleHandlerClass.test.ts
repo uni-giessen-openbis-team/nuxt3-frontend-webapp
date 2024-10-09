@@ -29,8 +29,8 @@ describe('SampleHandler', () => {
   })
 
   it('should correctly combine properties from parent and child', () => {
-    const sampleCreations = biologicalSampleHandler.createSampleCreations()
-    sampleCreations.forEach(sample => {
+    biologicalSampleHandler.createSampleCreations()
+    biologicalSampleHandler.sampleCreations.forEach(sample => {
       expect(sample.getProperties()).toMatchObject({
         'TISSUE_ID': expect.any(String),
         'name': expect.any(String),
@@ -39,8 +39,8 @@ describe('SampleHandler', () => {
   })
 
   it('should correctly combine properties from grandparent, parent, and child', () => {
-    const sampleCreations = technicalSampleHandler.createSampleCreations()
-    sampleCreations.forEach(sample => {
+     technicalSampleHandler.createSampleCreations()
+     technicalSampleHandler.sampleCreations.forEach(sample => {
       expect(sample.getProperties()).toMatchObject({
         'TISSUE_ID': expect.any(String),
         'name': expect.any(String),

@@ -10,3 +10,15 @@
 : 1728373612:0;bunx nuxi@latest module add vuetify-nuxt-module
 : 1728373617:0;bun i 
 : 1728373619:0;bun run dev
+: 1728400311:0;bun run dev --inspect
+: 1728401279:0;ls
+: 1728401282:0;ls -a
+: 1728402681:0;bun run dev
+: 1728455692:0;bun test
+: 1728456734:0;nuxi dev --inspect
+: 1728456742:0;bun run dev --inspect
+: 1728456763:0;lsof -ti:3000,3001 | xargs kill -9
+: 1728456779:0;bun run dev --inspect
+: 1728456788:0;lsof -ti:3001 | xargs kill -9
+: 1728456810:0;lsof -ti:3000 | xargs kill -9
+: 1728456818:0;bun run dev --inspect

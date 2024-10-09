@@ -1,6 +1,6 @@
 
 import type { Entity, ProjectContext, TableVariable, combinedVariable } from '@/types/wizard';
-
+ 
  
 // The variables that are available for the entety variables in the wizard
 
@@ -14,7 +14,7 @@ export const entetySampleItems: Entity[] = [
 
 // The variables that are available for the biological sample variables in the wizard
 
-export const biologicalSampletems: Entity[] = [
+export const biologicalSampleItems: Entity[] = [
   {
     title: 'genotype',
     conditions: [],
@@ -30,7 +30,7 @@ export const biologicalSampletems: Entity[] = [
 
 // The variables that are available for the technical sample variables in the wizard
 
-export const technicalSampletems: Entity[] = [
+export const technicalSampleItems: Entity[] = [
     {
       title: 'Method',
       conditions: [],

@@ -21,6 +21,7 @@ export abstract class SampleHandler {
 
   // Getter to create combinations of properties
   get propertyCombinations(): Array<{ [key: string]: string }> {
+    console.log('properties', this.properties , "parent properties", this.parentSampleHandler?.properties);
     const combinedProperties = this.properties.reduce((acc, property) => {
       return this.combinePropertyConditions(acc, property.conditions, property.code);
     }, [{}]);
@@ -52,8 +53,9 @@ export abstract class SampleHandler {
   ): Array<{ [key: string]: string }> {
     return accumulator.flatMap(acc =>
       conditions.map(condition => {
+        const uniqueValues = new Set(Object.values(acc).filter(Boolean)); // Create a Set for unique values
         const combinedName = 
-          `${Object.values(acc).filter(Boolean).join('_')}_${condition}`
+          `${[...uniqueValues].join('_')}${uniqueValues.size > 0 ? '_' : ''}${condition}`; // Updated line
         
         return {
           ...acc,
@@ -64,40 +66,12 @@ export abstract class SampleHandler {
     );
   }
 
-  // This function creates a name for the sample by combining the conditions.
-  // It is used to create unique sample codes.
-  private createCombinedName(
-    accumulator: Array<{ [key: string]: string }>,
-    condition: string
-  ): Array<{ [key: string]: string }> {
-    return accumulator.flatMap(x =>
-      condition.map(term => ({ ...x, [condition]: term }))
-    );
-  }
-
-  protected createTableEntries(variables: Entity[]): openbis.Sample[] {
-    // Example implementation to create samples from entity variables
-    return variables.map(variable => {
-      const sampleCode = SampleHandler.sanitizeName(variable.title);
-      return this.prepareSample(sampleCode, variable.conditions);
-    });
-  }
-
-
-  createSampleCreations(): openbis.SampleCreation[] {
+  createSampleCreations() {
     // if a parent exist, also take the props of the sampleCreations and
     // create combinations of the parent and the current sampleCreations
-
-
-      const sampleCreations =  this.propertyCombinations.map((props) => {
-        return this.createSampleCreation(props.name, Object.entries(props));
+      this.sampleCreations  =  this.propertyCombinations.map((props) => {
+        return this.createSampleCreation(props?.name ?? '', Object.entries(props));
       });
-      
-    // Save the sample creations
-    this.sampleCreations = sampleCreations;
-
-
-    return sampleCreations;
   }
 
   private createSampleCreation(sampleCode: string, properties: [string, string][], parentSampleCreation?: openbis.SampleCreation| openbis.Sample): openbis.SampleCreation {
@@ -135,17 +109,15 @@ export abstract class SampleHandler {
       children.map(child => ({
         ...child,
         id: `${parent.getCode()}_${child.getCode()}`,
-        properties: { ...parent.properties, ...child.properties  }
+        properties: { ...parent.getProperties(), ...child.getProperties()  }
       }))
     );
   }
 
 
-   
-
   async createSamples() {
     const samples = this.createSampleCreations();
-    useOpenBisStore().v3?.createSamples(samples);
+    useOpenBisStore().v3?.createSamples(this.sampleCreations);
   }
 
   // Add a property to the properties array
@@ -174,15 +146,6 @@ export class EntitySampleHandler extends SampleHandler {
     ]; 
 
     this.items.push(...properties);
-
-    // Ensure properties are created before returning
-    this.ensurePropertiesCreated();
-  }
-
-  private ensurePropertiesCreated() {
-    if (this.items.length === 0) {
-      throw new Error("Properties are not created yet.");
-    }
   }
 }
 
@@ -219,4 +182,6 @@ export class TechnicalSampleHandler extends BiologicalSampleHandler {
     this.sampleType = 'TECHNICAL_SAMPLE_TYPE'; // Overwrite the sample type
     this.parentSampleHandler = parentSampleHandler;
   }
+
+  // override the createSamples method to create a 
 }

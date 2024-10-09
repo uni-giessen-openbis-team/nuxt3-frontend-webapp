@@ -13,7 +13,7 @@ onMounted(() => {
  
 <template>
   <div>
-    <v-textarea v-model="textInput" />
+   
   </div>
 </template>
  
