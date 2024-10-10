@@ -35,3 +35,27 @@ export type combinedVariable = {
   sampleType: string;
   child?: string;
 };
+
+
+export type Sample = {
+  conditions: { [key: string]: string }[];
+  externalDBID: string;
+  secondaryName: string;
+  count: string;
+  sampleType: string;
+  parent?: string;
+};
+
+
+export type PropertyWithVocabulary = {
+  title: string;
+  vocabularyCode: string;
+};
+
+export type  PropertyWithoutVocabulary = {
+  title: string;
+  continuous: boolean;
+  unit: string | null;
+};
+
+export type Property = PropertyWithVocabulary | PropertyWithoutVocabulary;

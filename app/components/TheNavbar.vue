@@ -22,12 +22,12 @@ const tempDrawer = ref(true)
     <!-- The Icon on the left to open and close the drawer -->
     <v-app-bar-nav-icon class="hidden-lg-and-up" @click="tempDrawer = !tempDrawer" />
     <nuxt-link to="/" class="d-flex align-items-center">
-      <v-img src="/logo.webp" alt="Logo" height="80" width="80"/>
+      <v-img src="/logo.webp" alt="Logo" height="80" width="80" />
     </nuxt-link>
     <v-app-bar-title>Project Safe</v-app-bar-title>
 
-    <v-spacer />
-   
+    <v-spacer /> 
+
     <v-spacer />
     <!-- Icons on the right side -->
     <!-- Settings Menu -->
@@ -63,8 +63,5 @@ const tempDrawer = ref(true)
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
-  
+
 </template>
-
-
-

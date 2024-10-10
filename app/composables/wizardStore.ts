@@ -8,133 +8,27 @@ import openbis from './openbis.esm';
  * variables will be used to create the samples.
  */
 
-type Sample = {
-  conditions: { [key: string]: string }[];
-  externalDBID: string;
-  secondaryName: string;
-  count: string;
-  sampleType: string;
-  parent?: string;
-};
 
 export const useWizardStore = defineStore('wizardStore', {
-  state: () => ({
-    spaceContext: {
-      code: '',
-    },
 
-    collectionContext: {
-      code: '',
-      typeId: '',
-      description: '',
-    },
-
-
-    projectContext: {
-      UUID: '',
-      code: '',
-      contactPerson: null,
-      manager: null,
-      description: null,
-    } as ProjectContext,
-
-    selectedBiologicalEntityVariables: [] as ProjectEntity[],
-
-    biologicalSampleVariables: [
-      {
-        title: 'genotype',
-        conditions: [],
-        continuous: false,
-        unit: null,
-        vocabularyCode: "",
-      },
-      {
-        title: 'color',
-        conditions: [],
-        continuous: false,
-        unit: null,
-      },
-    ] as ProjectEntity[],
-
-
-    entityVariables: [
-      {
-        title: 'species',
-        conditions: [""],
-        continuous: false,
-        unit: null,
-        vocabularyCode: "Q_NCBI_TAXONOMY",
-      },
-    ] as ProjectEntity[],
-    entityConditionsResult: [] as Sample[],
-    sampleVariables: [
-      {
-        title: 'tissue',
-        conditions: [],
-        continuous: false,
-        unit: null,
-        vocabularyId: "null",
-      },
-    ] as unknown as ProjectEntity[],
-    sampleConditionsResult: [] as Sample[],
-    entetyAndSampleResult: [] as Sample[],
-    technicalVariables: [
-      {
-        title: 'Method',
-        conditions: [],
-        continuous: false,
-        unit: null,
-        vocabularyCode: null,
-      },
-    ] as ProjectEntity[],
-    technicalConditionsResult: [] as Sample[],
-    technicalSamples: [] as Sample[],
-    tmpResult: [] as string[],
-    spaceId: null,
-    projectId: null,
-  }),
 
   actions: {
-    /**
-     * Adds a new variable to the list of variables.
-     * @param variable - The variable to add.
-     */
-    addVariable(variable: ProjectEntity) {
-      this.biologicalSampleVariables.push(variable);
-    },
-    /**
-     * Removes a variable from the list of variables by its title.
-     * @param title - The title of the variable to remove.
-     */
-    removeVariable(title: string) {
-      this.biologicalSampleVariables = this.biologicalSampleVariables.filter(variable => variable.title !== title);
-    },
-    /**
-     * Updates the entity conditions result by creating table entries for the entity variables.
-     * @returns {boolean} - Returns true if the update is successful.
-     */
+ 
+   
     updateEntityVariables() {
       console.log("updateEntityVariables")
       const SAMPLE_TYPE = 'BIOLOGICAL_ENTITY';
       this.entityConditionsResult = this.createTableEntries(this.entityVariables, SAMPLE_TYPE);
       return true;
     },
-    /**
-     * Updates the biological sample conditions result by creating table entries for the sample variables.
-     * Combines the entity and sample results.
-     * @returns {boolean} - Returns true if the update is successful.
-     */
+
     updateBiologicalVariables() {
       const SAMPLE_TYPE = 'BIOLOGICAL';
       this.sampleConditionsResult = this.createTableEntries(this.sampleVariables, SAMPLE_TYPE);
       this.entetyAndSampleResult = this.crossProductSamples(this.entityConditionsResult, this.sampleConditionsResult);
       return true;
     },
-    /**
-     * Updates the technical sample conditions result by creating table entries for the technical variables.
-     * Combines the entity, sample, and technical results.
-     * @returns {boolean} - Returns true if the update is successful.
-     */
+   
     updateTechnicalVariables() {
       const SAMPLE_TYPE = 'TECHNICAL';
       this.technicalConditionsResult = this.createTableEntries(this.technicalVariables, SAMPLE_TYPE);
@@ -144,17 +38,6 @@ export const useWizardStore = defineStore('wizardStore', {
     },
 
 
-
-
-    /**
-     * Creates table entries for the given variables and sample type.
-     * @param Variables - The variables to create table entries for.
-     * @param sampleType - The type of the sample.
-     * @returns {Sample[]} - The created table entries.
-     */
-    sanitizeName(name: string) {
-      return name.replace(/[^a-zA-Z0-9_]/g, '_');
-    },
 
     createTableEntries(Variables: TableVariable[], sampleType: string) {
       let entetyConditionCombinations = this.generateConditionCombinations(Variables);
