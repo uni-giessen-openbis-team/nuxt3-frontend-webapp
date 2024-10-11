@@ -12,7 +12,6 @@ const meta = {
 
 type Story = StoryObj<typeof meta>
 
-
 export default meta
 
 export const Default: Story = {
@@ -23,3 +22,4 @@ export const Default: Story = {
       ] as Array<Property>,
   }
 }  
+ 

@@ -51,7 +51,9 @@
     "@storybook/addon-links": "8.3.0",
     "@storybook/blocks": "8.3.0",
     "@storybook/test": "8.3.0",
-    "storybook": "8.3.0"
+    "storybook": "8.3.0",
+    "msw": "^2.4.10",
+    "msw-storybook-addon": "^2.0.3"
   },
   "dependencies": {
     "@formkit/nuxt": "^1.6.3",
@@ -69,6 +71,7 @@
     "lodash-es": "^4.17.21",
     "lodash.product": "^18.10.0",
     "material-design-icons-iconfont": "^6.7.0",
+   
     "pnpm": "^9.1.1",
     "requirejs": "^2.3.6",
     "rollup": "4.17.2",

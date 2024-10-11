@@ -1,9 +1,11 @@
 <template>
   <div>
-    <v-checkbox :value="continuous" label="continuous" @change="updateContinuous" />
+    <v-checkbox  
+      v-model="continuous"
+      label="continuous" />
     <div v-if="continuous">
       Unit
-      <v-text-field :value="unit" @input="updateUnit" />
+      <v-text-field v-model="unit" />
     </div>
   </div>
 </template>
@@ -16,15 +18,16 @@ const unit = ref('');
 
 const emit = defineEmits(['update:continuous', 'update:unit']);
 
-function updateContinuous(value: boolean) {
-  continuous.value = value;
-  emit('update:continuous', value);
-}
+// Watch for changes in 'continuous' and emit an event
+watch(continuous, (newValue) => {
+  emit('update:continuous', newValue);
+});
 
-function updateUnit(value: string) {
-  unit.value = value;
-  emit('update:unit', value);
-}
+// Watch for changes in 'unit' and emit an event
+watch(unit, (newValue) => {
+  emit('update:unit', newValue);
+});
+
  
 </script>
 

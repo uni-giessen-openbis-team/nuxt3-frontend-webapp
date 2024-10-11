@@ -13,7 +13,7 @@ const selectedVocabulary = ref<openbis.VocabularyTerm[]>([])
 const vocabularyTerms = ref<openbis.VocabularyTerm[]>([])
 
 onMounted(async () => {
-  vocabularyTerms.value = await listVocabularyTermsByVocabularyCode(searchTerm)
+  vocabularyTerms.value = await listVocabularyTermsByVocabularyCode(searchTerm) || []
 })
 
 // Add a watcher for selectedVocabulary
@@ -25,7 +25,7 @@ watch(selectedVocabulary, (newValue) => {
 
 <template>
   <div v-if="vocabularyTerms.length > 0">
-    <VAutocomplete 
+    <VAutocomplete
       v-model="selectedVocabulary" 
       :items="vocabularyTerms" 
       item-title="code" 
@@ -33,5 +33,4 @@ watch(selectedVocabulary, (newValue) => {
       multiple 
     />
   </div>  
-  <pre>{{ JSON.stringify(selectedVocabulary, null, 2) }}</pre>
 </template>

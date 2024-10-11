@@ -16,10 +16,28 @@ type Story = StoryObj<typeof meta>
 
 export default meta
 
+
+
 export const Default: Story = {
+  decorators: [
+    () => ({
+      setup() {
+        const vocabularyTerms = ref([]);
+        
+        // Mock the onMounted lifecycle hook
+        onMounted(async () => {
+          vocabularyTerms.value = [
+            { label: 'TEST_CODE', description: 'Test Description' },
+            { label: 'TEST_CODE_2', description: 'Test Description 2' },
+          ];
+        });
+
+        return { vocabularyTerms };
+      },
+    }),
+  ],
   args: {
     searchTerm: "TEST_CODE",
     "onUpdate:selectedVocabulary": action("update:selectedVocabulary")
-    
+  }
 }
-}  

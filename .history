@@ -585,3 +585,11 @@
 : 1728580130:0;bun run dev
 : 1728580195:0;bun i 
 : 1728580202:0;bun run dev
+: 1728639769:0;bun i install msw msw-storybook-addon --save-dev
+: 1728639773:0;bun install msw msw-storybook-addon --save-dev
+: 1728639784:0;bunx msw init public/
+: 1728639991:0;install msw --save-dev
+: 1728639996:0;bun install msw --save-dev
+: 1728640041:0;bun i 
+: 1728640101:0;bunx  init /public
+: 1728640112:0;npx msw init public/
