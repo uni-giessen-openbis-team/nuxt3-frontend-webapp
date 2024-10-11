@@ -15,7 +15,8 @@ export default defineNuxtConfig({
     'vuetify-nuxt-module',
     '@pinia-plugin-persistedstate/nuxt',
     "@nuxt/eslint",
-    '@nuxt/test-utils/module'
+    '@nuxt/test-utils/module',
+    '@nuxtjs/storybook'
   ],
 
   nitro: {

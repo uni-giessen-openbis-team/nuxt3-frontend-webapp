@@ -47,15 +47,19 @@ export type Sample = {
 };
 
 
-export type PropertyWithVocabulary = {
-  title: string;
+export type PropertyWithVocabulary = BaseProperty & {
   vocabularyCode: string;
 };
 
-export type  PropertyWithoutVocabulary = {
-  title: string;
+export type  PropertyWithoutVocabulary = BaseProperty & {
   continuous: boolean;
   unit: string | null;
 };
+
+export type BaseProperty = {
+  title: string;
+  description: string;
+  conditions: Condition[];
+}
 
 export type Property = PropertyWithVocabulary | PropertyWithoutVocabulary;

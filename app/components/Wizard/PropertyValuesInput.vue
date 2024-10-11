@@ -1,30 +1,25 @@
 <script setup lang="ts">
+import type { Property , Condition } from '@/types/wizard'
 
-import type { Property } from '@/types/wizard'
+// Prop goes in and decides which one of the below is shown
+const property = defineModel<Property>('property', { required: true })
 
-const props = defineProps<{
-    property: Property;
-}>()
-
-
-
+function handleListUpdate(updatedList: Condition[]) {
+    property.value.conditions = updatedList
+}
 </script>
 
 <template>
-    <div v-if="property.vocabularyCode !== ''">
-        <!-- Todo: Add APIComponentsAutocompleteVocabulary -->
+    <div v-if="property.vocabularyCode && property.vocabularyCode !== ''">
         <div>
             <label for="species-selector">Select Species:</label>
-            <AutocompleteVocabulary v-model="property.conditions[0]" :search-term="property.vocabularyCode as string" />
+            <!-- Adjust the field name according to the actual structure of Property -->
+            <AutocompleteVocabulary :search-term="property.vocabularyCode as string"/>
         </div>
-        {{ item }}
     </div>
     <div v-else>
-        <WizardCrudTable v-model="item.conditions" />
-        <v-checkbox v-model="property.continuous" label="continuous" />
-        <div v-if="property.continuous">
-            Unit
-            <v-text-field v-model="property.unit" />
-        </div>
+      
+        <WizardTextareaToList @update:list="handleListUpdate" />
+        <WizardAddUnitToProperty v-model:continuous="property.continuous" v-model:="property.unit" />
     </div>
 </template>
