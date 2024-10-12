@@ -21,10 +21,6 @@ export default defineNuxtConfig({
   routeRules: {
     '/openbis/**': { proxy: 'http://localhost:8080/openbis/**' },
   },
-  storybook: {
-    port: 8080,
-  },
-  
 
   app: {
     head: {

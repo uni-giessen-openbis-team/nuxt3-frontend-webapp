@@ -602,3 +602,13 @@ echo $ftp_proxy
 : 1728711685:0;kill $(lsof -t -i:6006)
 : 1728711796:0;bun storybook dev --port 6006
 : 1728711830:0;bun storybook dev --port 8080
+: 1728716790:0;bun i -D  @storybook/addon-proxy
+: 1728716885:0;bun run dev
+: 1728716940:0;lsof -ti :6006-6008 | xargs kill -9
+: 1728716986:0;sudo lsof -ti :6006-6008
+: 1728716995:0;bun run dev
+: 1728717022:0;lsof -ti :6006 | xargs kill -9
+: 1728717049:0;lsof -ti :6006 | xargs kill -9 || echo "No processes found on port 6006"
+: 1728717083:0;bun run dev
+: 1728717250:0;curl -I http://localhost:3000/openbis
+: 1728717788:0;bun run dev

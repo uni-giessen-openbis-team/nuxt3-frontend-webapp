@@ -17,5 +17,13 @@ const config = {
     docs: {
       autodocs: 'tag',
     },
+    proxy: {
+      '/api/': {
+        target: 'http://localhost:8080/openbis',
+        changeOrigin: true,
+        pathRewrite: { '^/openbis/': '' },
+      },
+    },
+
   }
   export default config
