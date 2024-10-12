@@ -18,16 +18,13 @@ export default defineNuxtConfig({
     '@nuxt/test-utils/module',
     '@nuxtjs/storybook'
   ],
-
-  nitro: {
-    devProxy: {
-      '/openbis': {
-        target: 'http://localhost:8080/openbis',
-        changeOrigin: true,
-        prependPath: true,
-      },
-    },
+  routeRules: {
+    '/openbis/**': { proxy: 'http://localhost:8080/openbis/**' },
   },
+  storybook: {
+    port: 8080,
+  },
+  
 
   app: {
     head: {

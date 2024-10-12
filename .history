@@ -593,3 +593,12 @@
 : 1728640041:0;bun i 
 : 1728640101:0;bunx  init /public
 : 1728640112:0;npx msw init public/
+: 1728709479:0;bun run dev
+: 1728709856:0;echo $http_proxy
+: 1728709865:0;echo $https_proxy\
+echo $ftp_proxy
+: 1728709873:0;netstat -tuln | grep -E "8080|3128"
+: 1728711652:0;bun run dev
+: 1728711685:0;kill $(lsof -t -i:6006)
+: 1728711796:0;bun storybook dev --port 6006
+: 1728711830:0;bun storybook dev --port 8080
