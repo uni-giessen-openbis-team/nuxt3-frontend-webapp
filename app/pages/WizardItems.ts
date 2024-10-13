@@ -1,9 +1,11 @@
 // Define the types for properties which are used in the wizard to select 
 
-export const entityVariables: (PropertyWithoutVocabulary | PropertyWithVocabulary)[] = [
+import type { Property } from "~/types/wizard"
+
+export const entityVariables: (Property)[] = [
   {
     title: 'genotype',
-    vocabularyCode: "Q_NCBI_TAXONOMY",
+    vocabularyCode: "TEST",
     continuous: false,
   },
   {
@@ -11,19 +13,19 @@ export const entityVariables: (PropertyWithoutVocabulary | PropertyWithVocabular
     continuous: false, 
     unit: null,
   },
-]
+] as Property[]
 
-export const biologicalSampleVariables: Array< PropertyWithoutVocabulary | PropertyWithVocabulary> = [
+export const biologicalSampleVariables: Array< Property> = [
   {
     title: 'species',
-    vocabularyCode: "Q_NCBI_TAXONOMY",
+    vocabularyCode: "TEST",
   },
-]
+] as Property[]
 
-export const sampleVariables: Array< PropertyWithoutVocabulary | PropertyWithVocabulary> = [
+export const sampleVariables: Array< Property> = [
   {
     title: 'tissue',
     continuous: false,
     unit: null,
   },
-]
+] as Property[]

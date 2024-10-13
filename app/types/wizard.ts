@@ -7,7 +7,6 @@ export type ProjectEntity = {
 };
 
 export type Condition = {
-  code: string;
   label: string;
 };
 
@@ -19,23 +18,6 @@ export interface ProjectContext {
   manager: string | null;
   description: string | null;
 }
-
-export type TableVariable = {
-  title: string;
-  conditions: Array<string | number>;
-  continuous: boolean;
-  unit: string | null;
-};
-
-export type combinedVariable = {
-  conditions: Array<{ [key: string]: string }>;
-  externalDBID: string;
-  secondaryName: string;
-  count: string;
-  sampleType: string;
-  child?: string;
-};
-
 
 export type Sample = {
   conditions: { [key: string]: string }[];
@@ -63,3 +45,9 @@ export type BaseProperty = {
 }
 
 export type Property = PropertyWithVocabulary | PropertyWithoutVocabulary;
+
+export type VocabularyTerm = {
+  title: string;
+  description: string;
+  code: string;
+}

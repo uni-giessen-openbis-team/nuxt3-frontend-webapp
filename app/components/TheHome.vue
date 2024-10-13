@@ -18,11 +18,10 @@ const openBizDescription = [
     link: '/projects',
   },
   {
-    header: 'Share your data',
+    header: 'Share your data',  
     text: '... Coming Soon ..',
     link: '/data-storage/share-data',
   },
-
 ]
 </script>
 

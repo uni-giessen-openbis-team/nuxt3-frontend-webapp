@@ -612,3 +612,7 @@ echo $ftp_proxy
 : 1728717083:0;bun run dev
 : 1728717250:0;curl -I http://localhost:3000/openbis
 : 1728717788:0;bun run dev
+: 1728810772:0;dev
+: 1728810774:0;bun run dev
+: 1728811202:0;bun i -D  @storybook/addon-interactions
+: 1728811225:0;bun run dev

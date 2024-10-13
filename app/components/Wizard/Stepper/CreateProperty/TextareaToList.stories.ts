@@ -8,7 +8,6 @@ import { fn } from '@storybook/test'
 
 
 const meta = {
-  title: "Wizard/TextareaToList",
   component: TextareaToList,
   args: {
     // Create a action in Storybook for the onUpdate:list event
