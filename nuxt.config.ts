@@ -56,5 +56,16 @@ export default defineNuxtConfig({
         defaultTheme: 'dark',
       },
     }
-  }
+  },
+  // storybook issue https://github.com/nuxt-modules/storybook/issues/776
+  vite: {
+    optimizeDeps: {
+      include: ['jsdoc-type-pratt-parser']
+    }
+  },
+  storybook: {
+    url: 'http://localhost:6006',
+    storybookRoute: '/__storybook__',
+    port: 6006,
+  },
 })

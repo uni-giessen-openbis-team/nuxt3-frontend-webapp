@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import type { Property } from '@/types/wizard'
 import { action } from '@storybook/addon-actions'
 import { userEvent, within } from '@storybook/test';
-s
+
 const meta = {
   component: TextareaToList,
 
