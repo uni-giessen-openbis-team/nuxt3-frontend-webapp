@@ -9,7 +9,9 @@
     "postinstall": "nuxi prepare",
     "generate": "nuxi generate",
     "start:generate": "npx serve .output/public",
-    "test": "vitest"
+    "test": "vitest",
+    "clear": "rm -rf node_modules package-lock.json bun.lockb"
+
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.18.0",

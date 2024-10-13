@@ -625,3 +625,40 @@ echo $ftp_proxy
 : 1728812860:0;bun i 
 : 1728812892:0;bun update
 : 1728812922:0;bun run dev
+: 1728818837:0;bun storybook init
+: 1728818888:0;bunx storybook init
+: 1728819105:0;npm i -g pnpm 
+: 1728819131:0;npm install -g npm
+: 1728819154:0;npm -v
+: 1728819178:0;npm install -g npm
+: 1728819201:0;curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash\
+
+: 1728819218:0;wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash\
+
+: 1728819228:0;export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"\
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm\
+
+: 1728819240:0;node -v
+: 1728819258:0;bun storybook init
+: 1728819314:0;npm i  
+: 1728819393:0;bun storybook init
+: 1728819419:0;npm i 
+: 1728819502:0;bun i 
+: 1728819505:0;npm i 
+: 1728819557:0;bun storybook init
+: 1728819560:0;bun i 
+: 1728819584:0;bun storybook init
+: 1728819654:0;npm i
+: 1728819671:0;npm i 
+: 1728819821:0;npm update
+: 1728819882:0;npm storybook init
+: 1728819896:0;bun run dev
+: 1728819906:0;npm run dev
+: 1728824560:0;bun clear 
+: 1728824627:0;bun clear
+: 1728824638:0;bun i 
+: 1728824723:0;bun i vuetify-nuxt-module
+: 1728824752:0;bun i 
+: 1728824787:0;bun run dev
+: 1728824815:0;bun i 
+: 1728824822:0;bun run dev
