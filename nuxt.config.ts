@@ -6,7 +6,6 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
-
   modules: [
     '@vueuse/nuxt',
     '@pinia/nuxt',
@@ -61,11 +60,20 @@ export default defineNuxtConfig({
   vite: {
     optimizeDeps: {
       include: ['jsdoc-type-pratt-parser']
-    }
+    },
+    // https://github.com/nuxt/test-utils/blob/main/examples/app-vitest-full/nuxt.config.ts
+    vue: {
+      script: {
+        defineModel: true,
+      },
+    },
+  },
+    
+  testUtils: {
+    startOnBoot: true,
   },
   storybook: {
-    url: 'http://localhost:6006',
-    storybookRoute: '/__storybook__',
+    route: '/__storybook__',
     port: 6006,
   },
 })

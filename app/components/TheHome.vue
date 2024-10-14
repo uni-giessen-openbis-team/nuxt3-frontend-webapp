@@ -48,7 +48,6 @@ const openBizDescription = [
       This service is part of the Bioinformatics Core Facility (BCF) which provides a centralized IT-infrastructure for high-throughput data analysis.
     </div>
   </v-container>
-  <TestListSpaces />
 </template>
 
 <style scoped>

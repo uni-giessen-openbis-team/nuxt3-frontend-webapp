@@ -1,18 +1,16 @@
-<script setup lang="ts">
-import { ref } from 'vue'
+ <script setup lang="ts">
 import SelectProperties from './SelectProperties.vue'
-import type { Property , Sample } from '@/types/wizard'
+import type { Property , Sample  , VocabularyTerm , PropertyWithVocabulary } from '@/types/wizard'
 import TextareaToList from './TextareaToList.vue'
 import AddUnitToProperty from './AddUnitToProperty.vue'
-import AutocompleteVocabulary from '@/components/Atoms/Autocomplete/Vocabulary.vue'
 // This is some small view component, where the selectedProperties are created. and later passed to the parent
 
 const selectedProperties = ref<Property[]>([])
 
 const props = defineProps<{
   items: Array<Property>; // Adjust the type as necessary
+  vocabularyTerms: VocabularyTerm[]
 }>()
-
 
 const emit = defineEmits<{
   (e: 'update:return-samples', updatedList: Sample[]): void
@@ -20,24 +18,23 @@ const emit = defineEmits<{
 
 const tab = ref(1)
 
-function calculateCrossProduct(properties: Property[]): Sample[] {
+function calculateSamplesFromProperties(properties: Property[]): Sample[] {
   const crossProduct: Sample[] = [];
 
-  // Assuming each property has a 'conditions' array, and we want to calculate
-  // the cross-product of these conditions across all properties.
   const conditionsArrays = properties.map(property => property.conditions || []);
 
-  // Helper function to calculate the cartesian product of arrays
   function cartesianProduct<T>(arrays: T[][]): T[][] {
     return arrays.reduce((a, b) => a.flatMap(d => b.map(e => [...d, e])), [[]] as T[][]);
   }
 
   const product = cartesianProduct(conditionsArrays);
 
-  // Create new samples based on the cross-product of conditions
   product.forEach(conditionSet => {
     const newSample: Partial<Sample> = {
-      conditions: conditionSet,
+      conditions: conditionSet.map(condition => ({
+        propertyTitle: condition.title,
+        conditionTitle: condition.title
+      })),
       secondaryName: '', // Assign appropriate value
       count: '1'
     };
@@ -48,18 +45,31 @@ function calculateCrossProduct(properties: Property[]): Sample[] {
 }
 
 function emitCrossProduct() {
-  const crossProduct = calculateCrossProduct(selectedProperties.value);
+  const crossProduct = calculateSamplesFromProperties(selectedProperties.value);
   emit('update:return-samples', crossProduct as Sample[]);
 }
 
 function handleSelectedProperties(updatedProperties: Property[]) {
-  console.log(updatedProperties); // Log to check if conditions are present
   selectedProperties.value = updatedProperties;
   if (updatedProperties.length > 0) {
-    tab.value = updatedProperties[0].title; // Set the tab to the first selected property
+    tab.value = 0; // Set the tab to the first selected property
   }
-  emitCrossProduct();
 }
+
+const updatedProperties = ref<Property[]>([]);
+
+// Deep watcher to run handleSelectedProperties whenever updatedProperties changes deeply
+watch(updatedProperties, (newProperties) => {
+  handleSelectedProperties(newProperties);
+}, { deep: true }); 
+
+
+const selectedVocabularyTerms = ref<VocabularyTerm[]>([])
+
+// when the selectedVocabulary changes, we need to update the conditions
+watch(selectedVocabularyTerms, (newVocabulary) => {
+  console.log('selectedVocabulary', newVocabulary)
+})
 
 </script>
 
@@ -76,15 +86,27 @@ function handleSelectedProperties(updatedProperties: Property[]) {
     <v-card-text>
       
       <v-window  v-model="tab">
-        <v-window-item v-for="(item, index) in selectedProperties" :key="index" :value="item.title">
-            <div v-if="item && 'vocabularyCode' in item">
+        <v-window-item v-for="(property, index) in selectedProperties as PropertyWithVocabulary[]" :key="index" :value="property.title">
+            <div v-if="property && 'vocabularyCode' in property">
                 <div>
-                    <AutocompleteVocabulary :search-term="item.vocabularyCode as string"/>
+                    <VAutocomplete
+                      v-model="property.conditions" 
+                      :items="property.vocabulary.terms" 
+                      item-title="code" 
+                      :return-object="true"
+                      multiple 
+                  />
                 </div>
             </div>
             <div v-else>
-                <TextareaToList @update:list="item.conditions = $event"/>
-                <AddUnitToProperty v-model:continuous="item.continuous" v-model:unit="item.unit" />
+                <TextareaToList 
+                    @update:list="property.conditions = $event; emitCrossProduct()"
+                />
+                <AddUnitToProperty 
+                    v-model:continuous="property.continuous" 
+                    v-model:unit="property.unit" 
+                    @input="emitCrossProduct"
+                />
             </div>
         </v-window-item>
       </v-window>

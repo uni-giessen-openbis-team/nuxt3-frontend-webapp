@@ -1,4 +1,4 @@
-import TextareaToList from './CreateProperty.vue';
+import TextareaToList from './CreateSamples.vue';
 import type { Meta, StoryObj } from '@storybook/vue3'
 import type { Property } from '@/types/wizard'
 import { action } from '@storybook/addon-actions'

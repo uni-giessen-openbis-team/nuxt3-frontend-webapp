@@ -662,3 +662,43 @@ echo $ftp_proxy
 : 1728824787:0;bun run dev
 : 1728824815:0;bun i 
 : 1728824822:0;bun run dev
+: 1728826983:0;bun clear
+: 1728826987:0;bun i
+: 1728827112:0;bun run dev
+: 1728827217:0;bun i 
+: 1728827271:0;ncu --upgrade
+: 1728827277:0;bun clear
+: 1728827280:0;bun run dev
+: 1728827283:0;bun i \
+: 1728827285:0;bun i 
+: 1728827401:0;bun run dv
+: 1728827403:0;bun run dev
+: 1728840971:0;bun test
+: 1728845044:0;bun run dev
+: 1728845375:0;bun test
+: 1728845814:0;bun add --dev @nuxt/test-utils vitest @vue/test-utils happy-dom playwright-core
+: 1728846921:0;bun test
+: 1728846989:0;bun run dev
+: 1728846995:0;bun test
+: 1728886140:0;bun run dev
+: 1728886342:0;vitest
+: 1728886344:0;bun test
+: 1728889983:0;bun run dev
+: 1728891438:0;bun test
+: 1728892187:0;bun add --dev @nuxt/test-utils vitest @vue/test-utils happy-dom playwright-core\
+
+: 1728892209:0;bun test
+: 1728892977:0;bun tree
+: 1728892984:0;bun dependencies
+: 1728893000:0;bun ls
+: 1728893003:0;npm ls
+: 1728893022:0;npm ls --all
+: 1728893031:0;bun ks
+: 1728893033:0;bun ls
+: 1728893788:0;bun i 
+: 1728893804:0;bun test
+: 1728894227:0;bun run dev
+: 1728894345:0;bun vitest --ui
+: 1728894375:0;bun run dev
+: 1728894504:0;bun i @testing-library/vue
+: 1728896341:0;bun run dev

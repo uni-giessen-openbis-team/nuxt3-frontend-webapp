@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import 'vue3-form-wizard/dist/style.css';
-
+import type openbis from '~/composables/openbis.esm';
+import type { Property } from '@/types/wizard';
 
 const tab = ref('');
 
@@ -14,6 +15,47 @@ const projectContext = {
 }
 
 // Select Variables from the List 
+
+const searchTerm = ref('')
+const vocabularyTerms = await listVocabularyTermsByVocabularyCode(searchTerm) || []
+
+
+const entetyProperties = ref<Property[]>([
+  {
+    title: 'Property 1',
+    description: 'Description 1',
+    continuous: false,
+    unit: null,
+    conditions: []
+  },
+  // wih vocabulary
+  {
+    title: 'Property 2',
+    description: 'Description 2',
+    continuous: false,
+    unit: null,
+    conditions: []
+  },
+])
+const biologicalProperties = ref<Property[]>([
+  {
+    title: 'Property 2',
+    description: 'Description 2',
+    continuous: false,
+    unit: null,
+    conditions: []
+  },
+])
+const technicalProperties = ref<Property[]>([
+  {
+    title: 'Property 3',
+    description: 'Description 3',
+    continuous: false,
+    unit: null,
+    conditions: []
+  },
+])
+
 
 
 </script>

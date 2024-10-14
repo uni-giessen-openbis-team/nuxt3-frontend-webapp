@@ -1,4 +1,5 @@
 <template>
+  
     <div>
       <h1>Spaces</h1>
       <VBtn @click="fetchSpaces">Fetch Spaces</VBtn>

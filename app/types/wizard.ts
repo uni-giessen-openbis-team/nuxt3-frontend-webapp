@@ -1,14 +1,4 @@
-export type ProjectEntity = {
-  title: string;
-  conditions: Array<Condition>;
-  continuous: boolean;
-  unit: string | null;
-  vocabularyCode: string | null;
-};
 
-export type Condition = {
-  label: string;
-};
 
 export interface ProjectContext {
   spaceCode: string ;
@@ -20,7 +10,7 @@ export interface ProjectContext {
 }
 
 export type Sample = {
-  conditions: { [key: string]: string }[];
+  conditions: { propertyTitle: string, conditionTitle: string }[]; 
   externalDBID: string;
   secondaryName: string;
   count: string;
@@ -28,26 +18,35 @@ export type Sample = {
   parent?: string;
 };
 
-
-export type PropertyWithVocabulary = BaseProperty & {
-  vocabularyCode: string;
+ 
+export type PropertyWithVocabulary  = {
+  vocabulary: Vocabulary;
+  title: string;
+  description?: string;
+  conditions: VocabularyTerm[];
 };
 
-export type  PropertyWithoutVocabulary = BaseProperty & {
+export type  PropertyWithoutVocabulary  = {
+  title: string;
   continuous: boolean;
   unit: string | null;
+  description?: string;
+  conditions: VocabularyTerm[];
 };
 
-export type BaseProperty = {
-  title: string;
-  description: string;
-  conditions: Condition[];
-}
 
 export type Property = PropertyWithVocabulary | PropertyWithoutVocabulary;
 
 export type VocabularyTerm = {
   title: string;
-  description: string;
-  code: string;
+  description?: string;
+  code?: string;
 }
+
+export type Vocabulary= {
+  title: string;
+  description?: string;
+  code: string;
+  terms: VocabularyTerm[];
+}
+

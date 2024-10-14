@@ -1,26 +1,27 @@
 import SelectProperties from './SelectProperties.vue';
 import type { Meta, StoryObj } from '@storybook/vue3';
 import { fn } from '@storybook/test'
+import { propertyWithVocabulary, propertyWithoutVocabulary } from '../testData';
 
 const meta = {
   component: SelectProperties,
-  args : {
+  args: {
     items: [
-      { title: 'Property 1', description: 'Description 1', continuous: false, unit: null , conditions: []},
-      { title: 'Property 2', description: 'Description 2', vocabularyCode: "TEST" , conditions: []},
-    ] ,
+      propertyWithVocabulary,
+      propertyWithoutVocabulary
+    ],
     'onUpdate:selectedProperties': fn(),
   },
 
 
-}  satisfies Meta<typeof SelectProperties>
+} satisfies Meta<typeof SelectProperties>
 
 type Story = StoryObj<typeof meta>
 
-export default meta 
+export default meta
 
 
 export const Default: Story = {
- 
-}  
+
+}
 
