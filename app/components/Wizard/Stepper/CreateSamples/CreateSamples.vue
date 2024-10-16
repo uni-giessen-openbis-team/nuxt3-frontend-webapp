@@ -1,6 +1,6 @@
  <script setup lang="ts">
 import SelectProperties from './SelectProperties.vue'
-import type { Property , Sample  , VocabularyTerm , PropertyWithVocabulary } from '@/types/wizard'
+import type { Property , Sample  , VocabularyTerm  } from '@/types/wizard'
 import TextareaToList from './TextareaToList.vue'
 import AddUnitToProperty from './AddUnitToProperty.vue'
 // This is some small view component, where the selectedProperties are created. and later passed to the parent
@@ -8,13 +8,12 @@ import AddUnitToProperty from './AddUnitToProperty.vue'
 const selectedProperties = ref<Property[]>([])
 
 const props = defineProps<{
-  items: Array<Property>; // Adjust the type as necessary
-  vocabularyTerms: VocabularyTerm[]
+  properties: Property[]
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:return-samples', updatedList: Sample[]): void
-}>()
+  (e: 'update:return-samples', updatedList: Sample[]): void;
+}>();
 
 const tab = ref(1)
 
@@ -36,7 +35,7 @@ function calculateSamplesFromProperties(properties: Property[]): Sample[] {
         conditionTitle: condition.title
       })),
       secondaryName: '', // Assign appropriate value
-      count: '1'
+      count: 1
     };
     crossProduct.push(newSample as Sample);
   });
@@ -75,7 +74,7 @@ watch(selectedVocabularyTerms, (newVocabulary) => {
 
 <template>
 <div/>
-  <SelectProperties :items="props.items" @update:selected-properties="handleSelectedProperties"/>
+  <SelectProperties :properties="props.properties" @update:selected-properties="handleSelectedProperties"/>
 
   <v-card v-if="selectedProperties.length > 0">
     <v-tabs v-model="tab" bg-color="primary">
@@ -86,13 +85,12 @@ watch(selectedVocabularyTerms, (newVocabulary) => {
     <v-card-text>
       
       <v-window  v-model="tab">
-        <v-window-item v-for="(property, index) in selectedProperties as PropertyWithVocabulary[]" :key="index" :value="property.title">
-            <div v-if="property && 'vocabularyCode' in property">
+        <v-window-item v-for="(property, index) in selectedProperties" :key="index" :value="property.title">
+            <div v-if="property && 'vocabulary' in property">
                 <div>
-                    <VAutocomplete
+                    <VSelect
                       v-model="property.conditions" 
                       :items="property.vocabulary.terms" 
-                      item-title="code" 
                       :return-object="true"
                       multiple 
                   />

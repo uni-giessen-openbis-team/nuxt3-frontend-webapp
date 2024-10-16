@@ -11,7 +11,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineEmits } from 'vue';
 
 const continuous = ref(false);
 const unit = ref('');

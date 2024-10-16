@@ -12,7 +12,7 @@ export default meta
 
 export const Default: Story = {
   args: {
-    test: 'test2'
+    test: "dasdf"
   }
 }  
   

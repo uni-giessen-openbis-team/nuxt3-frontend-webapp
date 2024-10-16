@@ -6,12 +6,12 @@ export default defineVitestConfig({
     root: process.cwd(),
 
     // https://github.com/vitest-dev/vitest/issues/2117#issuecomment-1890908753
-    include: ['src/**/*.{test,spec}.{js,ts}'],
-
+    include: ['`src/**/*.{test,spec}.{js,ts}'],
+    logLevel: 'silent',
     env: loadEnv('', process.cwd(), ''),
     environment: 'nuxt',
     environmentOptions: {
-      nuxt: {
+      nuxt: { 
         domEnvironment: 'jsdom',
       },
     },

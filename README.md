@@ -55,3 +55,10 @@ Make sure the ports 3000 and 54322 are accessible.
 ## Naming conventions
 
 To prevent duplication and namespace collisions caused by auto-imports, use the `handle` prefix in `components`, such as `handleCreateCollection`. This approach helps maintain unique and clear function names.
+
+## Testing
+
+Because this applicaion is running on vuetify components, check out the [components in github](https://github.com/vuetifyjs/vuetify/tree/071eae762bc595f0c3bf9ff45a5926afaa3bbe3b/packages/vuetify/src/components) to get some testing impressions. The tests are under `__tests__` in each component file.
+
+
+

@@ -1,5 +1,4 @@
 
-
 export interface ProjectContext {
   spaceCode: string ;
   projectCode: string ;
@@ -10,10 +9,10 @@ export interface ProjectContext {
 }
 
 export type Sample = {
-  conditions: { propertyTitle: string, conditionTitle: string }[]; 
+  conditions: { propertyTitle: string, conditionTerm: string }[]; 
   externalDBID: string;
   secondaryName: string;
-  count: string;
+  count: number;
   sampleType: string;
   parent?: string;
 };

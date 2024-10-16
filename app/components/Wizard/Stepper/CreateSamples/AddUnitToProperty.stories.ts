@@ -2,8 +2,6 @@ import TextareaToList from './AddUnitToProperty.vue';
 import type { Meta, StoryObj } from '@storybook/vue3'
 import { action } from '@storybook/addon-actions'  // Correct import for action handlers
 
-
-
 const meta = {
   component: TextareaToList,
 

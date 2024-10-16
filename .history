@@ -702,3 +702,27 @@ echo $ftp_proxy
 : 1728894375:0;bun run dev
 : 1728894504:0;bun i @testing-library/vue
 : 1728896341:0;bun run dev
+: 1728897456:0;node --trace-deprecation
+: 1728900408:0;bun run devb
+: 1728900410:0;bun run dev
+: 1728911863:0;bun storybook init
+: 1728911936:0;npm i
+: 1728912126:0;npm i 
+: 1728912150:0;bun pm cache rm -g
+: 1728912168:0;npm i 
+: 1728912179:0;npm cache clean --force
+: 1728912187:0;npm i  
+: 1728912222:0;npm -v
+: 1728912314:0;nvm 
+: 1728912322:0;nvm ls
+: 1728912345:0;nvm use nvm use 
+: 1728912357:0;nvm use v22.9.0
+: 1728912363:0;npm i 
+: 1728912418:0;bun i  
+: 1728912448:0;bun run dev
+: 1728912499:0;bun i 
+: 1728912506:0;bun run dev
+: 1728912530:0;bun i 
+: 1728912539:0;bun run dev
+: 1728994484:0;bun rund ev
+: 1728994487:0;bun run dev

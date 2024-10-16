@@ -105,7 +105,6 @@ export const useOpenBisStore = defineStore('openBis', {
     async initialize() {
       try {
         this.v3 = await new openbis.openbis()
-        console.log('🚀 ~ initialize ~ this.v3:', this.v3)
         // after initialization, look if PAT is available and use it
       } catch (error) {
         console.error('Error initializing v3 object:', error)
@@ -127,7 +126,6 @@ export const useOpenBisStore = defineStore('openBis', {
 
         
         this.sessionToken = await this.v3.login(username, password)
-        console.log('🚀 ~ login ~ sessionToken:', this.sessionToken)
         // after login create a PAT
 
       } catch (error) {

@@ -3,6 +3,9 @@ import { appDescription } from './app/constants/index'
 
 
 export default defineNuxtConfig({
+  devtools: {
+    enabled: false,
+  },
   future: {
     compatibilityVersion: 4,
   },

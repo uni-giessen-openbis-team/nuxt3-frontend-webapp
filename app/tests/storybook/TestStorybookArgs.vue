@@ -1,11 +1,11 @@
 <template>
     <div>
-{{ test }}
+{{ props.test }}
     </div>
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
     test: string
 }>()
 
