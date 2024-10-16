@@ -10,8 +10,16 @@ const meta = {
 
 type Story = StoryObj<typeof meta>
 
-export default meta
+export default meta;
 
 export const Default: Story = {
+  args: {
+    samples: {
+      entitySamples: [],
+      biologicalSamples: [],
+      technicalSamples: []
+    },
+    onEntityVariablesUpdated: () => {},
 
-}  
+  }
+};

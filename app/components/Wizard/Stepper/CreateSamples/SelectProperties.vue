@@ -1,50 +1,41 @@
-
-
 <script setup lang="ts">
-import { ref } from 'vue';
-import type { Property } from '@/types/wizard'
-
-const selectedProperties = ref<Property[] | null>(null);
+import { ref, watch } from 'vue'
+import type { Property , PropertyWithoutVocabulary} from '@/types/wizard'
 
 const props = defineProps<{
   properties: Array<Property>; // Adjust the type as necessary
 }>()
 
-const emit = defineEmits(['update:selectedProperties']);
+const emit = defineEmits<{
+  (e: 'update:selectedProperties', selected: Property[]): void
+}>()
 
-const _selectedProperties = computed(() => {
-  if (selectedProperties.value) {
-    for (const [i, property] of Object.entries(selectedProperties.value)) {
-      if  (typeof property === 'string'  ) {
-        selectedProperties.value[i] = { title: property };
-      }
+const selectedProperties = ref<(Property| string) []>([])
+
+
+watch(selectedProperties, (newVal) => {
+  const updatedProperties = newVal.map(property => {
+    if (typeof property === 'string') {
+      return {
+        title: property,
+        description: "",  
+        continuous: false,
+        unit: null
+      } as PropertyWithoutVocabulary;
     }
-    return selectedProperties.value;
-  }
-  return [];
-});
-  
-  
-watch(_selectedProperties, (newValue) => {
-});
-
-
+    return property;
+  });
+  emit('update:selectedProperties', updatedProperties);
+})
 </script>
 
-
 <template>
-  <v-container>
-    <v-combobox
-      v-model="selectedProperties"
-      :items="props.properties"
-      label="Select a Property"
-      outlined
-      multiple
-    />
-  </v-container>
+  <v-combobox
+    v-model="selectedProperties"
+    label="Experimental variables"
+    box
+    chips
+    :items="props.properties"
+    multiple
+  />
 </template>
-
-
-
-
-

@@ -11,7 +11,7 @@ const meta = {
       propertyWithoutVocabulary
     ],
     'onUpdate:selectedProperties': fn(),
-  },
+  }, 
 
 
 } satisfies Meta<typeof SelectProperties>

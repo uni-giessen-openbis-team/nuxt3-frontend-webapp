@@ -3,6 +3,7 @@ import SelectProperties from './SelectProperties.vue'
 import type { Property , Sample  , VocabularyTerm  } from '@/types/wizard'
 import TextareaToList from './TextareaToList.vue'
 import AddUnitToProperty from './AddUnitToProperty.vue'
+import { calculateSamplesFromProperties } from './utils'
 // This is some small view component, where the selectedProperties are created. and later passed to the parent
 
 const selectedProperties = ref<Property[]>([])
@@ -16,32 +17,6 @@ const emit = defineEmits<{
 }>();
 
 const tab = ref(1)
-
-function calculateSamplesFromProperties(properties: Property[]): Sample[] {
-  const crossProduct: Sample[] = [];
-
-  const conditionsArrays = properties.map(property => property.conditions || []);
-
-  function cartesianProduct<T>(arrays: T[][]): T[][] {
-    return arrays.reduce((a, b) => a.flatMap(d => b.map(e => [...d, e])), [[]] as T[][]);
-  }
-
-  const product = cartesianProduct(conditionsArrays);
-
-  product.forEach(conditionSet => {
-    const newSample: Partial<Sample> = {
-      conditions: conditionSet.map(condition => ({
-        propertyTitle: condition.title,
-        conditionTitle: condition.title
-      })),
-      secondaryName: '', // Assign appropriate value
-      count: 1
-    };
-    crossProduct.push(newSample as Sample);
-  });
-
-  return crossProduct;
-}
 
 function emitCrossProduct() {
   const crossProduct = calculateSamplesFromProperties(selectedProperties.value);

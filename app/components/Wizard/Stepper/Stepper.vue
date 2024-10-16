@@ -10,11 +10,8 @@ const entetyProperties: Property[] = [
 
 // Define props
 const props = defineProps<{
-  samples: {
-    entitySamples?: Sample[],
-    biologicalSamples?: Sample[],
-    technicalSamples?: Sample[]
-  }
+  entitySamples?: Sample[],
+  biologicalSamples?: Sample[],
 }>()
 
 const emit = defineEmits<{
@@ -55,11 +52,33 @@ const prev = () => {
 }
 
 
-const _entitySamples = ref<Sample[] >([]);
+const _entitySamples: Sample[] = props.entitySamples || [] // Can be passed as props, to act as already created samples
+const _biologicalSamples: Sample[] = props.biologicalSamples || [] // Can be passed as props, to act as already created samples
+const _technicalSamples: Sample[] =  [] // They are always empty because the need to be created in the wizard
 
+
+let currentScenario:string = ''
+
+if (_entitySamples.length === 0 && _biologicalSamples.length === 0 && _technicalSamples.length === 0) {
+  console.log('No samples passed as props');
+  currentScenario = 'No samples passed as props';
+  e1.value = 0; // Start from the beginning
+} else if (_biologicalSamples.length > 0) {
+  console.log('Biological samples passed as props');
+  currentScenario = 'Biological samples passed as props';
+  e1.value = 2; // Start from creating technical samples
+} else if (_entitySamples.length > 0) {
+  console.log('Enteties passed as props');
+  currentScenario= 'Enteties passed as props';
+  e1.value = 1; // Start from creating biological samples
+}
+ 
 </script>
 
 <template>
+  <div v-if="currentScenario !== ''">
+    No Data Passed as props, go through the whole wizard to create samples.
+  </div>
   <v-stepper v-model="e1" alt-labels>
     <v-stepper-header>
       <v-stepper-item value="1" title="Project Enteties" />
