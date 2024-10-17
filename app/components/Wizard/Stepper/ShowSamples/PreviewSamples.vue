@@ -1,16 +1,21 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
 import type { Sample } from '@/types/wizard'
-import {   } from '../CreateSamples/utils'
 
-const props = defineProps<{
+const {samples, editable=true} = defineProps<{
   samples: Sample[]
+  editable?: boolean
 }>()
 
 const emit = defineEmits(['update:sample']);
 
 // Create a local copy of samples to track changes
-const modelValue = ref([...props.samples]);
+const _samples = ref([...samples]);
+
+// Watch for changes in the samples prop and update modelValue
+watch(() => samples, (newSamples) => {
+  _samples.value = [...newSamples];
+}, { deep: true });
 
 // Define headers for the v-data-table, excluding 'sampleType'
 const headers = computed(() => [
@@ -18,10 +23,10 @@ const headers = computed(() => [
   { title: 'Name', key: 'secondaryName' },
   { title: 'Count', key: 'count' },
   { title: 'Conditions', key: 'conditions', sortable: false },
-  ]);
+]);
 
 // Watch for changes in modelValue and emit updates
-watch(modelValue, (newValue, oldValue) => {
+watch(_samples, (newValue, oldValue) => {
   newValue.forEach((item, index) => {
     if (JSON.stringify(item) !== JSON.stringify(oldValue[index])) {
       emit('update:sample', { index, item });
@@ -47,7 +52,7 @@ const isPanelExpanded = (index: number) => expandedPanels.value.has(index);
 <template>
   <v-data-table
     :headers="headers"
-    :items="modelValue"
+    :items="_samples"
     >
     
   <template #item.externalDBID="{ item }"> 
@@ -55,6 +60,7 @@ const isPanelExpanded = (index: number) => expandedPanels.value.has(index);
       v-model="item.externalDBID"
       type="text"
         variant="solo"
+        :disabled="!editable"
     />
   </template>
   <template #item.secondaryName="{ item }">
@@ -62,6 +68,7 @@ const isPanelExpanded = (index: number) => expandedPanels.value.has(index);
       v-model="item.secondaryName"
       type="text"
         variant="solo"
+        :disabled="!editable"
     />
   </template>
   <template #item.count="{ item }">
@@ -70,6 +77,7 @@ const isPanelExpanded = (index: number) => expandedPanels.value.has(index);
           type="number"
           max-width="80"
            variant="solo"
+           :disabled="!editable"
         />
     </template>
     <template #item.conditions="{ item, index }">
@@ -87,7 +95,7 @@ const isPanelExpanded = (index: number) => expandedPanels.value.has(index);
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(condition, index) in item.conditions" :key="index">
+                <tr v-for="(condition, indexb) in item.conditions" :key="indexb">
                   <td style="padding: 10px;">{{ condition.propertyTitle }}</td>
                   <td style="padding: 10px;">{{ condition.conditionTerm }}</td>
                 </tr>

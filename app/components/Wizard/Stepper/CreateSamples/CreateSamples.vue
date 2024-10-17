@@ -1,54 +1,53 @@
- <script setup lang="ts">
+<script setup lang="ts">
 import SelectProperties from './SelectProperties.vue'
-import type { Property , Sample  , VocabularyTerm  } from '@/types/wizard'
+import type { Property, Sample } from '@/types/wizard'
 import TextareaToList from './TextareaToList.vue'
 import AddUnitToProperty from './AddUnitToProperty.vue'
 import { calculateSamplesFromProperties } from './utils'
-// This is some small view component, where the selectedProperties are created. and later passed to the parent
 
 const selectedProperties = ref<Property[]>([])
 
 const props = defineProps<{
   properties: Property[]
+  parentSamples?: Sample[]
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:return-samples', updatedList: Sample[]): void;
+  (e: 'return-samples', updatedList: Sample[]): void;
 }>();
 
 const tab = ref(1)
+const newSamples = ref<Sample[]>([])
 
-function emitCrossProduct() {
+function createSamples() {
   const crossProduct = calculateSamplesFromProperties(selectedProperties.value);
-  emit('update:return-samples', crossProduct as Sample[]);
+  
+  if (props.parentSamples && props.parentSamples.length > 0) {
+    for (const parent of props.parentSamples) {
+      for (const child of crossProduct) { 
+        const newSample = {
+          ...parent,
+          conditions: [...parent.conditions, ...child.conditions],
+          secondaryName: `${parent.secondaryName}_${child.secondaryName}`
+        }
+        newSamples.value.push(newSample)
+      }
+    }
+  } else {
+    newSamples.value = crossProduct
+  }
+  emit('return-samples', newSamples.value as Sample[]);
 }
 
 function handleSelectedProperties(updatedProperties: Property[]) {
   selectedProperties.value = updatedProperties;
-  if (updatedProperties.length > 0) {
-    tab.value = 0; // Set the tab to the first selected property
-  }
+  createSamples();
 }
-
-const updatedProperties = ref<Property[]>([]);
-
-// Deep watcher to run handleSelectedProperties whenever updatedProperties changes deeply
-watch(updatedProperties, (newProperties) => {
-  handleSelectedProperties(newProperties);
-}, { deep: true }); 
-
-
-const selectedVocabularyTerms = ref<VocabularyTerm[]>([])
-
-// when the selectedVocabulary changes, we need to update the conditions
-watch(selectedVocabularyTerms, (newVocabulary) => {
-  console.log('selectedVocabulary', newVocabulary)
-})
 
 </script>
 
 <template>
-<div/>
+  <div/>
   <SelectProperties :properties="props.properties" @update:selected-properties="handleSelectedProperties"/>
 
   <v-card v-if="selectedProperties.length > 0">
@@ -58,32 +57,31 @@ watch(selectedVocabularyTerms, (newVocabulary) => {
       </v-tab>
     </v-tabs>
     <v-card-text>
-      
-      <v-window  v-model="tab">
+      <v-window v-model="tab">
         <v-window-item v-for="(property, index) in selectedProperties" :key="index" :value="property.title">
-            <div v-if="property && 'vocabulary' in property">
-                <div>
-                    <VSelect
-                      v-model="property.conditions" 
-                      :items="property.vocabulary.terms" 
-                      :return-object="true"
-                      multiple 
-                  />
-                </div>
+          <div v-if="property && 'vocabulary' in property">
+            <div>
+              <VSelect
+                v-model="property.conditions" 
+                :items="property.vocabulary.terms" 
+                :return-object="true"
+                multiple 
+                @change="createSamples"
+              />
             </div>
-            <div v-else>
-                <TextareaToList 
-                    @update:list="property.conditions = $event; emitCrossProduct()"
-                />
-                <AddUnitToProperty 
-                    v-model:continuous="property.continuous" 
-                    v-model:unit="property.unit" 
-                    @input="emitCrossProduct"
-                />
-            </div>
+          </div>
+          <div v-else>
+            <TextareaToList 
+              @update:list="property.conditions = $event; createSamples()"
+            />
+            <AddUnitToProperty 
+              v-model:continuous="property.continuous" 
+              v-model:unit="property.unit" 
+              @input="createSamples"
+            />
+          </div>
         </v-window-item>
       </v-window>
     </v-card-text>
   </v-card>
 </template>
-
