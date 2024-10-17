@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { FormWizard, TabContent } from 'vue3-form-wizard';
 import 'vue3-form-wizard/dist/style.css';
 import type { Sample, Property } from '~/types/wizard';
 import { propertyWithVocabulary, propertyWithoutVocabulary } from './testData';
@@ -19,118 +20,53 @@ const emit = defineEmits<{
   (e: 'completed'): void
 }>()
 
-// control the stepper
-const e1 = ref<number>(0)
+const _enetySamples: Ref<Sample[]> = ref(props.entitySamples ?? [])
+const _biologicalSamples: Ref<Sample[]> = ref(props.biologicalSamples ?? [])
 
-const next = async () => {
-  console.log(e1.value)
-  switch (e1.value) {
-    case 0:
-      // emit('entityVariablesUpdated',props.entityVariables); 
-      break
-    case 1:
-      // No function for Entity Preview, just move to next step
-      break
-    case 2:
-      // emit('biologicalVariablesUpdated',  props.biologicalVariables); 
-      break
-    case 3:
-      // No function for Biological Samples Preview, just move to next step
-      break
-    case 4:
-      // emit('technicalVariablesUpdated', props.technicalVariables); 
-      break
-    case 5:
-      // emit('completed');
-      return 
-  }
-  e1.value++
-} 
-
-const prev = () => {
-  e1.value--
+const updateSamples = (samples: Sample[]) => {
+  _enetySamples.value = samples;
 }
 
 
-const _entitySamples: Sample[] = props.entitySamples || [] // Can be passed as props, to act as already created samples
-const _biologicalSamples: Sample[] = props.biologicalSamples || [] // Can be passed as props, to act as already created samples
-const _technicalSamples: Sample[] =  [] // They are always empty because the need to be created in the wizard
-
-
-let currentScenario:string = ''
-
-if (_entitySamples.length === 0 && _biologicalSamples.length === 0 && _technicalSamples.length === 0) {
-  console.log('No samples passed as props');
-  currentScenario = 'No samples passed as props';
-  e1.value = 0; // Start from the beginning
-} else if (_biologicalSamples.length > 0) {
-  console.log('Biological samples passed as props');
-  currentScenario = 'Biological samples passed as props';
-  e1.value = 2; // Start from creating technical samples
-} else if (_entitySamples.length > 0) {
-  console.log('Enteties passed as props');
-  currentScenario= 'Enteties passed as props';
-  e1.value = 1; // Start from creating biological samples
-}
- 
 </script>
 
 <template>
-  <div v-if="currentScenario !== ''">
-    No Data Passed as props, go through the whole wizard to create samples.
-  </div>
-  <v-stepper v-model="e1" alt-labels>
-    <v-stepper-header>
-      <v-stepper-item value="1" title="Project Enteties" />
-      <v-divider />
-      <v-stepper-item value="2" title="Entety Preview" />
-      <v-divider />
-      <v-stepper-item value="3" title="Biological Samples" />
-      <v-divider />
-      <v-stepper-item value="4" title="Biological Samples Preview" />
-      <v-divider />
-      <v-stepper-item value="5" title="Technical Samples" />
-      <v-divider />
-      <v-stepper-item value="6" title="Technical Samples Preview" />
-    </v-stepper-header>
+    <FormWizard @on-complete="() => { emit('completed') }">
+            
+      <TabContent title="Project Entities">
+        <WizardStepperCreateSamples :properties="entetyProperties" @return-samples="updateSamples, $event" />
 
-    <v-stepper-window>
-      <v-stepper-window-item value="1">
-        <WizardStepperCreateSamples 
-          :properties="entetyProperties"
-          @update:return-samples="(updatedList) => { _entitySamples = updatedList; }" 
-        />
-      </v-stepper-window-item>
+      </TabContent>
+      
+      <TabContent title="Project Entities Preview" :before-change="() => emit('entityVariablesUpdated', _enetySamples)">
+        {{_enetySamples}}
+        <WizardStepperShowSamplesPreviewSamples :samples="_enetySamples" />
+      </TabContent>
+      <!-- <TabContent
+        title="Entity Preview"
+        :before-change="() => emit('entityVariablesUpdated', _enetySamples)"
+      >
+    </TabContent>  -->
+        <!-- <WizardPreviewTable v-model="entetyConditionsResult" />
+      </TabContent>
+      <TabContent title="Biological Samples" :before-change="store.updateBiologicalVariables">
+        <WizardSampleExtracts v-model="store.sampleVariables" />
+      </TabContent> 
+      <TabContent title="Biological Samples Preview">
+        <WizardPreviewTable v-model="entetyAndSampleResult" />
+      </TabContent>
+      <TabContent title="Technical Samples" :before-change="store.updateTechnicalVariables">
+        <WizardTechnical v-model="store.technicalVariables" />
+      </TabContent>
+      <TabContent title="Technical Samples Preview">
+        <WizardPreviewTable v-model="result" />
+        -->
 
-      <v-stepper-window-item value="2">
-        <WizardStepperShowSamplesPreviewSamples :samples="_entitySamples" />
-      </v-stepper-window-item>
-
-      <v-stepper-window-item value="3">
-        <!-- <WizardSampleExtracts v-model="store.sampleVariables" /> -->
-      </v-stepper-window-item>
-
-      <v-stepper-window-item value="4">
-        <!-- <WizardPreviewTable v-model="entetyAndSampleResult" /> -->
-      </v-stepper-window-item>
-
-      <v-stepper-window-item value="5">
-        <!-- <WizardTechnical v-model="store.technicalVariables" /> -->
-      </v-stepper-window-item>
-
-      <v-stepper-window-item value="6">
-        <!-- <WizardPreviewTable v-model="result" /> -->
-      </v-stepper-window-item>
-    </v-stepper-window>
-
-    <v-stepper-actions @click:next="next" @click:prev="prev">
-      <template #next>
-        <v-btn v-if="e1 < 5" color="primary" @click="next">Next</v-btn>
-        <v-btn v-else color="success" :disabled="false" @click="emit('completed')">Finish</v-btn>
-      </template>
-      <template #prev>
-        <v-btn @click="prev">Prev</v-btn>
-      </template>
-    </v-stepper-actions>
-  </v-stepper>
+   </FormWizard>
 </template>
+
+
+<style scoped>
+
+
+</style>
