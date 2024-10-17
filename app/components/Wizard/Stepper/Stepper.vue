@@ -27,6 +27,38 @@ const updateSamples = (samples: Sample[]) => {
   _enetySamples.value = samples;
 }
 
+function updateEntety() {
+  const SAMPLE_TYPE = 'BIOLOGICAL_ENTITY'
+  const isEqual = tempEntetyVariables.value == JSON.stringify(entetyVariables.value)
+  if (!isEqual) {
+    entetyConditionsResult.value = createTableEntries(entetyVariables.value, SAMPLE_TYPE)
+    tempEntetyVariables.value = JSON.stringify(entetyVariables.value)
+  }
+  return true
+}
+
+function updateBiol() {
+  const SAMPLE_TYPE = 'BIOLOGICAL_SAMPLE'
+  const isEqual = tempSampleVariables.value == JSON.stringify(sampleVariables.value)
+  if (!isEqual) {
+    sampleConditionsResult.value = createTableEntries(sampleVariables.value, SAMPLE_TYPE)
+    entetyAndSampleResult.value = crossProductSamples(entetyConditionsResult.value, sampleConditionsResult.value)
+    tempSampleVariables.value = JSON.stringify(sampleVariables.value)
+  }
+  return true
+}
+
+function updateTech() {
+  const SAMPLE_TYPE = 'TECHNICAL_SAMPLE'
+  const isEqual = tempTechVariables.value == JSON.stringify(techVariables.value)
+  if (!isEqual) {
+    techConditionsResult.value = createTableEntries(techVariables.value, SAMPLE_TYPE)
+    Result.value = crossProductSamples(entetyAndSampleResult.value, techConditionsResult.value)
+    tmpResult.value = JSON.stringify(Result.value)
+  }
+  return true
+}
+
 
 </script>
 
