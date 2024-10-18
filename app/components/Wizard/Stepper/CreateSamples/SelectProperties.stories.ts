@@ -10,7 +10,8 @@ const meta = {
       propertyWithVocabulary,
       propertyWithoutVocabulary
     ],
-    'onUpdate:selectedProperties': fn(),
+    modelValue: [],
+    'onUpdate:modelValue': fn(),
   }, 
 
 

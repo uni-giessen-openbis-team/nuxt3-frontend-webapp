@@ -23,6 +23,7 @@ export type PropertyWithVocabulary  = {
   title: string;
   description?: string;
   conditions: VocabularyTerm[];
+  category: string;
 };
 
 export type  PropertyWithoutVocabulary  = {
@@ -31,6 +32,7 @@ export type  PropertyWithoutVocabulary  = {
   unit: string | null;
   description?: string;
   conditions: VocabularyTerm[];
+  category: string;
 };
 
 
@@ -47,5 +49,5 @@ export type Vocabulary= {
   description?: string;
   code: string;
   terms: VocabularyTerm[];
-}
+} 
 

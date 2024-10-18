@@ -14,91 +14,60 @@ const biologicalProperties: Property[] = [
   propertyWithoutVocabulary
 ]
 
+const technicalProperties: Property[] = [
+  propertyWithVocabulary,
+  propertyWithoutVocabulary
+]
+
 // Define props
 const props = defineProps<{
   entitySamples?: Sample[],
   biologicalSamples?: Sample[],
+
 }>()
 
 const emit = defineEmits<{
-  (e: 'entityVariablesUpdated' | 'biologicalVariablesUpdated' | 'technicalVariablesUpdated', variables: Sample[]): void,
-  (e: 'completed'): void
+  (e: 'samplesUpdated' , variables: Array<Sample[]>): void,
+  (e: 'completed',  technicalSamples: Sample[] , entitySamples?: Sample[], biologicalSamples?: Sample[]): void
 }>()
 
 const _enetySamples: Ref<Sample[]> = ref(props.entitySamples ?? [])
 const _biologicalSamples: Ref<Sample[]> = ref(props.biologicalSamples ?? [])
-
-
-// function updateEntety() {
-//   const SAMPLE_TYPE = 'BIOLOGICAL_ENTITY'
-//   const isEqual = tempEntetyVariables.value == JSON.stringify(entetyVariables.value)
-//   if (!isEqual) {
-//     entetyConditionsResult.value = createTableEntries(entetyVariables.value, SAMPLE_TYPE)
-//     tempEntetyVariables.value = JSON.stringify(entetyVariables.value)
-//   }
-//   return true
-// }
-
-// function updateBiol() {
-//   const SAMPLE_TYPE = 'BIOLOGICAL_SAMPLE'
-//   const isEqual = tempSampleVariables.value == JSON.stringify(sampleVariables.value)
-//   if (!isEqual) {
-//     sampleConditionsResult.value = createTableEntries(sampleVariables.value, SAMPLE_TYPE)
-//     entetyAndSampleResult.value = crossProductSamples(entetyConditionsResult.value, sampleConditionsResult.value)
-//     tempSampleVariables.value = JSON.stringify(sampleVariables.value)
-//   }
-//   return true
-// }
-
-// function updateTech() {
-//   const SAMPLE_TYPE = 'TECHNICAL_SAMPLE'
-//   const isEqual = tempTechVariables.value == JSON.stringify(techVariables.value)
-//   if (!isEqual) {
-//     techConditionsResult.value = createTableEntries(techVariables.value, SAMPLE_TYPE)
-//     Result.value = crossProductSamples(entetyAndSampleResult.value, techConditionsResult.value)
-//     tmpResult.value = JSON.stringify(Result.value)
-//   }
-//   return true
-// }
-
+const _technicalSamples: Ref<Sample[]> = ref( [])
 
 </script>
 
-<template>
-  <FormWizard @on-complete="() => { emit('completed') }">
+<template> 
+  <FormWizard @on-complete="() => { emit('completed',  _technicalSamples, _enetySamples, _biologicalSamples,) }">
     <div v-if="!props.entitySamples">
-      <TabContent title="Project Entities">
-        <WizardStepperCreateSamples :properties="entetyProperties"
+      <TabContent title="Project Entities" >
+        <WizardStepperCreateSamples
+:properties="entetyProperties"
           @return-samples="(samples) => { _enetySamples = samples; }" />
       </TabContent>
-
       <TabContent title="Project Entities Preview">
         <WizardStepperShowSamplesPreviewSamples :samples="_enetySamples" />
       </TabContent>
     </div>
+
     <div v-if="!props.biologicalSamples">
       <TabContent title="Entity Preview">
-        <WizardStepperCreateSamples :properties="biologicalProperties" :parent-samples="_enetySamples"
+        <WizardStepperCreateSamples
+:properties="biologicalProperties" :parent-samples="_enetySamples"
           @return-samples="(samples) => { _biologicalSamples = samples; }" />
       </TabContent>
       <TabContent title="Project Entities Preview">
         <WizardStepperShowSamplesPreviewSamples :samples="_biologicalSamples" />
       </TabContent>
     </div>
-    <!-- 
 
-      <TabContent title="Biological Samples Preview">
-        <WizardPreviewTable v-model="entetyAndSampleResult" />
+    <TabContent title="Technical Samples">
+        <WizardStepperCreateSamples
+  :properties="technicalProperties" :parent-samples="_biologicalSamples"
+          @return-samples="(samples) => { _biologicalSamples = samples; }" />
       </TabContent>
-      <TabContent title="Technical Samples" :before-change="store.updateTechnicalVariables">
-        <WizardTechnical v-model="store.technicalVariables" />
+      <TabContent title="Project Entities Preview">
+        <WizardStepperShowSamplesPreviewSamples :samples="_technicalSamples" />
       </TabContent>
-      <TabContent title="Technical Samples Preview">
-        <WizardPreviewTable v-model="result" />
-        -->
-
   </FormWizard>
 </template>
-
-
-<style scoped></style>

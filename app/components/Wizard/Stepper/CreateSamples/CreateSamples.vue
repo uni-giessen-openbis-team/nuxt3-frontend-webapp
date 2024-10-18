@@ -26,9 +26,8 @@ function createSamples() {
     for (const parent of props.parentSamples) {
       for (const child of crossProduct) { 
         const newSample = {
-          ...parent,
-          conditions: [...parent.conditions, ...child.conditions],
-          secondaryName: `${parent.secondaryName}_${child.secondaryName}`
+          ...child,
+          parent: parent.secondaryName
         }
         newSamples.value.push(newSample)
       }
@@ -41,6 +40,7 @@ function createSamples() {
 
 function handleSelectedProperties(updatedProperties: Property[]) {
   selectedProperties.value = updatedProperties;
+  console.log(selectedProperties.value)
   createSamples();
 }
 
@@ -49,7 +49,7 @@ function handleSelectedProperties(updatedProperties: Property[]) {
 <template>
   <div/>
   <SelectProperties :properties="props.properties" @update:selected-properties="handleSelectedProperties"/>
-
+{{ newSamples }}
   <v-card v-if="selectedProperties.length > 0">
     <v-tabs v-model="tab" bg-color="primary">
       <v-tab v-for="(item, index) in selectedProperties" :key="index" :value="item.title">
@@ -66,7 +66,7 @@ function handleSelectedProperties(updatedProperties: Property[]) {
                 :items="property.vocabulary.terms" 
                 :return-object="true"
                 multiple 
-                @change="createSamples"
+                @update:model-value="createSamples()"
               />
             </div>
           </div>
@@ -85,3 +85,4 @@ function handleSelectedProperties(updatedProperties: Property[]) {
     </v-card-text>
   </v-card>
 </template>
+

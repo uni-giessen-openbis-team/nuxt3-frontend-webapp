@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed,  ref, watchEffect } from 'vue'
+import { computed, ref, watch } from 'vue'
 import type { VocabularyTerm } from '@/types/wizard'
 
 const emit = defineEmits<{
@@ -11,10 +11,12 @@ const list = computed<VocabularyTerm[]>(() => textInput.value.split('\n').map(it
   title: item, 
 })))
 
-watchEffect(() => {
+watch(textInput, (newValue, oldValue) => {
+  if (newValue !== oldValue) {
     emit('update:list', list.value)
-  })
- 
+  }
+})
+
 </script>
 
 <template>
@@ -22,4 +24,3 @@ watchEffect(() => {
     <v-textarea v-model="textInput" />
   </div>
 </template>
-

@@ -14,12 +14,7 @@ export default meta;
 
 export const Default: Story = {
   args: {
-    samples: {
-      entitySamples: [],
-      biologicalSamples: [],
-      technicalSamples: []
-    },
-    onEntityVariablesUpdated: () => {},
-
+    onSamplesUpdated: () => {},
+ 
   }
 };

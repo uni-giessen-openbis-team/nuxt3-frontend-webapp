@@ -17,13 +17,24 @@ watch(() => samples, (newSamples) => {
   _samples.value = [...newSamples];
 }, { deep: true });
 
-// Define headers for the v-data-table, excluding 'sampleType'
-const headers = computed(() => [
-  { title: 'External DB ID', key: 'externalDBID' },
-  { title: 'Name', key: 'secondaryName' },
-  { title: 'Count', key: 'count' },
-  { title: 'Conditions', key: 'conditions', sortable: false },
-]);
+// Define headers for the v-data-table, conditionally including 'Parent'
+const headers = computed(() => {
+  const baseHeaders = [
+    { title: 'External DB ID', key: 'externalDBID' },
+    { title: 'Name', key: 'secondaryName' },
+    { title: 'Count', key: 'count' },
+    { title: 'Conditions', key: 'conditions', sortable: false },
+  ];
+
+  // Check if any sample has a parent
+  const hasParent = samples.some(sample => sample.parent);
+
+  if (hasParent) {
+    baseHeaders.splice(3, 0, { title: 'Parent', key: 'parent' }); // Insert 'Parent' before 'Conditions'
+  }
+
+  return baseHeaders;
+});
 
 // Watch for changes in modelValue and emit updates
 watch(_samples, (newValue, oldValue) => {
@@ -80,31 +91,34 @@ const isPanelExpanded = (index: number) => expandedPanels.value.has(index);
            :disabled="!editable"
         />
     </template>
-    <template #item.conditions="{ item, index }">
-      <v-expansion-panels>
-        <v-expansion-panel>
-          <v-expansion-panel-title @click="togglePanel(index)">
-            {{ isPanelExpanded(index) ? 'Show Less' : 'Show More' }}
-          </v-expansion-panel-title>
-          <v-expansion-panel-text>
-            <table style="width: 100%; border-collapse: separate; border-spacing: 0 10px;">
-              <thead>
-                <tr>
-                  <th style="text-align: left;">Property</th>
-                  <th style="text-align: left;">Term</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(condition, indexb) in item.conditions" :key="indexb">
-                  <td style="padding: 10px;">{{ condition.propertyTitle }}</td>
-                  <td style="padding: 10px;">{{ condition.conditionTerm }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </v-expansion-panel-text>
-        </v-expansion-panel>
-      </v-expansion-panels>
-    </template>
+  <template #item.parent="{ item }"> <!-- New template for Parent -->
+    <span>{{ item.parent || 'N/A' }}</span>
+  </template>
+  <template #item.conditions="{ item, index }">
+    <v-expansion-panels>
+      <v-expansion-panel>
+        <v-expansion-panel-title @click="togglePanel(index)">
+          {{ isPanelExpanded(index) ? 'Show Less' : 'Show More' }}
+        </v-expansion-panel-title>
+        <v-expansion-panel-text>
+          <table style="width: 100%; border-collapse: separate; border-spacing: 0 10px;">
+            <thead>
+              <tr>
+                <th style="text-align: left;">Property</th>
+                <th style="text-align: left;">Term</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(condition, indexb) in item.conditions" :key="indexb">
+                <td style="padding: 10px;">{{ condition.propertyTitle }}</td>
+                <td style="padding: 10px;">{{ condition.conditionTerm }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+    </v-expansion-panels>
+  </template>
 
   </v-data-table>
 </template>
