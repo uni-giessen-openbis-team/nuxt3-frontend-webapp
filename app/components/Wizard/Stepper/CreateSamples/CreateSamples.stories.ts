@@ -1,6 +1,6 @@
 import CreateSamples from './CreateSamples.vue';
 import type { Meta, StoryObj } from '@storybook/vue3'
-import { action } from '@storybook/addon-actions'
+import { fn } from '@storybook/test'
 import { propertyWithVocabulary, propertyWithoutVocabulary } from '../testData'
 import type { Property } from '@/types/wizard.js'
 
@@ -10,10 +10,7 @@ export const  properties: Property[] = [
   propertyWithoutVocabulary 
 ]
 
-const args = {
-  properties: properties,
-  'onUpdate:return-samples': action('update:return-samples')
-}
+
 
 const meta = {
   component: CreateSamples,
@@ -25,5 +22,8 @@ type Story = StoryObj<typeof meta>
 export default meta
 
 export const Default: Story = {
-  args: args
+  args: {
+    properties: properties,
+    'onUpdate-samples': fn(() => {})
+  }
 };

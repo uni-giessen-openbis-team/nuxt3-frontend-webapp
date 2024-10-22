@@ -13,43 +13,41 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'return-samples', updatedList: Sample[]): void;
+  (e: 'update-pools', updatedList: Sample[]): void;
 }>();
 
 const tab = ref(1)
-const newSamples = ref<Sample[]>([])
-
-function createSamples() {
+const newSamples = computed<Sample[]>(() => {
   const crossProduct = calculateSamplesFromProperties(selectedProperties.value);
-  
+  const samples: Sample[] = [];
+
   if (props.parentSamples && props.parentSamples.length > 0) {
     for (const parent of props.parentSamples) {
       for (const child of crossProduct) { 
         const newSample = {
           ...child,
-          parent: parent.secondaryName
+          parent: [parent.Id]
         }
-        newSamples.value.push(newSample)
+        samples.push(newSample);
       }
     }
   } else {
-    newSamples.value = crossProduct
+    return crossProduct;
   }
-  emit('return-samples', newSamples.value as Sample[]);
-}
+  return samples;
+});
 
-function handleSelectedProperties(updatedProperties: Property[]) {
-  selectedProperties.value = updatedProperties;
-  console.log(selectedProperties.value)
-  createSamples();
-}
+// Watch for changes in newSamples and emit the updated samples
+watch(newSamples, (updatedSamples) => {
+  emit('update-pools', updatedSamples);
+});
+
 
 </script>
 
 <template>
   <div/>
-  <SelectProperties :properties="props.properties" @update:selected-properties="handleSelectedProperties"/>
-{{ newSamples }}
+  <SelectProperties :properties="props.properties" @update:selected-properties="selectedProperties=$event"/>
   <v-card v-if="selectedProperties.length > 0">
     <v-tabs v-model="tab" bg-color="primary">
       <v-tab v-for="(item, index) in selectedProperties" :key="index" :value="item.title">
@@ -66,18 +64,16 @@ function handleSelectedProperties(updatedProperties: Property[]) {
                 :items="property.vocabulary.terms" 
                 :return-object="true"
                 multiple 
-                @update:model-value="createSamples()"
               />
             </div>
           </div>
           <div v-else>
             <TextareaToList 
-              @update:list="property.conditions = $event; createSamples()"
+              @update:list="property.conditions = $event"
             />
             <AddUnitToProperty 
               v-model:continuous="property.continuous" 
               v-model:unit="property.unit" 
-              @input="createSamples"
             />
           </div>
         </v-window-item>

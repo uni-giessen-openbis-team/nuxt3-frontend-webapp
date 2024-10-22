@@ -20,10 +20,10 @@ watch(() => samples, (newSamples) => {
 // Define headers for the v-data-table, conditionally including 'Parent'
 const headers = computed(() => {
   const baseHeaders = [
-    { title: 'Name', key: 'name' },
+    { title: 'ID', key: 'Id' }, 
     { title: 'External DB ID', key: 'externalDBID' },
+    { title: 'Name', key: 'secondaryName' },
     { title: 'Count', key: 'count' },
-    { title: 'Parent', key: 'parent' },
     { title: 'Conditions', key: 'conditions', sortable: false },
   ];
 
@@ -58,10 +58,13 @@ const togglePanel = (index: number) => {
 };
 
 const isPanelExpanded = (index: number) => expandedPanels.value.has(index);
+
+
 </script>
 
 
 <template>
+
   <v-data-table
     :headers="headers"
     :items="_samples"
@@ -75,7 +78,7 @@ const isPanelExpanded = (index: number) => expandedPanels.value.has(index);
         :disabled="!editable"
     />
   </template>
-  <template #item.name="{ item }">
+  <template #item.secondaryName="{ item }">
     <v-text-field
       v-model="item.name"
       type="text"
@@ -88,17 +91,17 @@ const isPanelExpanded = (index: number) => expandedPanels.value.has(index);
           v-model="item.count"
           type="number"
           max-width="80"
-           variant="solo"
-           :disabled="!editable"
+          variant="solo"
+          :disabled="!editable"
         />
     </template>
-      <template #item.parent="{ item }"> <!-- Updated template for Parent -->
-      <span v-if="item.parent && item.parent.length > 0">
-        {{ item.parent.join(', ') }}
+  <template #item.parent="{ item }"> 
+    <span v-if="item.parent && item.parent.length">
+      <span v-for="(parent, index) in item.parent" :key="index">
+        {{ parent }}<span v-if="index < item.parent.length - 1">, </span>
       </span>
-      <span v-else>
-        N/A
-      </span>
+    </span>
+    <span v-else>N/A</span>
   </template>
   <template #item.conditions="{ item, index }">
     <v-expansion-panels>

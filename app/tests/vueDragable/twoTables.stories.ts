@@ -1,18 +1,19 @@
-import ListSpaces from './Wizard.vue';
+import TwoTables from './twoTables.vue';
 import type { Meta, StoryObj } from '@storybook/vue3'
 
 const meta = {
-  component: ListSpaces,
+    title: "Test/vueDragable",
 
-}  satisfies Meta<typeof ListSpaces>
+  component: TwoTables
+,
+
+}  satisfies Meta<typeof TwoTables>
 
 type Story = StoryObj<typeof meta>
 
 export default meta
 
 export const Default: Story = {
-  args: {
-    
-  }
+
 }  
- 
+  

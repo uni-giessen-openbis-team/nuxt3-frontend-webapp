@@ -1,6 +1,9 @@
 import openbis from '../openbis.esm'
+import type { Sample } from '../../types/wizard'
 
-async function listSamplesOfCollection(collectionPermId: string): Promise<openbis.Sample[]> {
+
+/////////////////////    Getter functions    ///////////////////////
+export async function listSamplesOfCollection(collectionPermId: string): Promise<openbis.Sample[]> {
   try {
     const openBisStore = useOpenBisStore()
     const criteria = new openbis.SampleSearchCriteria()
@@ -14,58 +17,11 @@ async function listSamplesOfCollection(collectionPermId: string): Promise<openbi
   }
 }
 
-function createSample(sample, projectContext, sampleCreationsDict) {
-  const sampleCreation = new openbis.SampleCreation()
-  sampleCreation.setTypeId(new openbis.EntityTypePermId(sample.sampleType))
-  sampleCreation.setSpaceId(new openbis.SpacePermId(projectContext.space))
-
-  // Iterate over conditions and set property for each
-  for (const condition of sample.conditions) {
-    for (const [key, value] of Object.entries(condition)) {
-      sampleCreation.setProperty(key, value)
-    }
-  }
-
-  if (sample.parent) {
-    const parentSampleCreation = sampleCreationsDict[sample.parent]
-    if (parentSampleCreation) {
-      sampleCreation.setParentIds([parentSampleCreation.getCreationId()])
-
-      const parentChildIds = parentSampleCreation.getChildIds() || []
-      parentChildIds.push(sampleCreation.getCreationId())
-      parentSampleCreation.setChildIds(parentChildIds)
-    } else {
-      console.log('Parent sample not found')
-    }
-  }
-
-  return sampleCreation
-}
-
-async function createSamples(samples, projectContext) {
-  const openBisStore = useOpenBisStore()
-  const sampleCreations = []
-  const sampleCreationsDict = {}
-
-  for (const sample of samples) {
-    const sampleCreation = createSample(sample, projectContext, sampleCreationsDict)
-    sampleCreations.push(sampleCreation)
-    sampleCreationsDict[sample.id] = sampleCreation
-  }
-
-  try {
-    const result = await openBisStore.v3?.createSamples(sampleCreations)
-    return result || []
-  } catch (error) {
-    console.error('Failed to create samples:', error)
-    return []
-  }
-}
-
-async function getSample(sampleId: string): Promise<openbis.Sample | null> {
+ 
+export async function getSample(sampleId: string): Promise<openbis.Sample | null> {
   try {
     const openBisStore = useOpenBisStore()
-    const result = await openBisStore.v3?.getSamples([new openbis.SamplePermId(sampleId)])
+    const result = await openBisStore.v3?.getSamples([new openbis.SamplePermId(sampleId)], new openbis.SampleFetchOptions())
     return result?.[0] || null
   } catch (error) {
     console.error(`Failed to get sample ${sampleId}: ${error}`)
@@ -73,7 +29,31 @@ async function getSample(sampleId: string): Promise<openbis.Sample | null> {
   }
 }
 
-async function updateSample(sampleUpdate: openbis.SampleUpdate): Promise<boolean> {
+
+/////////////////////    Sample creation functions    ///////////////////////
+
+export function prepareSampleCreation(sample: Sample, sampleType: string, spaceId: string, projectId: string, experimentId: string) {
+  const sampleCreation = new openbis.SampleCreation()
+  sampleCreation.setSpaceId(new openbis.SpacePermId(spaceId))
+  sampleCreation.setProjectId(new openbis.ProjectPermId(projectId))
+  sampleCreation.setTypeId(new openbis.EntityTypePermId(sample.sampleType))
+  sampleCreation.setExperimentId(new openbis.ExperimentPermId(experimentId))
+  sampleCreation.setCode(sample.name)
+  if (sample.parent) {
+    sampleCreation.setParentIds([new openbis.SamplePermId(sample.parent)])
+  }
+
+  // Iterate over conditions and set property for each
+  for (const condition of sample.conditions) {
+    for (const [key, value] of Object.entries(condition)) {
+      sampleCreation.setProperty(key, value)
+    }
+  }
+  return sampleCreation
+}
+
+
+export async function updateSample(sampleUpdate: openbis.SampleUpdate): Promise<boolean> {
   try {
     const openBisStore = useOpenBisStore()
     await openBisStore.v3?.updateSamples([sampleUpdate])
@@ -84,7 +64,7 @@ async function updateSample(sampleUpdate: openbis.SampleUpdate): Promise<boolean
   }
 }
 
-async function deleteSample(sampleId: string, reason: string): Promise<boolean> {
+export async function deleteSample(sampleId: string, reason: string): Promise<boolean> {
   try {
     const openBisStore = useOpenBisStore()
     const deletionOptions = new openbis.SampleDeletionOptions()
@@ -97,11 +77,3 @@ async function deleteSample(sampleId: string, reason: string): Promise<boolean> 
   }
 }
 
-export {
-  listSamplesOfCollection,
-  createSample,
-  createSamples,
-  getSample,
-  updateSample,
-  deleteSample
-}

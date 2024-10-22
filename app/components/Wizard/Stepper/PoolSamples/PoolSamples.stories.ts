@@ -1,11 +1,11 @@
-import Upload from './PreviewSamples.vue';
+import PoolSamples from './PoolSamples.vue';
 import type { Meta, StoryObj } from '@storybook/vue3'
 import type { Sample } from '@/types/wizard'
-import { fn } from '@storybook/test'
 
 
 export const samples:Sample[] = [
   {
+      sampleType: 'Sample Type 1',
       externalDBID: '1',
       name: 'Sample 1',
       count: 1,
@@ -21,6 +21,7 @@ export const samples:Sample[] = [
       ]
   },
   {
+      sampleType: 'Sample Type 2',
       externalDBID: '2',
       name: 'Sample 2',
       count: 2,
@@ -34,9 +35,9 @@ export const samples:Sample[] = [
 ]
 
 const meta = {
-  component: Upload,
+  component: PoolSamples,
 
-}  satisfies Meta<typeof Upload>
+}  satisfies Meta<typeof PoolSamples>
 
 type Story = StoryObj<typeof meta>
 
@@ -44,8 +45,6 @@ export default meta
 
 export const Default: Story = {
   args: {
-   samples:samples,
-   'onUpdate-samples': fn(() => {})
-
+   samples:samples
   }  
 }

@@ -19,7 +19,7 @@ export function calculateSamplesFromProperties(properties: Property[]): Sample[]
           conditionTerm: condition.title
         })),  
         externalDBID: conditionSet.map(condition => condition.title).join('_'),
-        secondaryName: conditionSet.map(condition => condition.title).join('_'),
+        name: conditionSet.map(condition => condition.title).join('_'),
         count: 1
       };
       crossProduct.push(newSample as Sample);

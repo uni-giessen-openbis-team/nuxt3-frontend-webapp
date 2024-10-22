@@ -3,7 +3,7 @@ const config = {
     stories: [
       // '../app/components/**/*.mdx',
       '../app/components/**/*.stories.@(js|jsx|ts|tsx|mdx)',
-      '../app/tests/storybook/**/*.stories.@(js|jsx|ts|tsx|mdx)',
+      '../app/tests/**/*.stories.@(js|jsx|ts|tsx|mdx)',
       '../app/pages/**/*.stories.@(js|jsx|ts|tsx|mdx)',
     ],
     addons: [

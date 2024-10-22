@@ -9,21 +9,21 @@ export interface ProjectContext {
 }
 
 export type Sample = {
+  Id: string;
   conditions: { propertyTitle: string, conditionTerm: string }[]; 
   externalDBID: string;
-  secondaryName: string;
+  name: string;
   count: number;
-  sampleType: string;
-  parent?: string;
+  parent?: string[];
+  pool?: boolean;
 };
 
- 
+  
 export type PropertyWithVocabulary  = {
   vocabulary: Vocabulary;
   title: string;
   description?: string;
   conditions: VocabularyTerm[];
-  category: string;
 };
 
 export type  PropertyWithoutVocabulary  = {
@@ -50,4 +50,10 @@ export type Vocabulary= {
   code: string;
   terms: VocabularyTerm[];
 } 
+
+export type Pool = {
+  id: number;
+  samples: Sample[];
+  name: string;
+};
 

@@ -2,6 +2,8 @@ import TestStorybookArgs from './TestStorybookArgs.vue';
 import type { Meta, StoryObj } from '@storybook/vue3'
 
 const meta = {
+  title: "Test/TestStorybookArgs",
+
   component: TestStorybookArgs,
 
 }  satisfies Meta<typeof TestStorybookArgs>

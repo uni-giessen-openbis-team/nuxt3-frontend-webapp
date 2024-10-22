@@ -82,6 +82,7 @@
     "unplugin-vue-components": "^0.27.4",
     "vite-plugin-vuetify": "^2.0.4",
     "vue": "3.5.12",
+    "vue-draggable-next": "^2.2.1",
     "vue-router": "4.4.5",
     "vue3-form-wizard": "^0.2.4",
     "vuetify": "^3.7.2",

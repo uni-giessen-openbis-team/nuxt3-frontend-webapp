@@ -30,35 +30,39 @@ describe('calculateSamplesFromProperties', () => {
     const expectedSamples = [
       {
         conditions: [
-          { propertyTitle: 'Condition 1', conditionTerm: 'Condition 1' },
-          { propertyTitle: 'Condition A', conditionTerm: 'Condition A' }
+          { propertyTitle: 'Property 1', conditionTerm: 'Condition 1' },
+          { propertyTitle: 'Property 2', conditionTerm: 'Condition A' }
         ],
-        secondaryName: '',
-        count: 1
+        secondaryName: 'Condition 1_Condition A',
+        count: 1,
+        externalDBID: 'Condition 1_Condition A'
       },
       {
         conditions: [
-          { propertyTitle: 'Condition 1', conditionTerm: 'Condition 1' },
-          { propertyTitle: 'Condition B', conditionTerm: 'Condition B' }
+          { propertyTitle: 'Property 1', conditionTerm: 'Condition 1' },
+          { propertyTitle: 'Property 2', conditionTerm: 'Condition B' }
         ],
-        secondaryName: '',
-        count: 1
+        secondaryName: 'Condition 1_Condition B',
+        count: 1,
+        externalDBID: 'Condition 1_Condition B'
       },
       {
         conditions: [
-          { propertyTitle: 'Condition 2', conditionTerm: 'Condition 2' },
-          { propertyTitle: 'Condition A', conditionTerm: 'Condition A' }
+          { propertyTitle: 'Property 1', conditionTerm: 'Condition 2' },
+          { propertyTitle: 'Property 2', conditionTerm: 'Condition A' }
         ],
-        secondaryName: '',
-        count: 1
+        secondaryName: 'Condition 2_Condition A',
+        count: 1,
+        externalDBID: 'Condition 2_Condition A'
       },
       {
         conditions: [
-          { propertyTitle: 'Condition 2', conditionTerm: 'Condition 2' },
-          { propertyTitle: 'Condition B', conditionTerm: 'Condition B' }
+          { propertyTitle: 'Property 1', conditionTerm: 'Condition 2' },
+          { propertyTitle: 'Property 2', conditionTerm: 'Condition B' }
         ],
-        secondaryName: '',
-        count: 1
+        secondaryName: 'Condition 2_Condition B',
+        count: 1,
+        externalDBID: 'Condition 2_Condition B'
       }
     ];
 

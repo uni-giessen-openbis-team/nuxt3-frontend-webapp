@@ -726,3 +726,9 @@ echo $ftp_proxy
 : 1728912539:0;bun run dev
 : 1728994484:0;bun rund ev
 : 1728994487:0;bun run dev
+: 1729371108:0;bun i vuedraggable
+: 1729371146:0;bun run dev
+: 1729417619:0;bun uninstall vuedraggable
+: 1729417626:0;bun i vue-draggable-next\
+
+: 1729417670:0;bun run dev

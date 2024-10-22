@@ -1,6 +1,6 @@
 import TextareaToList from './Stepper.vue';
 import type { Meta, StoryObj } from '@storybook/vue3'
-
+import { action } from '@storybook/addon-actions'
 
 
 const meta = {
@@ -14,7 +14,6 @@ export default meta;
 
 export const Default: Story = {
   args: {
-    onSamplesUpdated: () => {},
- 
+    onUpdateSamples: action('updateSamples'),
   }
 };
