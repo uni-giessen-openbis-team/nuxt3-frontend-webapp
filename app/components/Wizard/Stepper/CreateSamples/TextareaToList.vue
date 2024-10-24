@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import type { VocabularyTerm } from '@/types/wizard'
 
 const props = defineProps<{
@@ -16,17 +17,15 @@ onMounted(() => {
 })
 
 function updateValue(newValue: string) {
-  const list = newValue.split('\n').map(item => ({
-  title: item, 
+  const list = newValue.split('\n').filter(item => item.trim() !== '').map(item => ({
+    title: item.trim(),
   }))
   emit('update:list', list)
 }
-
-
 </script>
 
 <template>
   <div>
-    <v-textarea :model-value="textInput" @update:model-value="updateValue" />
+    <v-textarea v-model="textInput" @update:model-value="updateValue" />
   </div>
 </template>

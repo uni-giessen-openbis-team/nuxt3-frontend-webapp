@@ -1,25 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { computed, ref } from 'vue';
 import type { Sample } from '@/types/wizard';
 
-const props = defineProps<{
-  samples: Sample[]
-}>();
+const samples = defineModel<Sample[]>('samples');
 
-const emit = defineEmits<{
-  (e: 'update:samples', samples: Sample[]): void
-}>();
-
-const _samples = ref<Sample[]>([]);
 const newPoolName = ref('');
-
-onMounted(() => {
-  _samples.value = props.samples;
-});
 
 const uniquePools = computed(() => {
   const poolSet = new Set<string>();
-  _samples.value.forEach(sample => {
+  samples.value?.forEach(sample => {
     sample.pools?.forEach(pool => poolSet.add(pool));
   });
   return Array.from(poolSet);
@@ -32,9 +21,7 @@ function togglePool(sample: Sample, pool: string) {
   } else {
     sample.pools?.splice(poolIndex, 1);
   }
-  emit('update:samples', _samples.value);
 }
-
 
 function addNewPool() {
   if (!newPoolName.value) {
@@ -42,23 +29,24 @@ function addNewPool() {
     return;
   }
   if (!uniquePools.value.includes(newPoolName.value)) {
-    _samples.value.forEach(sample => {
+    samples.value?.forEach(sample => {
       sample.pools?.push(newPoolName.value);
     });
     newPoolName.value = '';
   }
-  emit('update:samples', _samples.value);
 }
 </script>
 
 <template>
-    <div>
-      <h4>Add New Pool</h4>
-      <input v-model="newPoolName" placeholder="Enter pool name" >
-      <v-btn @click="addNewPool">
-        <v-icon>mdi-plus</v-icon>
-        Add Pool</v-btn>
-    </div>
+  <div>
+    <h4>Add New Pool</h4>
+    <v-text-field v-model="newPoolName" placeholder="Enter pool name" >
+      <template #append-inner>
+    <v-btn @click="addNewPool">
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
+  </template>
+</v-text-field></div>
   <div>
     <h3>Samples</h3>
     <v-table>
@@ -69,7 +57,7 @@ function addNewPool() {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="sample in _samples" :key="sample.id">
+        <tr v-for="sample in samples" :key="sample.id">
           <td>{{ sample.name }}</td>
           <td v-for="pool in uniquePools" :key="pool">
             <input type="checkbox" :checked="sample.pools?.includes(pool)" @change="togglePool(sample, pool)" >

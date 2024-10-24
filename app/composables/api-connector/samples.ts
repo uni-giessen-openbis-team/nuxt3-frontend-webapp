@@ -39,8 +39,8 @@ export function prepareSampleCreation(sample: Sample, sampleType: string, spaceI
   sampleCreation.setTypeId(new openbis.EntityTypePermId(sample.sampleType))
   sampleCreation.setExperimentId(new openbis.ExperimentPermId(experimentId))
   sampleCreation.setCode(sample.name)
-  if (sample.parent) {
-    sampleCreation.setParentIds([new openbis.SamplePermId(sample.parent)])
+  if (sample.parents) {
+    sampleCreation.setParentIds([new openbis.SamplePermId(sample.parents)])
   }
 
   // Iterate over conditions and set property for each

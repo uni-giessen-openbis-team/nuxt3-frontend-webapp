@@ -28,7 +28,7 @@ const headers = computed(() => {
   ];
 
   // Check if any sample has a parent
-  const hasParent = samples.some(sample => sample.parent);
+  const hasParent = samples.some(sample => sample.parents);
 
   if (hasParent) {
     baseHeaders.splice(3, 0, { title: 'Parent', key: 'parent' }); // Insert 'Parent' before 'Conditions'
@@ -93,8 +93,8 @@ const isPanelExpanded = (index: number) => expandedPanels.value.has(index);
         />
     </template>
       <template #item.parent="{ item }"> <!-- Updated template for Parent -->
-      <span v-if="item.parent && item.parent.length > 0">
-        {{ item.parent.join(', ') }}
+      <span v-if="item.parents && item.parents.length > 0">
+        {{ item.parents.join(', ') }}
       </span>
       <span v-else>
         N/A

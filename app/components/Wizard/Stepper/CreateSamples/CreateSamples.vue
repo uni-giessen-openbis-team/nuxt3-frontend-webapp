@@ -13,7 +13,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'update-pools', updatedList: Sample[]): void;
+  (e: 'update-samples', updatedList: Sample[]): void;
 }>();
 
 const tab = ref(1)
@@ -27,7 +27,8 @@ const newSamples = computed<Sample[]>(() => {
       for (const child of crossProduct) { 
         const newSample = {
           ...child,
-          parent: [parent.Id]
+          parents: [parent.id],
+          pools: []
         }
         samples.push(newSample);
       }
@@ -40,7 +41,7 @@ const newSamples = computed<Sample[]>(() => {
 
 // Watch for changes in newSamples and emit the updated samples
 watch(newSamples, (updatedSamples) => {
-  emit('update-pools', updatedSamples);
+  emit('update-samples', updatedSamples);
 });
 
 

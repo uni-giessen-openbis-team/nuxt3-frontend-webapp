@@ -51,6 +51,4 @@ export const Default: Story = {
    samples:samples,
     "onUpdate:samples": action('updateSamples'),
   },
-
-  
 }

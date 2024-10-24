@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { FormWizard, TabContent } from 'vue3-form-wizard';
 import 'vue3-form-wizard/dist/style.css';
-import type { Sample, Property, Pool } from '~/types/wizard';
+import type { Sample, Property } from '~/types/wizard';
 import { propertyWithVocabulary, propertyWithoutVocabulary } from './testData';
+import { createPoolSamples } from './CreateSamples/utils';
 
-// Define props
 const props = defineProps<{
   entitySamples?: Sample[],
   biologicalSamples?: Sample[],
-
 }>()
 
 const emit = defineEmits<{
@@ -30,40 +29,26 @@ const technicalProperties: Property[] = [
   propertyWithoutVocabulary
 ]
 
-const _enetySamples: Ref<Sample[]> = ref(props.entitySamples ?? [])
-const _enetyPoolSamples = ref<Pool[]>([]);
+const entitySamples = ref<Sample[]>(props.entitySamples ?? [])
+const biologicalSamples = ref<Sample[]>(props.biologicalSamples ?? [])
+const technicalSamples = ref<Sample[]>([])
 
-const _biologicalSamples: Ref<Sample[]> = ref(props.biologicalSamples ?? [])
-const _biologicalPoolSamples = ref<Pool[]>([]);
+function completed() {
+  const entityPoolSamples = createPoolSamples(entitySamples.value)
+  entitySamples.value = [...entityPoolSamples, ...entitySamples.value]
+  const biologicalPoolSamples = createPoolSamples(biologicalSamples.value)
+  biologicalSamples.value = [...biologicalPoolSamples, ...biologicalSamples.value]
+  const technicalPoolSamples = createPoolSamples(technicalSamples.value)
+  technicalSamples.value = [...technicalPoolSamples, ...technicalSamples.value]
 
-const _technicalSamples: Ref<Sample[]> = ref([])
-const _technicalPoolSamples = ref<Pool[]>([]);
-
-
-function createPoolSamples(pools: Pool[]): Sample[] {
-  if (pools.length === 0 || pools.every(pool => pool.samples.length === 0)) {
-    return []; // Return an empty array if no pools exist or if no samples are in any of the pools
-  }
-  const samples: Sample[] = [];
-  for (const pool of pools) {
-    samples.push({
-      name: pool.name,
-      conditions: pool.samples.flatMap(sample => sample.conditions), // Unpack and combine conditions
-      externalDBID: pool.name,
-      Id: pool.id.toString(),
-      count: 1,
-      parent: pool.samples.map(sample => sample.Id)
-    });
-  }
-  return samples;
+  emit('updateSamples', { technicalSamples: technicalSamples.value, entitySamples: entitySamples.value, biologicalSamples: biologicalSamples.value }) 
 }
-
-
+ 
 </script>
 
 <template>
   <FormWizard 
-    @on-complete="() => { emit('updateSamples', { technicalSamples: _technicalSamples, entitySamples: _enetySamples, biologicalSamples: _biologicalSamples }) }">
+    @on-complete="completed">
     
     <div v-if="!props.entitySamples">
       <!-- Entities -->
@@ -71,15 +56,19 @@ function createPoolSamples(pools: Pool[]): Sample[] {
       <TabContent  title="Project Entities" > 
         <WizardStepperCreateSamples
           :properties="entetyProperties"
-          @update-samples="(samples: Sample[]) => { _enetySamples = samples; }" />
+          @update-samples="(samples: Sample[]) => { entitySamples = samples; }" />
       </TabContent>
 
       <TabContent title="Project Entities Preview">
-        <WizardStepperShowSamplesPreviewSamples :samples="_enetySamples" /> 
+        <WizardStepperShowSamplesPreviewSamples
+          v-model:samples="entitySamples" />
       </TabContent>
+    
 
       <TabContent   title="Pool Samples">
-        <WizardStepperPoolSamples :samples="_enetySamples" @update-samples="(poolSamples: Sample[]) => { _enetyPoolSamples = poolSamples; }" />
+        <WizardStepperPoolSamples 
+          v-model:samples="entitySamples"
+        />
       </TabContent>
     </div>
 
@@ -87,38 +76,34 @@ function createPoolSamples(pools: Pool[]): Sample[] {
     <div v-if="!props.biologicalSamples">
       <TabContent title="Entity Preview" >
         <WizardStepperCreateSamples
-          v-model:samples="_biologicalSamples"  
           :properties="biologicalProperties"
-          :parent-samples="_enetySamples"
-        />
+          :parent-samples="entitySamples" @update-samples="(samples: Sample[]) => { biologicalSamples = samples; }"/>
       </TabContent>
 
       <TabContent title="Project Entities Preview">
-        <WizardStepperShowSamplesPreviewSamples :samples="_biologicalSamples" />
+        <WizardStepperShowSamplesPreviewSamples v-model:samples="biologicalSamples" />
       </TabContent>
 
       <TabContent  title="Pool Samples">
-        <WizardStepperPoolSamples :samples="_biologicalSamples" />
+        <WizardStepperPoolSamples v-model:samples="biologicalSamples" />
       </TabContent>
     </div>
 
     <!-- Technical -->
-    <TabContent title="Technical Samples">
-      <WizardStepperCreateSamples
-        :properties="technicalProperties" :parent-samples="_biologicalSamples"
-        @update-samples="(samples: Sample[]) => { _technicalSamples = samples; }" />
-    </TabContent>
+    <TabContent title="Entity Preview" >
+        <WizardStepperCreateSamples
+          :properties="technicalProperties"
+          :parent-samples="biologicalSamples" @update-samples="(samples: Sample[]) => { technicalSamples = samples; }"/>
+      </TabContent>
 
     <TabContent title="Project Entities Preview">
-      <WizardStepperShowSamplesPreviewSamples :samples="_technicalSamples" />
+      <WizardStepperShowSamplesPreviewSamples v-model:samples="technicalSamples" />
     </TabContent>
 
     <TabContent  title="Pool Samples"> 
-      <WizardStepperPoolSamples :samples="_technicalSamples" />
+      <WizardStepperPoolSamples v-model:samples="technicalSamples" />
     </TabContent>
   </FormWizard>
 </template>
 
-<style scoped>  
 
-</style>

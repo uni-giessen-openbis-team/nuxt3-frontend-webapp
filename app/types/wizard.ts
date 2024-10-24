@@ -14,8 +14,8 @@ export type Sample = {
   externalDBID: string;
   name: string;
   count: number;
-  parent?: string[];
-  pools?: string[];
+  parents: string[];
+  pools: string[];
 };
 
   
@@ -32,7 +32,6 @@ export type  PropertyWithoutVocabulary  = {
   unit: string | null;
   description?: string;
   conditions: VocabularyTerm[];
-  category: string;
 };
 
 
@@ -50,10 +49,4 @@ export type Vocabulary= {
   code: string;
   terms: VocabularyTerm[];
 } 
-
-export type Pool = {
-  id: string;
-  samples: Sample[];
-  name: string;
-};
 

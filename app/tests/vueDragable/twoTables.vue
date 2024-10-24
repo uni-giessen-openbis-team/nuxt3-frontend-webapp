@@ -49,7 +49,7 @@ const removePool = (poolIndex: number) => {
           <td>{{ item.externalDBID }}</td>
           <td>{{ item.name }}</td>
           <td>{{ item.count }}</td>
-          <td>{{ item.parent || 'N/A' }}</td>
+          <td>{{ item.parents || 'N/A' }}</td>
           <td>
             <ul>
               <li v-for="condition in item.conditions" :key="condition.propertyTitle">
@@ -80,7 +80,7 @@ const removePool = (poolIndex: number) => {
           <td>{{ item.externalDBID }}</td>
           <td>{{ item.name }}</td>
           <td>{{ item.count }}</td>
-          <td>{{ item.parent || 'N/A' }}</td>
+          <td>{{ item.parents || 'N/A' }}</td>
           <td>
             <ul>
               <li v-for="condition in item.conditions" :key="condition.propertyTitle">

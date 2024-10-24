@@ -23,7 +23,6 @@ function updateSelectedProperties(newVal: (Property| string) []){
       continuous: false,
       unit: null,
       conditions: [],
-      category: "experimental"
       }
       return out;
     }
