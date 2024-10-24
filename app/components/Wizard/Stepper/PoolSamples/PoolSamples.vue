@@ -71,10 +71,5 @@ function addNewPool() {
         </tr>
       </tbody>
     </v-table>
-
-  
-
   </div>
-  Samples
-  <pre> {{ _samples }} </pre>
 </template>
