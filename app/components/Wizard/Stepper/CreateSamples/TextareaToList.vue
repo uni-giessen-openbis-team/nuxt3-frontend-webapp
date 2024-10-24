@@ -1,26 +1,32 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
 import type { VocabularyTerm } from '@/types/wizard'
+
+const props = defineProps<{
+  list?: VocabularyTerm[]
+}>()
 
 const emit = defineEmits<{
   (e: 'update:list', value: VocabularyTerm[]): void
 }>()
+
 const textInput = ref('')
 
-const list = computed<VocabularyTerm[]>(() => textInput.value.split('\n').map(item => ({
-  title: item, 
-})))
-
-watch(textInput, (newValue, oldValue) => {
-  if (newValue !== oldValue) {
-    emit('update:list', list.value)
-  }
+onMounted(() => {
+  textInput.value = props.list?.map(item => item.title).join('\n') ?? ''
 })
+
+function updateValue(newValue: string) {
+  const list = newValue.split('\n').map(item => ({
+  title: item, 
+  }))
+  emit('update:list', list)
+}
+
 
 </script>
 
 <template>
   <div>
-    <v-textarea v-model="textInput" />
+    <v-textarea :model-value="textInput" @update:model-value="updateValue" />
   </div>
 </template>

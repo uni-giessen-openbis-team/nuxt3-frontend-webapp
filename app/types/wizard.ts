@@ -9,13 +9,13 @@ export interface ProjectContext {
 }
 
 export type Sample = {
-  Id: string;
+  id: string;
   conditions: { propertyTitle: string, conditionTerm: string }[]; 
   externalDBID: string;
   name: string;
   count: number;
   parent?: string[];
-  pool?: boolean;
+  pools?: string[];
 };
 
   
@@ -52,7 +52,7 @@ export type Vocabulary= {
 } 
 
 export type Pool = {
-  id: number;
+  id: string;
   samples: Sample[];
   name: string;
 };

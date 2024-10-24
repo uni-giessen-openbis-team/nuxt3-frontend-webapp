@@ -78,7 +78,7 @@ function createPoolSamples(pools: Pool[]): Sample[] {
         <WizardStepperShowSamplesPreviewSamples :samples="_enetySamples" /> 
       </TabContent>
 
-      <TabContent  v-show="poolSamples" title="Pool Samples">
+      <TabContent   title="Pool Samples">
         <WizardStepperPoolSamples :samples="_enetySamples" @update-samples="(poolSamples: Sample[]) => { _enetyPoolSamples = poolSamples; }" />
       </TabContent>
     </div>
@@ -89,7 +89,7 @@ function createPoolSamples(pools: Pool[]): Sample[] {
         <WizardStepperCreateSamples
           v-model:samples="_biologicalSamples"  
           :properties="biologicalProperties"
-          :parent-samples="[..._enetyPoolSamples, ..._enetySamples]"
+          :parent-samples="_enetySamples"
         />
       </TabContent>
 
@@ -106,7 +106,7 @@ function createPoolSamples(pools: Pool[]): Sample[] {
     <TabContent title="Technical Samples">
       <WizardStepperCreateSamples
         :properties="technicalProperties" :parent-samples="_biologicalSamples"
-        @update-samples="(samples) => { _technicalSamples = samples; }" />
+        @update-samples="(samples: Sample[]) => { _technicalSamples = samples; }" />
     </TabContent>
 
     <TabContent title="Project Entities Preview">

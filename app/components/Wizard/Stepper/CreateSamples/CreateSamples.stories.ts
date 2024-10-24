@@ -5,12 +5,10 @@ import { propertyWithVocabulary, propertyWithoutVocabulary } from '../testData'
 import type { Property } from '@/types/wizard.js'
 
 // props
-export const  properties: Property[] = [
+const properties: Property[] = [
   propertyWithVocabulary,
   propertyWithoutVocabulary 
 ]
-
-
 
 const meta = {
   component: CreateSamples,

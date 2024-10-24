@@ -17,6 +17,7 @@ const emit = defineEmits<{
 }>();
 
 const tab = ref(1)
+
 const newSamples = computed<Sample[]>(() => {
   const crossProduct = calculateSamplesFromProperties(selectedProperties.value);
   const samples: Sample[] = [];
@@ -47,7 +48,7 @@ watch(newSamples, (updatedSamples) => {
 
 <template>
   <div/>
-  <SelectProperties :properties="props.properties" @update:selected-properties="selectedProperties=$event"/>
+  <SelectProperties :properties="props.properties" @update:samples="selectedProperties=$event"/>
   <v-card v-if="selectedProperties.length > 0">
     <v-tabs v-model="tab" bg-color="primary">
       <v-tab v-for="(item, index) in selectedProperties" :key="index" :value="item.title">

@@ -1,14 +1,4 @@
-<template>
-  <div>
-    <v-checkbox  
-      v-model="continuous"
-      label="continuous" />
-    <div v-if="continuous">
-      Unit
-      <v-text-field v-model="unit" />
-    </div>
-  </div>
-</template>
+
 
 <script lang="ts" setup>
 
@@ -27,6 +17,18 @@ watch(unit, (newValue) => {
   emit('update:unit', newValue);
 });
 
- 
 </script>
+
+<template>
+  <div>
+    <v-checkbox  
+      v-model="continuous"
+      label="continuous" />
+    <div v-if="continuous">
+      Unit
+      <v-text-field v-model="unit" />
+    </div>
+  </div>
+</template>
+
 

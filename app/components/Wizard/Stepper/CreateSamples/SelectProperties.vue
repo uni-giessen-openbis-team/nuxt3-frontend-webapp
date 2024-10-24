@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import type { Property , PropertyWithoutVocabulary} from '@/types/wizard'
 
 const props = defineProps<{
@@ -7,35 +7,41 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:selectedProperties', selected: Property[]): void
+  (e: 'update:samples', selected: Property[]): void
 }>()
 
 const selectedProperties = ref<(Property| string) []>([])
 
 
-watch(selectedProperties, (newVal) => {
+function updateSelectedProperties(newVal: (Property| string) []){
+  selectedProperties.value = newVal;
   const updatedProperties = newVal.map(property => {
     if (typeof property === 'string') {
-      return {
-        title: property,
-        description: "",  
-        continuous: false,
-        unit: null
-      } as PropertyWithoutVocabulary;
+    const out :  PropertyWithoutVocabulary = {
+      title: property,
+      description: "",  
+      continuous: false,
+      unit: null,
+      conditions: [],
+      category: "experimental"
+      }
+      return out;
     }
     return property;
   });
-  emit('update:selectedProperties', updatedProperties);
-})
+  emit('update:samples', updatedProperties);
+} 
+
 </script>
 
 <template>
   <v-combobox
-    v-model="selectedProperties"
+    :model-value="selectedProperties"
     label="Experimental variables"
     box
     chips
     :items="props.properties"
     multiple
+    @update:model-value="updateSelectedProperties"
   />
 </template>
