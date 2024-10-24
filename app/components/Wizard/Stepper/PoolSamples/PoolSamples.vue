@@ -6,6 +6,10 @@ const props = defineProps<{
   samples: Sample[]
 }>();
 
+const emit = defineEmits<{
+  (e: 'update:samples', samples: Sample[]): void
+}>();
+
 const _samples = ref<Sample[]>([]);
 const newPoolName = ref('');
 
@@ -28,6 +32,7 @@ function togglePool(sample: Sample, pool: string) {
   } else {
     sample.pools?.splice(poolIndex, 1);
   }
+  emit('update:samples', _samples.value);
 }
 
 
@@ -42,6 +47,7 @@ function addNewPool() {
     });
     newPoolName.value = '';
   }
+  emit('update:samples', _samples.value);
 }
 </script>
 

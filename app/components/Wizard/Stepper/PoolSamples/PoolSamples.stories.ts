@@ -1,6 +1,7 @@
 import PoolSamples from './PoolSamples.vue';
 import type { Meta, StoryObj } from '@storybook/vue3'
 import type { Sample } from '@/types/wizard'
+import { action } from '@storybook/addon-actions';
 
 
  const samples:Sample[] = [
@@ -47,6 +48,9 @@ export default meta
 
 export const Default: Story = {
   args: {
-   samples:samples
-  }  
+   samples:samples,
+    "onUpdate:samples": action('updateSamples'),
+  },
+
+  
 }
