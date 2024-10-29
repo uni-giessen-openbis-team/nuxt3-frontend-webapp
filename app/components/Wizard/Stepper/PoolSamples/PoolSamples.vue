@@ -8,7 +8,7 @@ const newPoolName = ref('');
 
 const uniquePools = computed(() => {
   const poolSet = new Set<string>();
-  samples.value?.forEach(sample => {
+  samples.value?.forEach(sample => {  
     sample.pools?.forEach(pool => poolSet.add(pool));
   });
   return Array.from(poolSet);

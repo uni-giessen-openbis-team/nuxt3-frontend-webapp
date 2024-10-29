@@ -29,23 +29,14 @@ async function handleFetchProjectDetails(projectPermId: string): Promise<void> {
     }
     console.log('project',project.value)
   } catch (error) {
-    errorMessage.value = 'Failed to fetch project details'
+    errorMessage.value = 'Failed to fetch project details, ' + error
   }
 }
 
 // Function to navigate to a collection detail page
 function goToCollection (permId: string) {
-  router.push(`/data/spaces/${spaceId.value}/${projectId.value}/${permId}/`)
+  router.push(`/Experiment/${permId}/`)
 }
-
-// Function to create a new collection
-const newCollection = ref({
-  code: '',
-  typeId: '',
-  properties: {
-    description: ''
-  }
-})
 
 
 // Function to delete the project
@@ -55,14 +46,13 @@ const handleDeleteProject = async () => {
     // Optionally, navigate back to a parent or home page after deletion
     router.push(`/data/spaces/${spaceId.value}/`);
   } catch (error) {
-    errorMessage.value = 'Failed to delete project';
+    errorMessage.value = 'Failed to delete project, ' + error;
   }
 }
 
 onMounted(() => {
   const projectPermId = new openbis.ProjectPermId(projectId.value as string)
   // set project context code 
-  useWizardStore().projectContext.code = projectId.value as string
   handleFetchCollections(projectPermId)
   handleFetchProjectDetails(projectId.value as string)
 })

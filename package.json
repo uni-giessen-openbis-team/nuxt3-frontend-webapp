@@ -11,6 +11,7 @@
     "start:generate": "npx serve .output/public",
     "test": "vitest",
     "clear": "rm -rf node_modules package-lock.json bun.lockb"
+
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.7.3",
@@ -85,7 +86,7 @@
     "vue-draggable-next": "^2.2.1",
     "vue-router": "4.4.5",
     "vue3-form-wizard": "^0.2.4",
-    "vuetify": "^3.7.2",
+    "vuetify": "^3.7.3",
     "workbox-cacheable-response": "^7.1.0",
     "zod": "^3.23.8"
   },

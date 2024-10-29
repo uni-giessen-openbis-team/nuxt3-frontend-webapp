@@ -2,6 +2,7 @@
  * Fetch options for openBIS
  * These fetch options specify the depth of the data to be fetched from the server.
  */
+import { OuterExpressionKinds } from 'typescript';
 import openbis from '../openbis.esm'
 
 // Person fetch options
@@ -82,7 +83,6 @@ export function fetchSpaceCompletely() {
     const options = new openbis.SpaceFetchOptions();
     options.withRegistrator();
     options.withProjects();
-    options.withSamples();
     return options;
 }
 

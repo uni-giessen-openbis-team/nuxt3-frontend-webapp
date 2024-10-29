@@ -100,6 +100,16 @@ async function deleteProject(projectId: string, reason: string): Promise<void> {
   await openBisStore.v3!.deleteProjects([new openbis.ProjectPermId(projectId)], pdo)
 }
 
+async function getProjectsForSpaces(spaceIds: string[]): Promise<{ [key: string]: openbis.Project[] }> {
+  const projects: { [key: string]: openbis.Project[] } = {}
+
+  for (const spaceId of spaceIds) {
+    projects[spaceId] = await getProjectsOfSpace(spaceId)
+  }
+
+  return projects
+}
+
 export {
   getProjects,
   getProjectsOfSpace,
@@ -111,5 +121,6 @@ export {
   createProjectWithCollections,
   updateProject,
   updateProjects,
-  deleteProject
+  deleteProject,
+  getProjectsForSpaces
 }

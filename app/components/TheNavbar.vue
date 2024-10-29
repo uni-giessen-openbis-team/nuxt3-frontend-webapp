@@ -18,6 +18,7 @@ const tempDrawer = ref(true)
 </script>
 
 <template>
+  
   <v-app-bar app>
     <!-- The Icon on the left to open and close the drawer -->
     <v-app-bar-nav-icon class="hidden-lg-and-up" @click="tempDrawer = !tempDrawer" />
@@ -53,15 +54,9 @@ const tempDrawer = ref(true)
   </v-app-bar>
 
   <!-- Add a navigation drawer on the left side on small screens -->
+
   <v-navigation-drawer v-model="tempDrawer" :permanent="mdAndUp.value" app>
-    <v-list :lines="false" density="compact" nav>
-      <v-list-item v-for="routeItem in navItems" :key="routeItem.name" :to="routeItem.path">
-        <template #prepend>
-          <v-icon>{{ routeItem.icon }}</v-icon>
-        </template>
-        <v-list-item-title>{{ routeItem.name }}</v-list-item-title>
-      </v-list-item>
-    </v-list>
+    <AtomsSidebar />
   </v-navigation-drawer>
 
 </template>

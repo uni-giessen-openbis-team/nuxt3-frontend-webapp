@@ -15,7 +15,7 @@ async function getAllSpaces(): Promise<openbis.Space[]> {
 
 async function getSpace(spaceId: openbis.ISpaceId): Promise<openbis.Space | undefined> {
   try {
-    const sfo = new openbis.SpaceFetchOptions()
+    const sfo = await fetchSpaceCompletely()
     const result = await useOpenBisStore().v3?.getSpaces(
       [spaceId], // Pass spaceId as an array
       sfo
@@ -27,7 +27,7 @@ async function getSpace(spaceId: openbis.ISpaceId): Promise<openbis.Space | unde
   }
 }
 
-async function createSpace(spaceCode: string, description: string | null = null): Promise<openbis.Space | undefined> {
+async function createSpace(spaceCode: string, description?: string ): Promise<openbis.Space | undefined> {
   const creation = new openbis.SpaceCreation()
 
   creation.setCode(spaceCode)
@@ -58,6 +58,7 @@ async function deleteSpace(spaceId: string, reason: string): Promise<void> {
   await useOpenBisStore().v3?.deleteSpaces([new openbis.SpacePermId(spaceId)], sdo)
 
 }
+
 
 export {
   getAllSpaces,

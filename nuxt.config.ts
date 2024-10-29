@@ -57,6 +57,7 @@ export default defineNuxtConfig({
       theme: {
         defaultTheme: 'dark',
       },
+      labComponents: true
     }
   },
   // storybook issue https://github.com/nuxt-modules/storybook/issues/776

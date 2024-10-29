@@ -732,3 +732,11 @@ echo $ftp_proxy
 : 1729417626:0;bun i vue-draggable-next\
 
 : 1729417670:0;bun run dev
+: 1729838021:0;bun rund ev
+: 1729838024:0;bun run dev
+: 1729841466:0;bun i 
+: 1729841473:0;bun run dev
+: 1729859952:0;npx nuxi info
+: 1729860269:0;bun run dev
+: 1729860615:0;bun run storybook 
+: 1729860763:0;bun run dev

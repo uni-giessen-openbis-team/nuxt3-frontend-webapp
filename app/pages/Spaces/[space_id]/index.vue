@@ -30,7 +30,7 @@ const fetchSpaceDetails = async () => {
 }
 
 const goToProject = (projectPermId: openbis.ProjectPermId) => {
-  router.push(`/data/spaces/${route.params.space_id}/${projectPermId}`)
+  router.push(`/Project/${projectPermId.toString()}`)
 }
  
 

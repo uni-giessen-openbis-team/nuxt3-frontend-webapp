@@ -1,35 +1,52 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import 'vue3-form-wizard/dist/style.css';
-
-
+import type openbis from '~/composables/openbis.esm';
+import type { Sample } from '~/types/wizard';
 const tab = ref('');
 
 const route = useRoute()
 const store = useWizardStore()
 
 const projectContext = {
-  space_id: route.query.space_id as string,
-  project_id: route.query.project_id as string,
-  experiment_id: route.query.collection_id as string,
+  experiment_id: route.query.experiment_id as string,
 }
 
 const props = defineProps<{
   entitySamples: openbis.Sample[]
   biologicalSamples: openbis.Sample[]
-  technicalSamples: openbis.Sample[]
 }>()
 
+const _entitySamples = ref<Sample[]>([])
+const _biologicalSamples = ref<Sample[]>([])
+
 onMounted(() => {
-  store.spaceId = projectContext.space_id
-  store.projectId = projectContext.project_id
   store.experimentId = projectContext.experiment_id
+  // transform the openbis objects into the format needed for the wizard
+  if (props.entitySamples) {
+
+    _entitySamples.value = mapSamplesForWizard(props.entitySamples)
+  }
+  if (props.biologicalSamples) {
+    _biologicalSamples.value = mapSamplesForWizard(props.biologicalSamples)
+  }
 })
 
-const entityCreation = prepareSampleCreation( props.entitySamples[0], 'Entity', projectContext.space_id, projectContext.project_id, projectContext.experiment_id )
-const biologicalCreation = prepareSampleCreation( props.biologicalSamples[0], 'Biological', projectContext.space_id, projectContext.project_id, projectContext.experiment_id )
-const technicalCreation = prepareSampleCreation( props.technicalSamples[0], 'Technical', projectContext.space_id, projectContext.project_id, projectContext.experiment_id )
- 
+function mapSamplesForWizard(samples: openbis.Sample[]) {
+  const _samples: Sample[] = samples.map(sample => ({
+    id: sample.getCode(),
+    conditions: [],
+    externalDBID: sample.getIdentifier().toString(), 
+    name: sample.getCode(),
+    count: 1, 
+    parents: sample.getParents().map(parent => parent.getCode()),
+    pools: [] 
+  }));
+  return _samples;
+}
+
+
+
 </script>
 
 
