@@ -8,7 +8,7 @@ export async function listSamplesOfCollection(collectionPermId: string): Promise
     const openBisStore = useOpenBisStore()
     const criteria = new openbis.SampleSearchCriteria()
     criteria.withExperiment().withPermId().thatEquals(collectionPermId)
-    const options = new openbis.SampleFetchOptions()
+    const options = fetchObjectWithParentsAndChildrenRecursive()
     const result = await openBisStore.v3?.searchSamples(criteria, options)
     return result?.getObjects() || []
   } catch (error) {

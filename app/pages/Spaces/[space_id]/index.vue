@@ -41,13 +41,14 @@ onMounted(fetchSpaceDetails)
   
   <v-container>
     <h1>Space: {{route.params.space_id}}</h1>
+    <pre>
+        {{ space?.getCode() }}
+    </pre>
     <v-row/>
-    <v-row>
-      <v-col cols="12">
-        <h2>{{ space?.getCode() ?? '' }}</h2>
+
+        
         <v-btn color="red" @click="deleteCurrentSpace">Delete Space</v-btn>
-      </v-col>
-    </v-row>
+
     <br>
     <template v-if="projects.length > 0">
       <v-row>

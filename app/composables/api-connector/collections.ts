@@ -40,10 +40,9 @@ async function listCollectionsOfProject(project: openbis.ProjectPermId): Promise
   return listCollections(criteria)
 }
 
-async function getCollection(experimentId: string, options = fetchExperimentCompletely()): Promise<openbis.Experiment | null> {
+async function getCollection(experimentId: string, options = fetchExperimentCompletely()) {
   try {
-    const openBisStore = useOpenBisStore()
-    const result = await openBisStore.v3?.getExperiments([new openbis.ExperimentPermId(experimentId)], options)
+    const result = await useOpenBisStore().v3?.getExperiments([new openbis.ExperimentPermId(experimentId)], options)
     if (result && result[experimentId]) {
       return result[experimentId]
     } else {

@@ -221,7 +221,7 @@ export function fetchObjectWithParentsAndChildrenRecursive() {
     options.withTags();
     options.withType();
     options.withParentsUsing(options);
-    options.withChildrenUsing(options);
+    options.withChildrenUsing(options); 
     return options;
 }
 
